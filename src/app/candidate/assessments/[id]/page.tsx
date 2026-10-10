@@ -90,6 +90,7 @@ export default function AssessmentRunnerPage() {
   const [testOutput, setTestOutput] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [autoSavedTime, setAutoSavedTime] = useState("Just now");
+  const [selectedLanguage, setSelectedLanguage] = useState<"TypeScript" | "JavaScript" | "Python">("TypeScript");
 
   // Countdown timer effect
   useEffect(() => {
@@ -117,8 +118,10 @@ export default function AssessmentRunnerPage() {
     toast.loading("Compiling & running sandbox test cases...", { id: "run-test" });
     setTimeout(() => {
       toast.dismiss("run-test");
+      const latencyMs = Math.floor(Math.random() * 25) + 18;
+      const memMb = (Math.random() * 3 + 12).toFixed(1);
       setTestOutput(
-        "✔ Test Case 1 Passed: set('item', 42) -> get('item') === 42\n✔ Test Case 2 Passed: TTL Expiry verification simulated in 12ms\nAll 2 automated test assertions PASSED."
+        `[Environment: ${selectedLanguage} v5 Runtime]\n✔ Test Case 1 Passed: set('item', 42) -> get('item') === 42\n✔ Test Case 2 Passed: TTL Expiry verification simulated in 12ms\n✔ Test Case 3 Passed: Non-existent key lookup returns null\n\nExecution Time: ${latencyMs}ms | Peak Memory: ${memMb}MB\nAll 3 automated test assertions PASSED (100% Score).`
       );
       toast.success("All test cases passed successfully!");
     }, 800);
@@ -274,7 +277,15 @@ export default function AssessmentRunnerPage() {
               <div className="px-4 py-2.5 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <Terminal className="w-3.5 h-3.5 text-blue-400" />
-                  <span className="font-mono text-slate-300">Solution.js / ts</span>
+                  <select
+                    value={selectedLanguage}
+                    onChange={(e) => setSelectedLanguage(e.target.value as any)}
+                    className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-0.5 focus:outline-none focus:border-blue-500 font-mono"
+                  >
+                    <option value="TypeScript">TypeScript (Node v20)</option>
+                    <option value="JavaScript">JavaScript (ES2024)</option>
+                    <option value="Python">Python (v3.12)</option>
+                  </select>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
