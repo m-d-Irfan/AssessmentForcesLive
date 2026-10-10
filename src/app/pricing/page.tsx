@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, CreditCard, Shield, Zap } from "lucide-react";
+import { Check, CreditCard, Shield, Zap } from "lucide-react";
 
 export const metadata = {
   title: "Pricing & Credit Packages | AssessmentForces",
@@ -101,7 +101,7 @@ export default function PricingPage() {
               {pkg.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                   <Badge variant="info" size="sm" className="bg-blue-600 text-white font-bold border-blue-400">
-                    <Sparkles className="w-3 h-3 mr-1" /> Most Popular
+                    Most Popular
                   </Badge>
                 </div>
               )}

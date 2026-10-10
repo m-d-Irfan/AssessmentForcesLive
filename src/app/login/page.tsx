@@ -15,7 +15,6 @@ import {
   Lock,
   Mail,
   ArrowRight,
-  Sparkles,
   KeyRound,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
@@ -153,8 +152,8 @@ export default function LoginPage() {
             <div className="mt-8 pt-6 border-t border-slate-800/80">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <span className="h-px bg-slate-800 flex-1" />
-                <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold px-2 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" /> Quick 1-Click Role Logins
+                <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold px-2">
+                  Quick 1-Click Role Logins
                 </span>
                 <span className="h-px bg-slate-800 flex-1" />
               </div>

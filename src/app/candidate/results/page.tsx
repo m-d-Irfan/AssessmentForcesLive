@@ -13,7 +13,6 @@ import {
   FileText,
   Download,
   Share2,
-  Sparkles,
   ArrowRight,
   TrendingUp,
 } from "lucide-react";

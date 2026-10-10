@@ -16,7 +16,6 @@ import {
   ArrowRight,
   TrendingUp,
   Award,
-  Sparkles,
   PlusCircle,
   FileCode2,
 } from "lucide-react";

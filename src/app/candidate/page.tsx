@@ -16,7 +16,6 @@ import {
   AlertCircle,
   FileCode2,
   Calendar,
-  Sparkles,
 } from "lucide-react";
 
 export default function CandidateOverviewPage() {
@@ -83,7 +82,7 @@ export default function CandidateOverviewPage() {
           <StatCard
             title="Skill Badges Earned"
             value="3"
-            icon={Sparkles}
+            icon={CheckCircle2}
             color="blue"
             description="TypeScript, Node.js, SQL"
           />

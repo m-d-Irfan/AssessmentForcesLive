@@ -12,7 +12,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { api } from "@/lib/api-client";
 import { Problem } from "@/types";
-import { Search, Filter, Code, Terminal, CheckCircle2, ChevronRight, Sparkles } from "lucide-react";
+import { Search, Filter, Code, Terminal, CheckCircle2, ChevronRight } from "lucide-react";
 
 const SAMPLE_PROBLEMS: Problem[] = [
   {

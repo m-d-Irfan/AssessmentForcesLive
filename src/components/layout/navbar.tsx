@@ -13,7 +13,6 @@ import {
   Menu,
   X,
   ChevronDown,
-  Sparkles,
   LayoutDashboard,
 } from "lucide-react";
 import { useAuth, DEMO_CREDENTIALS } from "@/context/auth-context";
@@ -106,7 +105,6 @@ export function Navbar() {
                   onClick={() => setIsDemoDropdownOpen(!isDemoDropdownOpen)}
                   className="gap-1.5 border-indigo-500/40 text-indigo-300 hover:text-white hover:border-indigo-400"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                   Demo Logins
                   <ChevronDown className="w-3.5 h-3.5 opacity-60" />
                 </Button>

@@ -13,7 +13,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   Clock,
-  Sparkles,
   Receipt,
   ArrowRight,
   ExternalLink,

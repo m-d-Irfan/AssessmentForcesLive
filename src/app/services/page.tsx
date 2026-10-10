@@ -9,7 +9,6 @@ import {
   Code,
   CheckCircle,
   Clock,
-  Sparkles,
   BarChart3,
   Users2,
   Workflow,
