@@ -9,11 +9,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Info */}
           <div className="space-y-4 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold">
-                <Code2 className="w-5 h-5" />
-              </div>
-              <span className="font-bold text-lg text-white">DevAssess</span>
+            <Link href="/" className="inline-block">
+              <span className="font-extrabold text-xl text-white">
+                Assessment<span className="text-blue-500">Forces</span>
+              </span>
             </Link>
             <p className="text-xs text-slate-400 leading-relaxed">
               Empowering top engineering teams and recruiters to evaluate candidate skills through real-time code environments, timed assessments, and automated scoring.
@@ -92,7 +91,7 @@ export function Footer() {
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/about" className="hover:text-white transition-colors">
-                  About DevAssess
+                  About AssessmentForces
                 </Link>
               </li>
               <li>
@@ -111,7 +110,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© 2026 DevAssess Platform. All rights reserved.</p>
+          <p>© 2026 AssessmentForces Platform. All rights reserved.</p>
           <p className="flex items-center gap-1">
             Built for Advanced Technical Hiring
           </p>

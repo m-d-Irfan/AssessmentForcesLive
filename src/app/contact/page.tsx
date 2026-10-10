@@ -56,7 +56,7 @@ export default function ContactPage() {
             Get in Touch
           </Badge>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            Connect with DevAssess Support
+            Connect with AssessmentForces Support
           </h1>
           <p className="text-slate-400 mt-4 text-base sm:text-lg">
             Have questions about custom algorithmic problem authoring, enterprise credit bundles, or recruiter integration? We are here to help.

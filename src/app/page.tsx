@@ -11,7 +11,6 @@ import {
   TrendingUp,
   Cpu,
   Layers,
-  Sparkles,
   Users,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
@@ -34,14 +33,6 @@ export default function HomePage() {
           <div className="absolute top-1/3 right-1/4 w-[400px] h-[300px] bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            {/* Announcement Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-semibold mb-8 animate-fade-in">
-              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-              <span>Next-Generation Developer Assessment Platform</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-              <span className="text-slate-300">Live API Integrated</span>
-            </div>
-
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.1] mb-6">
               Assess Developers with{" "}

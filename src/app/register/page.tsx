@@ -96,7 +96,7 @@ export default function RegisterPage() {
         <div className="w-full max-w-xl space-y-8 relative z-10">
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-extrabold text-white tracking-tight">
-              Create Your DevAssess Account
+              Create Your AssessmentForces Account
             </h1>
             <p className="text-xs sm:text-sm text-slate-400">
               Join the developer assessment network as a Candidate or Technical Recruiter

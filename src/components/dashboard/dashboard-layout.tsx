@@ -86,11 +86,10 @@ export function DashboardLayout({
     <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col md:flex-row">
       {/* Mobile Top Header */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-slate-950 border-b border-slate-800 sticky top-0 z-40">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold">
-            <Code2 className="w-4 h-4" />
-          </div>
-          <span className="font-bold text-white text-sm">DevAssess</span>
+        <Link href="/" className="flex items-center gap-1.5">
+          <span className="font-extrabold text-white text-base">
+            Assessment<span className="text-blue-500">Forces</span>
+          </span>
         </Link>
         <div className="flex items-center gap-2">
           <Badge variant={roleBadgeVariant} size="sm">
@@ -113,18 +112,15 @@ export function DashboardLayout({
         }`}
       >
         <div className="p-5 flex flex-col flex-1">
-          {/* Logo & Portal title */}
+          {/* Brand & Portal title */}
           <div className="flex items-center justify-between pb-6 mb-4 border-b border-slate-800/80">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-                <Code2 className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="font-extrabold text-sm text-white block">DevAssess</span>
-                <span className="text-[10px] text-slate-400 font-mono tracking-wider">
-                  {roleLabel}
-                </span>
-              </div>
+            <Link href="/" className="flex flex-col">
+              <span className="font-extrabold text-base text-white">
+                Assessment<span className="text-blue-500">Forces</span>
+              </span>
+              <span className="text-[10px] text-slate-400 font-mono tracking-wider mt-0.5">
+                {roleLabel}
+              </span>
             </Link>
           </div>
 

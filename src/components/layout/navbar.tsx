@@ -39,19 +39,11 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-            <Code2 className="w-5 h-5 text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-extrabold text-lg tracking-tight text-white flex items-center gap-1.5">
-              DevAssess
-              <span className="text-[10px] uppercase font-mono tracking-widest px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                PRO
-              </span>
-            </span>
-          </div>
+        {/* Brand */}
+        <Link href="/" className="flex items-center gap-1.5 group">
+          <span className="font-extrabold text-xl tracking-tight text-white group-hover:text-blue-400 transition-colors">
+            Assessment<span className="text-blue-500">Forces</span>
+          </span>
         </Link>
 
         {/* Desktop Navigation */}

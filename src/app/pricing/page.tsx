@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Check, Sparkles, CreditCard, Shield, Zap } from "lucide-react";
 
 export const metadata = {
-  title: "Pricing & Credit Packages | DevAssess",
+  title: "Pricing & Credit Packages | AssessmentForces",
   description: "Transparent, credit-based pricing for technical recruiter teams and enterprise engineering companies.",
 };
 

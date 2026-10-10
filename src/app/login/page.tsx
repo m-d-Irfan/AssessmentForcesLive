@@ -87,7 +87,7 @@ export default function LoginPage() {
               Secure Role Authentication
             </div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight">
-              Welcome Back to DevAssess
+              Welcome Back to AssessmentForces
             </h1>
             <p className="text-xs sm:text-sm text-slate-400">
               Sign in to manage assessments, review candidates, or continue testing

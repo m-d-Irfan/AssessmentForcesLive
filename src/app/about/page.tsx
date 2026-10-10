@@ -6,8 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { ShieldCheck, Target, Award, Users, Terminal, Cpu } from "lucide-react";
 
 export const metadata = {
-  title: "About Us | DevAssess",
-  description: "Learn about DevAssess mission to modernize engineering assessment and technical recruitment.",
+  title: "About Us | AssessmentForces",
+  description: "Learn about AssessmentForces mission to modernize engineering assessment and technical recruitment.",
 };
 
 export default function AboutPage() {
@@ -25,7 +25,7 @@ export default function AboutPage() {
             Redefining Technical Assessments for Modern Engineering
           </h1>
           <p className="text-slate-400 mt-4 text-base sm:text-lg leading-relaxed">
-            DevAssess was engineered to replace outdated, unstructured whiteboard interviews with objective, real-time code execution environments and multi-stage evaluation pipelines.
+            AssessmentForces was engineered to replace outdated, unstructured whiteboard interviews with objective, real-time code execution environments and multi-stage evaluation pipelines.
           </p>
         </div>
 

@@ -150,13 +150,16 @@ export default function AssessmentRunnerPage() {
       {/* Test Runner Sticky Header */}
       <header className="sticky top-0 z-50 px-4 sm:px-6 py-3 bg-slate-950/90 border-b border-slate-800 backdrop-blur-xl flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-xs">
-            <Code2 className="w-4 h-4" />
-          </div>
           <div>
-            <h1 className="text-xs sm:text-sm font-bold text-white truncate max-w-xs sm:max-w-md">
-              Backend Developer Fundamentals
-            </h1>
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-sm text-white">
+                Assessment<span className="text-blue-500">Forces</span>
+              </span>
+              <span className="text-slate-600">•</span>
+              <h1 className="text-xs sm:text-sm font-semibold text-slate-200 truncate max-w-xs sm:max-w-md">
+                Backend Developer Fundamentals
+              </h1>
+            </div>
             <span className="text-[10px] text-slate-400 font-mono">
               Live Test Attempt • ID: {params.id || "seed_backend"}
             </span>

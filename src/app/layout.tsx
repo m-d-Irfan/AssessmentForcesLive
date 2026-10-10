@@ -4,7 +4,7 @@ import { AuthProvider } from "@/context/auth-context";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "DevAssess | Enterprise Developer Assessment & Technical Hiring Platform",
+  title: "AssessmentForces | Enterprise Developer Assessment & Technical Hiring Platform",
   description:
     "Evaluate engineering talent with precision. Automated coding assessments, multi-role recruitment pipelines, real-time analytics, and seamless hiring evaluation.",
   keywords: [
@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     "recruitment software",
     "developer hiring platform",
   ],
-  authors: [{ name: "DevAssess Team" }],
+  authors: [{ name: "AssessmentForces Team" }],
   openGraph: {
-    title: "DevAssess | Enterprise Developer Assessment Platform",
+    title: "AssessmentForces | Enterprise Developer Assessment Platform",
     description: "Benchmark developer capabilities with high-fidelity testing.",
     type: "website",
   },

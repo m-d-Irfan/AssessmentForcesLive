@@ -18,8 +18,8 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "Features & Assessment Engine | DevAssess",
-  description: "Explore the comprehensive developer testing, auto-grading, and recruitment assessment tools provided by DevAssess.",
+  title: "Features & Assessment Engine | AssessmentForces",
+  description: "Explore the comprehensive developer testing, auto-grading, and recruitment assessment tools provided by AssessmentForces.",
 };
 
 export default function ServicesPage() {
