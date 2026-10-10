@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Code2, Github, Twitter, Linkedin, ShieldCheck, Heart } from "lucide-react";
+import { Code2, Globe, ShieldCheck, Heart } from "lucide-react";
 
 export function Footer() {
   return (
@@ -111,7 +111,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} DevAssess Platform. All rights reserved.</p>
+          <p>© 2026 DevAssess Platform. All rights reserved.</p>
           <p className="flex items-center gap-1">
             Built for Advanced Technical Hiring
           </p>

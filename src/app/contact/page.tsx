@@ -30,9 +30,13 @@ export default function ContactPage() {
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
-    defaultMap: {
+    defaultValues: {
+      fullName: "",
+      email: "",
       category: "recruitment",
-    } as any,
+      subject: "",
+      message: "",
+    },
   });
 
   const onSubmit = async (data: ContactFormData) => {

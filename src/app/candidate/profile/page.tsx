@@ -8,7 +8,7 @@ import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { User, Code2, Briefcase, Globe, Github, Save, CheckCircle2 } from "lucide-react";
+import { User, Code2, Briefcase, Globe, Save, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/context/auth-context";
 
