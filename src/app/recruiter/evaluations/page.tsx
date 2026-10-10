@@ -16,6 +16,7 @@ import {
   Send,
 } from "lucide-react";
 import { toast } from "sonner";
+import { CandidateRadar } from "@/components/dashboard/candidate-radar";
 
 interface PendingSubmission {
   id: string;
@@ -214,6 +215,9 @@ export default function RecruiterEvaluationsPage() {
                   {selectedSubmission.codeSnippet}
                 </pre>
               </div>
+
+              {/* Competency Telemetry Radar */}
+              <CandidateRadar candidateName={selectedSubmission.candidateName} />
 
               {/* Grading Input Form */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-800">
