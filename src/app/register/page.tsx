@@ -47,7 +47,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { login, getDashboardPath } = useAuth();
+  const { registerUser, getDashboardPath } = useAuth();
   const [selectedRole, setSelectedRole] = useState<"CANDIDATE" | "RECRUITER">("CANDIDATE");
 
   const {
@@ -64,22 +64,14 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      await api.post("/auth/register", {
+      const loggedUser = await registerUser({
         email: data.email.trim().toLowerCase(),
         password: data.password,
         displayName: data.displayName.trim(),
         role: data.role,
       });
 
-      toast.success("Account registered successfully! Logging you in...");
-
-      // Automatically sign in
-      try {
-        const loggedUser = await login(data.email, data.password);
-        router.push(getDashboardPath(loggedUser.role));
-      } catch {
-        router.push("/login");
-      }
+      router.push(getDashboardPath(loggedUser.role));
     } catch (err: any) {
       const msg = err instanceof ApiError ? err.message : "Failed to register account";
       toast.error(msg);

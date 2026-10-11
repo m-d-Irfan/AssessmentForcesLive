@@ -1,7 +1,12 @@
 import { getStoredToken } from "./auth-storage";
 
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+  process.env.NEXT_PUBLIC_API_URL &&
+  !process.env.NEXT_PUBLIC_API_URL.includes("localhost")
+    ? process.env.NEXT_PUBLIC_API_URL
+    : typeof window !== "undefined"
+    ? "/api/v1"
+    : "https://assessment-forces.onrender.com/api/v1";
 
 export class ApiError extends Error {
   code?: string;
@@ -61,7 +66,23 @@ export async function apiClient<T = unknown>(
   };
 
   try {
-    const response = await fetch(url, config);
+    let response: Response;
+    try {
+      response = await fetch(url, config);
+    } catch (networkErr: any) {
+      // If direct request failed and we are in browser and not already using /api/v1, retry via local proxy
+      if (
+        typeof window !== "undefined" &&
+        !url.startsWith("/api/v1") &&
+        !url.includes(window.location.host + "/api/v1")
+      ) {
+        const proxyUrl = `/api/v1${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
+        response = await fetch(proxyUrl, config);
+      } else {
+        throw networkErr;
+      }
+    }
+
     const contentType = response.headers.get("content-type");
     let data: any = null;
 
@@ -77,7 +98,7 @@ export async function apiClient<T = unknown>(
       throw new ApiError(errorMessage, response.status, data?.code, data?.errors);
     }
 
-    // DevGauge backend formats responses as { success: true, message: string, data: ... }
+    // Backend formats responses as { success: true, message: string, data: ... }
     return (data?.data !== undefined ? data.data : data) as T;
   } catch (error: any) {
     if (error instanceof ApiError) {
