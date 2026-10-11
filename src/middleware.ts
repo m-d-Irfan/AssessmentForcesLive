@@ -12,8 +12,13 @@ export function middleware(request: NextRequest) {
   const isCandidateRoute = pathname.startsWith("/candidate");
   const isProtectedRoute = isAdminRoute || isRecruiterRoute || isCandidateRoute;
 
+  // Free public sandbox problem accessible to all visitors without login
+  const isFreeProblemRoute =
+    pathname === "/candidate/assessments/seed_backend" ||
+    pathname === "/candidate/assessments/seed_problem_typescript";
+
   // If trying to access a protected route without auth token
-  if (isProtectedRoute && !token) {
+  if (isProtectedRoute && !token && !isFreeProblemRoute) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);

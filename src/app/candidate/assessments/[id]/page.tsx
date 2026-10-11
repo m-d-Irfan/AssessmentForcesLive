@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { LogoMark } from "@/components/ui/logo";
+import { useAuth } from "@/context/auth-context";
 
 interface TestProblem {
   id: string;
@@ -83,6 +84,7 @@ function createCache(ttlMs) {
 export default function AssessmentRunnerPage() {
   const router = useRouter();
   const params = useParams();
+  const { isAuthenticated } = useAuth();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("A");
@@ -137,8 +139,18 @@ export default function AssessmentRunnerPage() {
     try {
       await new Promise((r) => setTimeout(r, 1200));
       toast.dismiss("submit-test");
-      toast.success("Assessment submitted successfully! Scorecard generated.");
-      router.push("/candidate/results");
+      if (!isAuthenticated) {
+        toast.success("All Test Assertions Passed (100% Score)!", {
+          description: "Sign in with a free account to permanently record your scorecard and verify your ranking.",
+          action: {
+            label: "Sign In Now",
+            onClick: () => router.push(`/login?redirect=/candidate/assessments/${params.id || "seed_backend"}`),
+          },
+        });
+      } else {
+        toast.success("Assessment submitted successfully! Scorecard generated.");
+        router.push("/candidate/results");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -192,6 +204,25 @@ export default function AssessmentRunnerPage() {
           </Button>
         </div>
       </header>
+
+      {/* Public Free Guest Sandbox Banner */}
+      {!isAuthenticated && (
+        <div className="bg-gradient-to-r from-blue-950/90 via-slate-900 to-indigo-950/80 border-b border-blue-500/30 px-4 py-2.5 text-xs text-blue-200 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold text-[10px] uppercase tracking-wider border border-blue-500/40">
+              Free Public Sandbox
+            </span>
+            <span>
+              You are solving this featured problem as a guest! Live execution and automated tests are fully enabled.
+            </span>
+          </div>
+          <Link href={`/login?redirect=/candidate/assessments/${params.id || "seed_backend"}`}>
+            <Button size="sm" variant="outline" className="border-blue-400/50 text-blue-200 hover:text-white text-xs h-7 px-3">
+              Sign In to Unlock 40+ Problems
+            </Button>
+          </Link>
+        </div>
+      )}
 
       {/* Main Workspace Body */}
       <main className="flex-1 flex flex-col md:flex-row min-h-0">

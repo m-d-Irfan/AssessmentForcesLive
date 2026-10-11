@@ -146,10 +146,26 @@ function ProblemsList() {
 
   const { isAuthenticated, user } = useAuth();
 
-  const handlePracticeInSandbox = (prob: Problem) => {
+  const handlePracticeInSandbox = (prob: Problem, isFree: boolean) => {
+    // 1 Problem is 100% FREE for all visitors without login
+    if (isFree) {
+      if (!isAuthenticated) {
+        toast.success("Opening Free Sandbox", {
+          description: `Launching public practice environment for "${prob.title}". No login required!`,
+        });
+      } else {
+        toast.info("Entering Practice Sandbox", {
+          description: `Loading interactive runtime for "${prob.title}".`,
+        });
+      }
+      router.push(`/candidate/assessments/seed_backend`);
+      return;
+    }
+
+    // Other problems require a free Candidate account
     if (!isAuthenticated || !user) {
-      toast.warning("Candidate Authentication Required", {
-        description: `Please sign in as Candidate (or use 1-click Demo) to enter the sandbox for "${prob.title}".`,
+      toast.warning("Candidate Account Required", {
+        description: `Problem #1 is 100% free without login! To practice "${prob.title}", please sign in or use 1-click Demo.`,
         action: {
           label: "1-Click Login",
           onClick: () => router.push(`/login?redirect=/candidate/assessments/${prob.id}`),
@@ -249,7 +265,8 @@ function ProblemsList() {
         />
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {filteredProblems.map((prob) => {
+          {filteredProblems.map((prob, index) => {
+            const isFreeProblem = index === 0;
             const diffColor =
               prob.difficulty === "EASY"
                 ? "success"
@@ -261,7 +278,9 @@ function ProblemsList() {
               <Card
                 key={prob.id}
                 hoverEffect
-                className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-slate-800 bg-slate-900/40"
+                className={`p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-slate-800 bg-slate-900/40 ${
+                  isFreeProblem ? "border-emerald-500/40 bg-emerald-950/15" : ""
+                }`}
               >
                 <div className="space-y-1.5 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -271,6 +290,15 @@ function ProblemsList() {
                     <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded">
                       {prob.type.replace(/_/g, " ")}
                     </span>
+                    {isFreeProblem ? (
+                      <Badge variant="success" size="sm" className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
+                        ✦ FREE FOR ALL • NO LOGIN REQUIRED
+                      </Badge>
+                    ) : (
+                      <span className="text-[10px] font-mono text-slate-400 bg-slate-800/50 px-2 py-0.5 rounded border border-slate-700/50">
+                        Candidate Account Required
+                      </span>
+                    )}
                     <span className="text-xs text-slate-500 font-mono">
                       ID: {prob.id}
                     </span>
@@ -286,14 +314,24 @@ function ProblemsList() {
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => handlePracticeInSandbox(prob)}
-                    className="gap-1.5 text-xs hover:border-blue-500/50 hover:text-blue-300"
-                  >
-                    Practice in Sandbox <ChevronRight className="w-3.5 h-3.5" />
-                  </Button>
+                  {isFreeProblem ? (
+                    <Button
+                      size="sm"
+                      onClick={() => handlePracticeInSandbox(prob, true)}
+                      className="gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-600/25 cursor-pointer"
+                    >
+                      <Play className="w-3.5 h-3.5 fill-white" /> Practice Free (No Login)
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => handlePracticeInSandbox(prob, false)}
+                      className="gap-1.5 text-xs hover:border-blue-500/50 hover:text-blue-300 cursor-pointer"
+                    >
+                      Practice in Sandbox <ChevronRight className="w-3.5 h-3.5" />
+                    </Button>
+                  )}
                 </div>
               </Card>
             );
