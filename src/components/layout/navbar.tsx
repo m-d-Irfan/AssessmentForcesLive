@@ -18,6 +18,7 @@ import {
 import { useAuth, DEMO_CREDENTIALS } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Logo } from "@/components/ui/logo";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -39,11 +40,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-1.5 group">
-          <span className="font-extrabold text-xl tracking-tight text-white group-hover:text-blue-400 transition-colors">
-            Assessment<span className="text-blue-500">Forces</span>
-          </span>
-        </Link>
+        <Logo href="/" size="md" />
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-1">

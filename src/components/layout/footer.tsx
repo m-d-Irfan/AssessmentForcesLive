@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Code2, Globe, ShieldCheck, Heart } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 export function Footer() {
   return (
@@ -9,11 +10,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Info */}
           <div className="space-y-4 md:col-span-1">
-            <Link href="/" className="inline-block">
-              <span className="font-extrabold text-xl text-white">
-                Assessment<span className="text-blue-500">Forces</span>
-              </span>
-            </Link>
+            <Logo href="/" size="md" />
             <p className="text-xs text-slate-400 leading-relaxed">
               Empowering top engineering teams and recruiters to evaluate candidate skills through real-time code environments, timed assessments, and automated scoring.
             </p>

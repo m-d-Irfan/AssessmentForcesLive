@@ -27,6 +27,7 @@ import {
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Logo } from "@/components/ui/logo";
 
 interface NavItem {
   label: string;
@@ -86,11 +87,7 @@ export function DashboardLayout({
     <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col md:flex-row">
       {/* Mobile Top Header */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-slate-950 border-b border-slate-800 sticky top-0 z-40">
-        <Link href="/" className="flex items-center gap-1.5">
-          <span className="font-extrabold text-white text-base">
-            Assessment<span className="text-blue-500">Forces</span>
-          </span>
-        </Link>
+        <Logo href="/" size="sm" />
         <div className="flex items-center gap-2">
           <Badge variant={roleBadgeVariant} size="sm">
             {role}
@@ -114,14 +111,12 @@ export function DashboardLayout({
         <div className="p-5 flex flex-col flex-1">
           {/* Brand & Portal title */}
           <div className="flex items-center justify-between pb-6 mb-4 border-b border-slate-800/80">
-            <Link href="/" className="flex flex-col">
-              <span className="font-extrabold text-base text-white">
-                Assessment<span className="text-blue-500">Forces</span>
-              </span>
-              <span className="text-[10px] text-slate-400 font-mono tracking-wider mt-0.5">
+            <div>
+              <Logo href="/" size="sm" />
+              <div className="text-[10px] text-slate-400 font-mono tracking-wider mt-1.5 ml-0.5">
                 {roleLabel}
-              </span>
-            </Link>
+              </div>
+            </div>
           </div>
 
           {/* Navigation Menu */}

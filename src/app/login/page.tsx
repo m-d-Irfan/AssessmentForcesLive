@@ -22,6 +22,7 @@ import { Footer } from "@/components/layout/footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Logo } from "@/components/ui/logo";
 import { useAuth, DEMO_CREDENTIALS } from "@/context/auth-context";
 
 const loginSchema = z.object({
@@ -80,12 +81,13 @@ export default function LoginPage() {
 
         <div className="w-full max-w-xl space-y-8 relative z-10">
           {/* Header */}
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-3 flex flex-col items-center">
+            <Logo href="/" size="lg" />
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold">
               <KeyRound className="w-3.5 h-3.5" />
               Secure Role Authentication
             </div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               Welcome Back to AssessmentForces
             </h1>
             <p className="text-xs sm:text-sm text-slate-400">

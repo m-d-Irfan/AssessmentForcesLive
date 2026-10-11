@@ -21,6 +21,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 import { api, ApiError } from "@/lib/api-client";
 import { useAuth } from "@/context/auth-context";
 
@@ -86,8 +87,9 @@ export default function RegisterPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[400px] bg-purple-600/10 rounded-full blur-[130px] pointer-events-none" />
 
         <div className="w-full max-w-xl space-y-8 relative z-10">
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
+          <div className="text-center space-y-3 flex flex-col items-center">
+            <Logo href="/" size="lg" />
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               Create Your AssessmentForces Account
             </h1>
             <p className="text-xs sm:text-sm text-slate-400">

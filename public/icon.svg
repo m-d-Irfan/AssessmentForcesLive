@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="af-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+
+    <linearGradient id="af-border" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
+      <stop offset="45%" stop-color="#3b82f6" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0.8" />
+    </linearGradient>
+
+    <linearGradient id="af-left" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+
+    <linearGradient id="af-right" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+
+    <linearGradient id="af-slash" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+
+    <filter id="af-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Squircle Container -->
+  <rect
+    x="2.5"
+    y="2.5"
+    width="59"
+    height="59"
+    rx="16"
+    fill="url(#af-bg)"
+    stroke="url(#af-border)"
+    stroke-width="2.5"
+  />
+
+  <!-- Left Chevron < -->
+  <path
+    d="M24 20L13 32L24 44"
+    stroke="url(#af-left)"
+    stroke-width="4.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right Chevron > -->
+  <path
+    d="M40 20L51 32L40 44"
+    stroke="url(#af-right)"
+    stroke-width="4.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Dynamic Assessment Force Slash -->
+  <path
+    d="M36 17L28 47"
+    stroke="url(#af-slash)"
+    stroke-width="3.6"
+    stroke-linecap="round"
+    filter="url(#af-glow)"
+  />
+
+  <!-- Precision Assessment Core Node -->
+  <circle cx="32" cy="32" r="2.8" fill="#ffffff" />
+</svg>

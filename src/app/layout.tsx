@@ -20,6 +20,15 @@ export const metadata: Metadata = {
     description: "Benchmark developer capabilities with high-fidelity testing.",
     type: "website",
   },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "192x192" },
+    ],
+  },
 };
 
 export default function RootLayout({
