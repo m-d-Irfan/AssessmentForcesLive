@@ -34,7 +34,7 @@ import { Play } from "lucide-react";
 
 // Real-world Sandbox Preview Code Samples
 const RUNTIME_SAMPLES: Record<
-  "typescript" | "python" | "go",
+  "typescript" | "python" | "go" | "rust" | "java",
   {
     language: string;
     runtime: string;
@@ -43,12 +43,16 @@ const RUNTIME_SAMPLES: Record<
     testOutput: string;
     speed: string;
     memory: string;
+    tag: string;
+    tagColor: string;
   }
 > = {
   typescript: {
     language: "TypeScript",
     runtime: "Node.js v20.12 (V8 Isolate)",
     title: "Distributed Token Bucket Rate Limiter",
+    tag: "TS",
+    tagColor: "bg-blue-500/20 text-blue-400 border-blue-500/30",
     code: `class TokenBucketLimiter {
   private capacity: number;
   private tokens: number;
@@ -88,6 +92,8 @@ const RUNTIME_SAMPLES: Record<
     language: "Python",
     runtime: "CPython 3.12 (Sandboxed)",
     title: "LRU Cache with Time-To-Live (TTL)",
+    tag: "PY",
+    tagColor: "bg-sky-500/20 text-sky-400 border-sky-500/30",
     code: `import time
 from collections import OrderedDict
 
@@ -122,6 +128,8 @@ class TTLCache:
     language: "Go",
     runtime: "Go 1.22 (Linux Container)",
     title: "Concurrent Worker Pool with Graceful Cancellation",
+    tag: "GO",
+    tagColor: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
     code: `package main
 
 import (
@@ -161,6 +169,86 @@ func WorkerPool(ctx context.Context, workers int, jobs <-chan Job) <-chan int {
       "✔ Benchmark 1: Concurrently consumes 10,000 tasks without deadlock\n✔ Benchmark 2: Gracefully terminates within 5ms of Context cancel\n✔ Benchmark 3: Zero goroutine leaks detected\nExecution verified in 9ms",
     speed: "9ms",
     memory: "8.4 MB",
+  },
+  rust: {
+    language: "Rust",
+    runtime: "Rust 1.78.0 (LLVM Native)",
+    title: "Lock-Free SPSC Concurrent Ring Buffer",
+    tag: "RS",
+    tagColor: "bg-orange-500/20 text-orange-400 border-orange-500/30",
+    code: `use std::sync::atomic::{AtomicUsize, Ordering};
+use std::cell::UnsafeCell;
+
+pub struct RingBuffer<T, const N: usize> {
+    buffer: [UnsafeCell<Option<T>>; N],
+    head: AtomicUsize,
+    tail: AtomicUsize,
+}
+
+impl<T, const N: usize> RingBuffer<T, N> {
+    pub fn new() -> Self {
+        Self {
+            buffer: std::array::from_fn(|_| UnsafeCell::new(None)),
+            head: AtomicUsize::new(0),
+            tail: AtomicUsize::new(0),
+        }
+    }
+
+    pub fn push(&self, item: T) -> Result<(), T> {
+        let tail = self.tail.load(Ordering::Relaxed);
+        let head = self.head.load(Ordering::Acquire);
+        if tail.wrapping_sub(head) >= N {
+            return Err(item);
+        }
+        unsafe { *self.buffer[tail % N].get() = Some(item); }
+        self.tail.store(tail.wrapping_add(1), Ordering::Release);
+        Ok(())
+    }
+}`,
+    testOutput:
+      "✔ Unit Test 1: SPSC queue throughput exceeds 4.2M ops/sec\n✔ Unit Test 2: Atomic memory ordering verified across threads\n✔ Unit Test 3: Zero allocation during steady-state push/pop\nAll assertions PASSED in 4ms",
+    speed: "4ms",
+    memory: "6.2 MB",
+  },
+  java: {
+    language: "Java",
+    runtime: "OpenJDK 21 LTS (HotSpot)",
+    title: "High-Throughput Concurrent Cache with Virtual Threads",
+    tag: "JV",
+    tagColor: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    code: `package com.assessmentforces.engine;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.time.Instant;
+
+public class HighThroughputCache<K, V> {
+    private final long ttlMillis;
+    private final ConcurrentHashMap<K, CacheEntry<V>> map = new ConcurrentHashMap<>();
+
+    record CacheEntry<V>(V data, Instant expiresAt) {}
+
+    public HighThroughputCache(long ttlMillis) {
+        this.ttlMillis = ttlMillis;
+    }
+
+    public void put(K key, V value) {
+        map.put(key, new CacheEntry<>(value, Instant.now().plusMillis(ttlMillis)));
+    }
+
+    public V get(K key) {
+        CacheEntry<V> entry = map.get(key);
+        if (entry == null) return null;
+        if (Instant.now().isAfter(entry.expiresAt())) {
+            map.remove(key);
+            return null;
+        }
+        return entry.data();
+    }
+}`,
+    testOutput:
+      "✔ Test Suite 1: Concurrent reads/writes scale across 100 virtual threads\n✔ Test Suite 2: Automated entry eviction under high load\n✔ Test Suite 3: Lock-free map partition performance validated\nAll tests PASSED in 16ms",
+    speed: "16ms",
+    memory: "22.4 MB",
   },
 };
 
@@ -210,7 +298,9 @@ const SHOWCASE_PROBLEMS = [
 
 export default function HomePage() {
   const { isAuthenticated, user, getDashboardPath } = useAuth();
-  const [activeLang, setActiveLang] = useState<"typescript" | "python" | "go">("typescript");
+  const [activeLang, setActiveLang] = useState<
+    "typescript" | "python" | "go" | "rust" | "java"
+  >("typescript");
   const [isRunningHeroTest, setIsRunningHeroTest] = useState(false);
   const [heroTestOutput, setHeroTestOutput] = useState({
     passed: true,
@@ -433,37 +523,29 @@ export default function HomePage() {
               </div>
 
               {/* Language Selector Tabs */}
-              <div className="flex items-center gap-1.5 p-1 rounded-lg bg-slate-900 border border-white/10 self-start md:self-auto">
-                <button
-                  onClick={() => setActiveLang("typescript")}
-                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                    activeLang === "typescript"
-                      ? "bg-blue-600 text-white shadow"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  TypeScript
-                </button>
-                <button
-                  onClick={() => setActiveLang("python")}
-                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                    activeLang === "python"
-                      ? "bg-blue-600 text-white shadow"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Python
-                </button>
-                <button
-                  onClick={() => setActiveLang("go")}
-                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-                    activeLang === "go"
-                      ? "bg-blue-600 text-white shadow"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  Go
-                </button>
+              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-white/10 self-start md:self-auto">
+                {(
+                  [
+                    { id: "typescript", label: "TypeScript", tag: "TS", cls: "text-blue-400" },
+                    { id: "python", label: "Python", tag: "PY", cls: "text-sky-400" },
+                    { id: "go", label: "Go", tag: "GO", cls: "text-cyan-400" },
+                    { id: "rust", label: "Rust", tag: "RS", cls: "text-orange-400" },
+                    { id: "java", label: "Java", tag: "JV", cls: "text-amber-400" },
+                  ] as const
+                ).map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveLang(item.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold font-mono transition-all ${
+                      activeLang === item.id
+                        ? "bg-slate-800 text-white border border-slate-700 shadow-xs ring-1 ring-blue-500/30"
+                        : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                    }`}
+                  >
+                    <span className={`text-[10px] font-bold ${item.cls}`}>{item.tag}</span>
+                    <span>{item.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
 

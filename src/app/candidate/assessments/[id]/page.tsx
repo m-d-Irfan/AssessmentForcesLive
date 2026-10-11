@@ -19,10 +19,16 @@ import {
   ArrowRight,
   ArrowLeft,
   ChevronRight,
+  RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
 import { LogoMark } from "@/components/ui/logo";
 import { useAuth } from "@/context/auth-context";
+import { LanguageSelector } from "@/components/assessment/language-selector";
+import {
+  SupportedLanguage,
+  SUPPORTED_LANGUAGES,
+} from "@/components/assessment/language-data";
 
 interface TestProblem {
   id: string;
@@ -57,26 +63,8 @@ const TEST_QUESTIONS: TestProblem[] = [
     type: "CODE",
     title: "Asynchronous Concurrency & In-Memory Cache Helper",
     prompt:
-      "Write a TypeScript/JavaScript function `createCache(ttlMs)` that returns an object with `set(key, val)` and `get(key)`. If the key is older than `ttlMs`, `get(key)` must return `null`.",
-    initialCode: `// Write your solution below
-function createCache(ttlMs) {
-  const store = new Map();
-  
-  return {
-    set(key, val) {
-      store.set(key, { val, expiry: Date.now() + ttlMs });
-    },
-    get(key) {
-      const item = store.get(key);
-      if (!item) return null;
-      if (Date.now() > item.expiry) {
-        store.delete(key);
-        return null;
-      }
-      return item.val;
-    }
-  };
-}`,
+      "Write a multi-language compatible function or class `createCache(ttlMs)` that returns an object with `set(key, val)` and `get(key)`. If the key is older than `ttlMs`, `get(key)` must return `null`.",
+    initialCode: SUPPORTED_LANGUAGES[0].initialCode,
     points: 15,
   },
 ];
@@ -88,12 +76,23 @@ export default function AssessmentRunnerPage() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("A");
-  const [codeAnswer, setCodeAnswer] = useState(TEST_QUESTIONS[1].initialCode || "");
+  const [selectedLang, setSelectedLang] = useState<SupportedLanguage>(
+    SUPPORTED_LANGUAGES[0]
+  );
+  const [langDrafts, setLangDrafts] = useState<Record<string, string>>(() => {
+    const drafts: Record<string, string> = {};
+    SUPPORTED_LANGUAGES.forEach((l) => {
+      drafts[l.id] = l.initialCode;
+    });
+    return drafts;
+  });
+  const [codeAnswer, setCodeAnswer] = useState<string>(
+    SUPPORTED_LANGUAGES[0].initialCode
+  );
   const [timeLeft, setTimeLeft] = useState(1795); // ~29 mins 55 secs
   const [testOutput, setTestOutput] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [autoSavedTime, setAutoSavedTime] = useState("Just now");
-  const [selectedLanguage, setSelectedLanguage] = useState<"TypeScript" | "JavaScript" | "Python">("TypeScript");
 
   // Countdown timer effect
   useEffect(() => {
@@ -117,17 +116,58 @@ export default function AssessmentRunnerPage() {
     return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
+  const handleLanguageChange = (newLang: SupportedLanguage) => {
+    // Preserve current code draft before switching
+    setLangDrafts((prev) => ({
+      ...prev,
+      [selectedLang.id]: codeAnswer,
+    }));
+    setSelectedLang(newLang);
+    // Restore or load draft for target language
+    setCodeAnswer(langDrafts[newLang.id] || newLang.initialCode);
+    setTestOutput(null);
+    toast.info(`Environment switched to ${newLang.displayName}`, {
+      description: `Loaded ${newLang.runtimeBadge} runtime with ${newLang.testFramework}.`,
+    });
+  };
+
+  const handleCodeChange = (newVal: string) => {
+    setCodeAnswer(newVal);
+    setLangDrafts((prev) => ({
+      ...prev,
+      [selectedLang.id]: newVal,
+    }));
+  };
+
+  const handleResetCode = () => {
+    setCodeAnswer(selectedLang.initialCode);
+    setLangDrafts((prev) => ({
+      ...prev,
+      [selectedLang.id]: selectedLang.initialCode,
+    }));
+    setTestOutput(null);
+    toast.success(`Reset ${selectedLang.displayName} code to starter template.`);
+  };
+
   const handleRunTests = () => {
-    toast.loading("Compiling & running sandbox test cases...", { id: "run-test" });
+    toast.loading(`Compiling & testing via ${selectedLang.runnerCommand}...`, {
+      id: "run-test",
+    });
     setTimeout(() => {
       toast.dismiss("run-test");
-      const latencyMs = Math.floor(Math.random() * 25) + 18;
-      const memMb = (Math.random() * 3 + 12).toFixed(1);
+      const latencyMs = Math.floor(Math.random() * 8) + selectedLang.defaultLatencyMs;
+      const memMb = (Math.random() * 2 + 12.1).toFixed(1);
       setTestOutput(
-        `[Environment: ${selectedLanguage} v5 Runtime]\n✔ Test Case 1 Passed: set('item', 42) -> get('item') === 42\n✔ Test Case 2 Passed: TTL Expiry verification simulated in 12ms\n✔ Test Case 3 Passed: Non-existent key lookup returns null\n\nExecution Time: ${latencyMs}ms | Peak Memory: ${memMb}MB\nAll 3 automated test assertions PASSED (100% Score).`
+        `[Compiler / Runtime: ${selectedLang.displayName} ${selectedLang.version} | ${selectedLang.testFramework}]\n` +
+        `$ ${selectedLang.runnerCommand}\n` +
+        `✔ Suite 1: TestCreateCacheBasicOperations() ... PASSED (3ms)\n` +
+        `✔ Suite 2: TestTtlExpirationThreshold() ...... PASSED (simulated ${latencyMs}ms)\n` +
+        `✔ Suite 3: TestEvictionAndNilSafety() ........ PASSED (2ms)\n\n` +
+        `Diagnostics: Execution Latency ${latencyMs}ms | Peak RSS: ${memMb} MB | Sandbox: Linux Cgroups\n` +
+        `RESULT: All 3 automated test suites PASSED (100% Score)`
       );
-      toast.success("All test cases passed successfully!");
-    }, 800);
+      toast.success(`All assertions passed for ${selectedLang.displayName}!`);
+    }, 700);
   };
 
   const handleSubmitTest = async () => {
@@ -310,27 +350,35 @@ export default function AssessmentRunnerPage() {
           {currentProb.type === "CODE" ? (
             <div className="flex-1 flex flex-col">
               {/* Editor Toolbar */}
-              <div className="px-4 py-2.5 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <Terminal className="w-3.5 h-3.5 text-blue-400" />
-                  <select
-                    value={selectedLanguage}
-                    onChange={(e) => setSelectedLanguage(e.target.value as any)}
-                    className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-0.5 focus:outline-none focus:border-blue-500 font-mono"
-                  >
-                    <option value="TypeScript">TypeScript (Node v20)</option>
-                    <option value="JavaScript">JavaScript (ES2024)</option>
-                    <option value="Python">Python (v3.12)</option>
-                  </select>
+              <div className="px-3 sm:px-4 py-2 bg-slate-950/90 border-b border-slate-800 flex items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2 min-w-0">
+                  <LanguageSelector
+                    currentLanguage={selectedLang}
+                    onSelectLanguage={handleLanguageChange}
+                  />
+                  <span className="hidden lg:inline-flex items-center gap-1 text-[11px] font-mono text-slate-500 pl-2 border-l border-slate-800">
+                    <Terminal className="w-3 h-3 text-slate-400" />
+                    {selectedLang.testFramework}
+                  </span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={handleResetCode}
+                    className="h-7 text-xs text-slate-400 hover:text-slate-200 gap-1 px-2 border border-slate-800/80 hover:border-slate-700 hover:bg-slate-900"
+                    title={`Reset ${selectedLang.displayName} to starter boilerplate`}
+                  >
+                    <RotateCcw className="w-3 h-3 text-slate-400" />
+                    <span className="hidden sm:inline">Reset</span>
+                  </Button>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={handleRunTests}
-                    className="h-7 text-xs gap-1 border-slate-700"
+                    className="h-7 text-xs gap-1.5 border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 hover:text-emerald-200"
                   >
-                    <Play className="w-3 h-3 text-emerald-400" /> Run Tests
+                    <Play className="w-3 h-3 text-emerald-400 fill-emerald-400" /> Run Tests
                   </Button>
                 </div>
               </div>
@@ -338,7 +386,7 @@ export default function AssessmentRunnerPage() {
               {/* Code Textarea Area */}
               <textarea
                 value={codeAnswer}
-                onChange={(e) => setCodeAnswer(e.target.value)}
+                onChange={(e) => handleCodeChange(e.target.value)}
                 className="flex-1 w-full p-4 bg-transparent font-mono text-xs sm:text-sm text-slate-200 resize-none focus:outline-none leading-relaxed border-none selection:bg-blue-600/40"
                 spellCheck={false}
               />
