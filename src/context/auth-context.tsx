@@ -151,10 +151,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     try {
-      const loggedUser = await login(creds.email, creds.password);
+      await login(creds.email, creds.password);
       toast.dismiss("demo-login");
-      const targetDashboard = getRoleDashboard(loggedUser.role);
-      router.push(targetDashboard);
+      window.location.href = "/";
     } catch {
       // Direct failsafe fallback
       const fallbackUser: User = {
@@ -173,7 +172,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(fallbackToken);
       toast.dismiss("demo-login");
       toast.success(`Welcome back, ${fallbackUser.displayName}!`);
-      router.push(getRoleDashboard(targetRole));
+      window.location.href = "/";
     }
   };
 

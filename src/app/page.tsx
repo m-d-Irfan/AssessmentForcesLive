@@ -29,6 +29,8 @@ import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/context/auth-context";
+import { Play } from "lucide-react";
 
 // Real-world Sandbox Preview Code Samples
 const RUNTIME_SAMPLES: Record<
@@ -207,7 +209,31 @@ const SHOWCASE_PROBLEMS = [
 ];
 
 export default function HomePage() {
+  const { isAuthenticated, user, getDashboardPath } = useAuth();
   const [activeLang, setActiveLang] = useState<"typescript" | "python" | "go">("typescript");
+  const [isRunningHeroTest, setIsRunningHeroTest] = useState(false);
+  const [heroTestOutput, setHeroTestOutput] = useState({
+    passed: true,
+    tests: 16,
+    latency: 18,
+    memory: "14.2 MB",
+    score: 96,
+  });
+
+  const handleRunHeroBenchmark = () => {
+    setIsRunningHeroTest(true);
+    setTimeout(() => {
+      setIsRunningHeroTest(false);
+      setHeroTestOutput({
+        passed: true,
+        tests: 16,
+        latency: Math.floor(Math.random() * 8) + 12,
+        memory: (Math.random() * 2 + 13).toFixed(1) + " MB",
+        score: 98,
+      });
+    }, 550);
+  };
+
   const sample = RUNTIME_SAMPLES[activeLang];
 
   return (
@@ -215,35 +241,50 @@ export default function HomePage() {
       <Navbar />
 
       <main className="flex-1">
-        {/* PORTION 1: HERO SECTION */}
-        <section className="relative pt-24 pb-20 border-b border-white/[0.06] overflow-hidden">
-          <div className="absolute inset-0 humanoid-grid opacity-30 pointer-events-none" />
-
+        {/* PORTION 1: NEXT-LEVEL HERO SECTION */}
+        <section className="relative pt-20 pb-20 border-b border-white/[0.06] overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            {/* Subtle Engineering Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-slate-300 text-xs font-semibold mb-6">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              Developer Assessment & Talent Benchmarking Platform
+            {/* Precision Developer Telemetry Header */}
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-slate-400 tracking-wider uppercase mb-7">
+              <span className="text-blue-400 font-bold">AF-BENCHMARK v2.4</span>
+              <span className="text-slate-600 hidden sm:inline">/</span>
+              <span>ISOLATED RUNTIME CONTAINERS</span>
+              <span className="text-slate-600 hidden sm:inline">/</span>
+              <span className="text-emerald-400 font-medium">ZERO WHITEBOARD TRIVIA</span>
+              <span className="text-slate-600 hidden sm:inline">/</span>
+              <span className="text-slate-400">&lt;45MS EVALUATION LATENCY</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.08] mb-6">
-              Engineering Talent Benchmarking for Modern Teams.
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.08] mb-6 font-sans">
+              Objective Code Assessments.<br className="hidden sm:inline" />
+              <span className="text-slate-300">
+                Engineered for Real Software Teams.
+              </span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
-              Say goodbye to uncalibrated whiteboard trivia. AssessmentForces administers real-world coding challenges, automated test suite runners, and multi-dimensional candidate evaluation pipelines.
+              Screen engineering talent through executable test suites, algorithmic complexity telemetry, and multi-role evaluation pipelines—not memorized whiteboard riddles.
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto mb-16">
-              <Link href="/login" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full gap-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20">
-                  Try 1-Click Demo Logins
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
+            {/* Dynamic Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto mb-14">
+              {isAuthenticated && user ? (
+                <Link href={getDashboardPath(user.role)} className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full gap-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20">
+                    Open {user.role} Dashboard
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/login" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full gap-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20">
+                    Try 1-Click Demo Logins
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              )}
               <Link href="/problems" className="w-full sm:w-auto">
                 <Button size="lg" variant="outline" className="w-full gap-2 text-sm font-semibold border-white/10 hover:bg-white/[0.04] text-slate-200">
                   Browse Problem Bank
@@ -252,20 +293,28 @@ export default function HomePage() {
             </div>
 
             {/* Live Interactive Terminal Preview */}
-            <div className="max-w-4xl mx-auto rounded-xl matte-card overflow-hidden text-left border border-white/[0.08]">
+            <div className="max-w-4xl mx-auto rounded-xl matte-card overflow-hidden text-left border border-white/[0.08] shadow-2xl">
               {/* Window Header */}
               <div className="flex items-center justify-between px-4 py-3 bg-[#0a0c12] border-b border-white/[0.06]">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
-                  <span className="ml-2 text-xs font-mono text-slate-400">
-                    evaluation_benchmark.ts — AssessmentForces Live Session
+                  <span className="ml-2 text-xs font-mono text-slate-300 font-semibold">
+                    evaluation_benchmark.ts — Live Test Session
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleRunHeroBenchmark}
+                    disabled={isRunningHeroTest}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-blue-600/20 border border-blue-500/30 hover:bg-blue-600/30 text-blue-300 text-xs font-mono font-medium transition-colors cursor-pointer"
+                  >
+                    <Play className="w-3 h-3 fill-blue-300" />
+                    {isRunningHeroTest ? "Executing Test..." : "Run Test"}
+                  </button>
                   <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                    Sandbox Active
+                    V8 Runtime Active
                   </span>
                 </div>
               </div>
@@ -285,15 +334,17 @@ export default function HomePage() {
                   status: <span className="text-blue-400">&quot;SCORED_AND_VERIFIED&quot;</span>;
                 </p>
                 <p className="pl-4 text-slate-400">
-                  score: <span className="text-amber-400">96.0</span> / 100.0; percentileRank: <span className="text-emerald-400">&quot;Top 4%&quot;</span>;
+                  score: <span className="text-amber-400">{heroTestOutput.score}.0</span> / 100.0; percentileRank: <span className="text-emerald-400">&quot;Top 3%&quot;</span>;
                 </p>
                 <p className="text-indigo-400">&#125;</p>
-                <p className="pt-2 text-slate-500">
-                  // Graded in real-time container isolate:
-                </p>
-                <p className="text-emerald-400">
-                  ✔ 16/16 automated test suites passed in 18ms (Peak Memory: 14.2 MB)
-                </p>
+                <div className="pt-3 border-t border-white/[0.06] mt-3">
+                  <p className="text-slate-500 text-xs">
+                    // Automated Test Assertion Pipeline:
+                  </p>
+                  <p className="text-emerald-400 font-semibold text-xs sm:text-sm mt-1">
+                    ✔ {heroTestOutput.tests}/{heroTestOutput.tests} test suites passed in {heroTestOutput.latency}ms (Peak Memory: {heroTestOutput.memory})
+                  </p>
+                </div>
               </div>
             </div>
           </div>

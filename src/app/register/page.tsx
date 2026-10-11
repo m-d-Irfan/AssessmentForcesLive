@@ -72,7 +72,7 @@ export default function RegisterPage() {
         role: data.role,
       });
 
-      router.push(getDashboardPath(loggedUser.role));
+      window.location.href = "/";
     } catch (err: any) {
       const msg = err instanceof ApiError ? err.message : "Failed to register account";
       toast.error(msg);

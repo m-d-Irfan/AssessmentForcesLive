@@ -48,8 +48,8 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const user = await login(data.email, data.password);
-      router.push(getDashboardPath(user.role));
+      await login(data.email, data.password);
+      window.location.href = "/";
     } catch {
       // Error handled in auth context toast
     }

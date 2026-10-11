@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/auth-context";
 import { Toaster } from "sonner";
+
+const sansFont = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const monoFont = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "500", "700"],
+});
 
 export const metadata: Metadata = {
   title: "AssessmentForces | Enterprise Developer Assessment & Technical Hiring Platform",
@@ -37,8 +52,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark h-full">
-      <body className="min-h-full flex flex-col bg-[#090d16] text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
+    <html lang="en" className={`dark h-full ${sansFont.variable} ${monoFont.variable}`}>
+      <body className="min-h-full flex flex-col bg-[#07080c] text-slate-100 font-sans antialiased selection:bg-blue-600 selection:text-white">
         <AuthProvider>
           {children}
           <Toaster richColors position="top-right" theme="dark" closeButton />
