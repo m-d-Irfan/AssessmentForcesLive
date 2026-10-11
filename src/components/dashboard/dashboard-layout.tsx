@@ -102,6 +102,15 @@ export function DashboardLayout({
         </div>
       </div>
 
+      {/* Mobile Backdrop Overlay */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/75 backdrop-blur-xs z-40 md:hidden transition-opacity"
+          onClick={() => setIsMobileOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Sidebar for Desktop & Mobile Drawer */}
       <aside
         className={`fixed md:sticky top-0 left-0 z-50 h-screen w-64 bg-slate-950/95 border-r border-slate-800/80 backdrop-blur-xl flex flex-col justify-between transition-transform duration-200 ${
@@ -110,12 +119,16 @@ export function DashboardLayout({
       >
         <div className="p-5 flex flex-col flex-1">
           {/* Brand & Portal title */}
-          <div className="flex items-center justify-between pb-6 mb-4 border-b border-slate-800/80">
-            <div>
-              <Logo href="/" size="sm" />
-              <div className="text-[10px] text-slate-400 font-mono tracking-wider mt-1.5 ml-0.5">
-                {roleLabel}
-              </div>
+          <div className="flex flex-col pb-5 mb-4 border-b border-slate-800/80">
+            <div className="flex items-center justify-between">
+              <Logo href="/" size="md" />
+              <Badge variant={roleBadgeVariant} size="sm">
+                {role}
+              </Badge>
+            </div>
+            <div className="text-[11px] text-slate-400 font-mono tracking-wider mt-2.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+              {roleLabel}
             </div>
           </div>
 

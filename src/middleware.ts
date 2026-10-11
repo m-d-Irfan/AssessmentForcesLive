@@ -31,6 +31,10 @@ export function middleware(request: NextRequest) {
     }
 
     if (isCandidateRoute && role !== "CANDIDATE" && role !== "ADMIN") {
+      // Allow recruiters/employers to test and preview candidate assessment sandboxes
+      if (pathname.startsWith("/candidate/assessments")) {
+        return NextResponse.next();
+      }
       return NextResponse.redirect(new URL("/recruiter", request.url));
     }
 

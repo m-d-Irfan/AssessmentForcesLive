@@ -12,7 +12,9 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { api } from "@/lib/api-client";
 import { Problem } from "@/types";
-import { Search, Filter, Code, Terminal, CheckCircle2, ChevronRight } from "lucide-react";
+import { Search, Filter, Code, Terminal, CheckCircle2, ChevronRight, Play } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
+import { toast } from "sonner";
 
 const SAMPLE_PROBLEMS: Problem[] = [
   {
@@ -142,6 +144,43 @@ function ProblemsList() {
     return matchesQuery && matchesDifficulty && matchesType;
   });
 
+  const { isAuthenticated, user } = useAuth();
+
+  const handlePracticeInSandbox = (prob: Problem) => {
+    if (!isAuthenticated || !user) {
+      toast.warning("Candidate Authentication Required", {
+        description: `Please sign in as Candidate (or use 1-click Demo) to enter the sandbox for "${prob.title}".`,
+        action: {
+          label: "1-Click Login",
+          onClick: () => router.push(`/login?redirect=/candidate/assessments/${prob.id}`),
+        },
+      });
+      return;
+    }
+
+    if (user.role === "ADMIN") {
+      toast.info("Admin Sandbox Inspection Mode", {
+        description: `Opening "${prob.title}" in Administrator Inspection Mode. Full test assertions available.`,
+      });
+      router.push(`/candidate/assessments/${prob.id}`);
+      return;
+    }
+
+    if (user.role === "RECRUITER") {
+      toast.info("Recruiter Sandbox Preview", {
+        description: `Inspecting "${prob.title}" sandbox as Technical Recruiter/Employer.`,
+      });
+      router.push(`/candidate/assessments/${prob.id}`);
+      return;
+    }
+
+    // Role === CANDIDATE
+    toast.success("Initializing Execution Sandbox", {
+      description: `Entering timed assessment runtime for "${prob.title}".`,
+    });
+    router.push(`/candidate/assessments/${prob.id}`);
+  };
+
   return (
     <div className="space-y-6">
       {/* Search and Filters Bar */}
@@ -247,11 +286,14 @@ function ProblemsList() {
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
-                  <Link href="/candidate">
-                    <Button size="sm" variant="secondary" className="gap-1.5 text-xs">
-                      Practice in Sandbox <ChevronRight className="w-3.5 h-3.5" />
-                    </Button>
-                  </Link>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => handlePracticeInSandbox(prob)}
+                    className="gap-1.5 text-xs hover:border-blue-500/50 hover:text-blue-300"
+                  >
+                    Practice in Sandbox <ChevronRight className="w-3.5 h-3.5" />
+                  </Button>
                 </div>
               </Card>
             );
