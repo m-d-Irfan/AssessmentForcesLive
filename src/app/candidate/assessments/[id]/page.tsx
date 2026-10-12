@@ -72,7 +72,7 @@ const TEST_QUESTIONS: TestProblem[] = [
 export default function AssessmentRunnerPage() {
   const router = useRouter();
   const params = useParams();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("A");
@@ -261,6 +261,57 @@ export default function AssessmentRunnerPage() {
               Sign In to Unlock 40+ Problems
             </Button>
           </Link>
+        </div>
+      )}
+
+      {/* Authenticated Role Inspection Notification Banners */}
+      {isAuthenticated && user?.role === "ADMIN" && (
+        <div className="bg-purple-950/50 border-b border-purple-500/30 px-4 py-2 text-xs text-purple-200 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold text-[10px] uppercase tracking-wider border border-purple-500/40">
+              Admin Inspection Mode
+            </span>
+            <span>
+              Previewing candidate runtime as <strong>{user.displayName}</strong>. Full test execution diagnostics & assertions active.
+            </span>
+          </div>
+          <Link href="/admin">
+            <Button size="sm" variant="ghost" className="text-purple-300 hover:text-white text-xs h-6 px-2">
+              Back to Admin Overview →
+            </Button>
+          </Link>
+        </div>
+      )}
+
+      {isAuthenticated && user?.role === "RECRUITER" && (
+        <div className="bg-blue-950/50 border-b border-blue-500/30 px-4 py-2 text-xs text-blue-200 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold text-[10px] uppercase tracking-wider border border-blue-500/40">
+              Recruiter Preview Mode
+            </span>
+            <span>
+              Testing sandbox environment as <strong>{user.displayName}</strong> (Employer). Verify questions before assigning to candidates.
+            </span>
+          </div>
+          <Link href="/recruiter/assessments">
+            <Button size="sm" variant="ghost" className="text-blue-300 hover:text-white text-xs h-6 px-2">
+              Back to Recruiter Wizard →
+            </Button>
+          </Link>
+        </div>
+      )}
+
+      {isAuthenticated && user?.role === "CANDIDATE" && (
+        <div className="bg-emerald-950/30 border-b border-emerald-500/30 px-4 py-1.5 text-xs text-emerald-200 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[11px] font-mono text-emerald-300">
+              Active Candidate Attempt: <strong>{user.displayName}</strong> • Answers auto-save to candidate score log
+            </span>
+          </div>
+          <span className="text-[10px] text-emerald-400/80 font-mono">
+            Secure Proctoring Active
+          </span>
         </div>
       )}
 

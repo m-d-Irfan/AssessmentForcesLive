@@ -215,11 +215,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
+    // 1. Clear all stored auth (localStorage + cookies + sessionStorage)
     clearStoredAuth();
+
+    // 2. Immediately wipe in-memory state so no component re-render leaks data
     setUser(null);
     setToken(null);
-    toast.info("Logged out successfully");
-    router.push("/login");
+
+    // 3. Inform user
+    toast.info("Signed out successfully");
+
+    // 4. SECURITY: Use window.location.replace to purge browser history entry
+    //    and force a complete server-side navigation/reload.
+    window.location.replace("/login");
   };
 
   const updateUser = (updatedUser: User) => {

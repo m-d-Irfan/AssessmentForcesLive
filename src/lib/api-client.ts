@@ -1,4 +1,4 @@
-import { getStoredToken } from "./auth-storage";
+import { getStoredToken, clearStoredAuth } from "./auth-storage";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL &&
@@ -93,6 +93,9 @@ export async function apiClient<T = unknown>(
     }
 
     if (!response.ok) {
+      if (response.status === 401 && token && typeof window !== "undefined") {
+        clearStoredAuth();
+      }
       const errorMessage =
         data?.message || data?.error || `Request failed with status ${response.status}`;
       throw new ApiError(errorMessage, response.status, data?.code, data?.errors);

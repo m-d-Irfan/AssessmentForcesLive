@@ -35,9 +35,16 @@ export function getStoredUser(): User | null {
 export function clearStoredAuth() {
   if (typeof window === "undefined") return;
 
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    sessionStorage.clear();
+  } catch {
+    // Storage access may fail in private mode
+  }
 
-  document.cookie = `${TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-  document.cookie = `${ROLE_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  // Force-expire cookies across domain and paths
+  const expireCookieStr = "=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
+  document.cookie = `${TOKEN_KEY}${expireCookieStr}`;
+  document.cookie = `${ROLE_COOKIE}${expireCookieStr}`;
 }
