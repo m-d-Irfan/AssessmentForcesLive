@@ -17,6 +17,9 @@ import {
   BadgeCheck,
   ArrowRight,
   Sparkles,
+  Eye,
+  EyeOff,
+  RotateCcw,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -59,14 +62,59 @@ export default function RegisterPage() {
   const { registerUser } = useAuth();
   const [selectedRole, setSelectedRole] = useState<"CANDIDATE" | "RECRUITER">("CANDIDATE");
 
-  // Separate forms for crisp validation and fast experience
+  // Show/Hide password toggles for candidate
+  const [showCandidatePassword, setShowCandidatePassword] = useState(false);
+  const [showCandidateConfirmPassword, setShowCandidateConfirmPassword] = useState(false);
+
+  // Show/Hide password toggles for recruiter
+  const [showRecruiterPassword, setShowRecruiterPassword] = useState(false);
+  const [showRecruiterConfirmPassword, setShowRecruiterConfirmPassword] = useState(false);
+
+  // Separate forms for crisp validation and fast experience with clean empty defaults
   const candidateForm = useForm<z.infer<typeof candidateSchema>>({
     resolver: zodResolver(candidateSchema),
+    defaultValues: {
+      displayName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   const recruiterForm = useForm<z.infer<typeof recruiterSchema>>({
     resolver: zodResolver(recruiterSchema),
+    defaultValues: {
+      displayName: "",
+      email: "",
+      companyName: "",
+      designation: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
+
+  const handleRoleChange = (role: "CANDIDATE" | "RECRUITER") => {
+    setSelectedRole(role);
+    // Reset forms when switching roles so autofilled/saved credentials do not bleed over
+    candidateForm.reset({
+      displayName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+    recruiterForm.reset({
+      displayName: "",
+      email: "",
+      companyName: "",
+      designation: "",
+      password: "",
+      confirmPassword: "",
+    });
+    setShowCandidatePassword(false);
+    setShowCandidateConfirmPassword(false);
+    setShowRecruiterPassword(false);
+    setShowRecruiterConfirmPassword(false);
+  };
 
   const onCandidateSubmit = async (data: z.infer<typeof candidateSchema>) => {
     try {
@@ -125,7 +173,7 @@ export default function RegisterPage() {
               <div className="grid grid-cols-2 gap-3 p-1 rounded-2xl bg-slate-100 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
-                  onClick={() => setSelectedRole("CANDIDATE")}
+                  onClick={() => handleRoleChange("CANDIDATE")}
                   className={`py-2.5 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
                     selectedRole === "CANDIDATE"
                       ? "bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-sm border border-emerald-500/30 font-bold"
@@ -138,7 +186,7 @@ export default function RegisterPage() {
 
                 <button
                   type="button"
-                  onClick={() => setSelectedRole("RECRUITER")}
+                  onClick={() => handleRoleChange("RECRUITER")}
                   className={`py-2.5 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
                     selectedRole === "RECRUITER"
                       ? "bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-400 shadow-sm border border-blue-500/30 font-bold"
@@ -155,6 +203,7 @@ export default function RegisterPage() {
             {selectedRole === "CANDIDATE" && (
               <form
                 onSubmit={candidateForm.handleSubmit(onCandidateSubmit)}
+                autoComplete="off"
                 className="space-y-4 animate-fade-in"
               >
                 <div>
@@ -166,6 +215,7 @@ export default function RegisterPage() {
                     <input
                       type="text"
                       {...candidateForm.register("displayName")}
+                      autoComplete="off"
                       placeholder="e.g. Alex Mercer"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     />
@@ -186,6 +236,8 @@ export default function RegisterPage() {
                     <input
                       type="email"
                       {...candidateForm.register("email")}
+                      autoComplete="off"
+                      data-lpignore="true"
                       placeholder="alex@example.com"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     />
@@ -205,11 +257,21 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
-                        type="password"
+                        type={showCandidatePassword ? "text" : "password"}
                         {...candidateForm.register("password")}
+                        autoComplete="new-password"
                         placeholder="••••••••"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                        className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowCandidatePassword(!showCandidatePassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 focus:outline-none cursor-pointer transition-colors"
+                        title={showCandidatePassword ? "Hide password" : "Show password"}
+                        aria-label={showCandidatePassword ? "Hide password" : "Show password"}
+                      >
+                        {showCandidatePassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
                     </div>
                     {candidateForm.formState.errors.password && (
                       <p className="text-rose-500 text-xs mt-1">
@@ -225,11 +287,21 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
-                        type="password"
+                        type={showCandidateConfirmPassword ? "text" : "password"}
                         {...candidateForm.register("confirmPassword")}
+                        autoComplete="new-password"
                         placeholder="••••••••"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                        className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowCandidateConfirmPassword(!showCandidateConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 focus:outline-none cursor-pointer transition-colors"
+                        title={showCandidateConfirmPassword ? "Hide password" : "Show password"}
+                        aria-label={showCandidateConfirmPassword ? "Hide password" : "Show password"}
+                      >
+                        {showCandidateConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
                     </div>
                     {candidateForm.formState.errors.confirmPassword && (
                       <p className="text-rose-500 text-xs mt-1">
@@ -237,6 +309,35 @@ export default function RegisterPage() {
                       </p>
                     )}
                   </div>
+                </div>
+
+                {/* Show Passwords Option & Clear Form */}
+                <div className="flex items-center justify-between pt-0.5">
+                  <label className="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 select-none">
+                    <input
+                      type="checkbox"
+                      checked={showCandidatePassword && showCandidateConfirmPassword}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setShowCandidatePassword(checked);
+                        setShowCandidateConfirmPassword(checked);
+                      }}
+                      className="w-3.5 h-3.5 rounded border-slate-300 dark:border-slate-700 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                    />
+                    <span>Show passwords</span>
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      candidateForm.reset({ displayName: "", email: "", password: "", confirmPassword: "" });
+                      toast.info("Candidate form cleared");
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Clear form</span>
+                  </button>
                 </div>
 
                 <Button
@@ -254,6 +355,7 @@ export default function RegisterPage() {
             {selectedRole === "RECRUITER" && (
               <form
                 onSubmit={recruiterForm.handleSubmit(onRecruiterSubmit)}
+                autoComplete="off"
                 className="space-y-4 animate-fade-in"
               >
                 <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/20 text-xs text-blue-800 dark:text-blue-300 flex items-center gap-2">
@@ -270,6 +372,7 @@ export default function RegisterPage() {
                     <input
                       type="text"
                       {...recruiterForm.register("displayName")}
+                      autoComplete="off"
                       placeholder="e.g. Sarah Jenkins"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
@@ -290,6 +393,8 @@ export default function RegisterPage() {
                     <input
                       type="email"
                       {...recruiterForm.register("email")}
+                      autoComplete="off"
+                      data-lpignore="true"
                       placeholder="sarah@techcorp.io"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
@@ -311,6 +416,7 @@ export default function RegisterPage() {
                       <input
                         type="text"
                         {...recruiterForm.register("companyName")}
+                        autoComplete="off"
                         placeholder="e.g. Acme Labs"
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                       />
@@ -331,6 +437,7 @@ export default function RegisterPage() {
                       <input
                         type="text"
                         {...recruiterForm.register("designation")}
+                        autoComplete="off"
                         placeholder="e.g. Lead Technical Recruiter"
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                       />
@@ -351,11 +458,21 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
-                        type="password"
+                        type={showRecruiterPassword ? "text" : "password"}
                         {...recruiterForm.register("password")}
+                        autoComplete="new-password"
                         placeholder="••••••••"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowRecruiterPassword(!showRecruiterPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 focus:outline-none cursor-pointer transition-colors"
+                        title={showRecruiterPassword ? "Hide password" : "Show password"}
+                        aria-label={showRecruiterPassword ? "Hide password" : "Show password"}
+                      >
+                        {showRecruiterPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
                     </div>
                     {recruiterForm.formState.errors.password && (
                       <p className="text-rose-500 text-xs mt-1">
@@ -371,11 +488,21 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
-                        type="password"
+                        type={showRecruiterConfirmPassword ? "text" : "password"}
                         {...recruiterForm.register("confirmPassword")}
+                        autoComplete="new-password"
                         placeholder="••••••••"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowRecruiterConfirmPassword(!showRecruiterConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 focus:outline-none cursor-pointer transition-colors"
+                        title={showRecruiterConfirmPassword ? "Hide password" : "Show password"}
+                        aria-label={showRecruiterConfirmPassword ? "Hide password" : "Show password"}
+                      >
+                        {showRecruiterConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
                     </div>
                     {recruiterForm.formState.errors.confirmPassword && (
                       <p className="text-rose-500 text-xs mt-1">
@@ -383,6 +510,35 @@ export default function RegisterPage() {
                       </p>
                     )}
                   </div>
+                </div>
+
+                {/* Show Passwords Option & Clear Form */}
+                <div className="flex items-center justify-between pt-0.5">
+                  <label className="inline-flex items-center gap-2 cursor-pointer text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 select-none">
+                    <input
+                      type="checkbox"
+                      checked={showRecruiterPassword && showRecruiterConfirmPassword}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setShowRecruiterPassword(checked);
+                        setShowRecruiterConfirmPassword(checked);
+                      }}
+                      className="w-3.5 h-3.5 rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    />
+                    <span>Show passwords</span>
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      recruiterForm.reset({ displayName: "", email: "", companyName: "", designation: "", password: "", confirmPassword: "" });
+                      toast.info("Recruiter form cleared");
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Clear form</span>
+                  </button>
                 </div>
 
                 <Button
