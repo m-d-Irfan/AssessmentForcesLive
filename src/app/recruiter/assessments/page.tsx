@@ -6,10 +6,7 @@ import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge, StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { EmptyState } from "@/components/ui/empty-state";
-import { TableSkeleton } from "@/components/ui/skeleton";
-import { api } from "@/lib/api-client";
-import { Assessment, Problem } from "@/types";
+import { Assessment, CompanyProblem, CompanyMember } from "@/types";
 import {
   Layers,
   PlusCircle,
@@ -19,71 +16,131 @@ import {
   ArrowRight,
   ArrowLeft,
   Send,
-  HelpCircle,
+  Edit2,
+  Trash2,
+  Code2,
+  Users,
+  UserPlus,
+  Briefcase,
   FileCode2,
+  Plus,
 } from "lucide-react";
 import { toast } from "sonner";
-
-const AVAILABLE_PROBLEMS: { id: string; title: string; type: string; difficulty: string; points: number }[] = [
-  { id: "seed_problem_typescript", title: "TypeScript Type Safety & Structural Shape Evaluation", type: "SINGLE_CHOICE", difficulty: "EASY", points: 10 },
-  { id: "prob_async_eventloop", title: "Node.js Event Loop Phases & Microtask Queue Priority", type: "MULTIPLE_CHOICE", difficulty: "MEDIUM", points: 15 },
-  { id: "prob_lru_cache_algorithm", title: "Least Recently Used (LRU) Cache Implementation in O(1)", type: "CODE", difficulty: "HARD", points: 25 },
-  { id: "prob_postgres_indexing", title: "PostgreSQL B-Tree & GIN Index Optimization for JSONB", type: "SINGLE_CHOICE", difficulty: "MEDIUM", points: 15 },
-];
-
-const INITIAL_ASSESSMENTS: Assessment[] = [
-  {
-    id: "seed_assessment_backend",
-    title: "Backend Developer Fundamentals",
-    description: "Evaluates core Node.js runtime, asynchronous event loops, and TypeScript typing.",
-    durationMinutes: 30,
-    passPercentage: 60,
-    totalPoints: 10,
-    status: "PUBLISHED",
-    createdAt: "2026-10-01T10:00:00.000Z",
-    _count: {
-      items: 1,
-      invitations: 14,
-      attempts: 8,
-    },
-  },
-  {
-    id: "asst_fullstack_benchmark",
-    title: "Senior Full-Stack Architecture Challenge",
-    description: "In-depth testing covering PostgreSQL indexing, database transactions, and LRU algorithmic cache.",
-    durationMinutes: 60,
-    passPercentage: 70,
-    totalPoints: 50,
-    status: "PUBLISHED",
-    createdAt: "2026-10-05T14:30:00.000Z",
-    _count: {
-      items: 3,
-      invitations: 22,
-      attempts: 16,
-    },
-  },
-];
+import { useAuth } from "@/context/auth-context";
+import {
+  getAssessments,
+  saveAssessment,
+  deleteAssessment,
+  getCompanyProblems,
+  saveCompanyProblem,
+  getCompanyMembers,
+  inviteCompanyMember,
+  removeCompanyMember,
+} from "@/lib/assessment-store";
 
 export default function RecruiterAssessmentsPage() {
-  const [assessments, setAssessments] = useState<Assessment[]>(INITIAL_ASSESSMENTS);
+  const { user } = useAuth();
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [problems, setProblems] = useState<CompanyProblem[]>([]);
+  const [members, setMembers] = useState<CompanyMember[]>([]);
+
+  const [activeTab, setActiveTab] = useState<"assessments" | "problems" | "team">("assessments");
+
+  // Assessment Wizard & Edit State
   const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [editingAssessmentId, setEditingAssessmentId] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Wizard State
   const [wizardData, setWizardData] = useState({
     title: "",
     description: "",
     durationMinutes: 45,
     passPercentage: 65,
-    selectedProblemIds: ["seed_problem_typescript", "prob_async_eventloop"],
-    pointsMap: {
-      seed_problem_typescript: 10,
-      prob_async_eventloop: 15,
-      prob_lru_cache_algorithm: 25,
-      prob_postgres_indexing: 15,
-    } as Record<string, number>,
+    selectedProblemIds: [] as string[],
+    pointsMap: {} as Record<string, number>,
   });
+
+  // Custom Problem Modal State
+  const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
+  const [problemForm, setProblemForm] = useState({
+    title: "",
+    category: "Full-Stack & Algorithms",
+    difficulty: "MEDIUM" as "EASY" | "MEDIUM" | "HARD",
+    type: "CODE" as "CODE" | "SINGLE_CHOICE" | "MULTIPLE_CHOICE",
+    points: 20,
+    description: "",
+    starterCode: "function solution(input) {\n  // your implementation here\n}",
+  });
+
+  // Team Invite Modal State
+  const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
+  const [memberForm, setMemberForm] = useState({
+    name: "",
+    email: "",
+    designation: "Technical Interviewer",
+    role: "INTERVIEWER" as "ADMIN" | "INTERVIEWER" | "MEMBER",
+    assessmentId: "",
+  });
+
+  // Load and sync store data
+  const loadData = () => {
+    setAssessments(getAssessments(user?.email));
+    setProblems(getCompanyProblems());
+    setMembers(getCompanyMembers(user?.email));
+  };
+
+  useEffect(() => {
+    loadData();
+    const handleUpdate = () => loadData();
+    window.addEventListener("assessments_updated", handleUpdate);
+    window.addEventListener("problems_updated", handleUpdate);
+    window.addEventListener("members_updated", handleUpdate);
+    return () => {
+      window.removeEventListener("assessments_updated", handleUpdate);
+      window.removeEventListener("problems_updated", handleUpdate);
+      window.removeEventListener("members_updated", handleUpdate);
+    };
+  }, [user]);
+
+  // Open Wizard in "Create" mode
+  const handleOpenCreateWizard = () => {
+    setEditingAssessmentId(null);
+    setCurrentStep(1);
+    setWizardData({
+      title: "",
+      description: "",
+      durationMinutes: 45,
+      passPercentage: 65,
+      selectedProblemIds: problems.length > 0 ? [problems[0].id] : [],
+      pointsMap: problems.reduce((acc, p) => ({ ...acc, [p.id]: p.points || 15 }), {}),
+    });
+    setIsWizardOpen(true);
+  };
+
+  // Open Wizard in "Edit" mode
+  const handleOpenEditWizard = (asst: Assessment) => {
+    setEditingAssessmentId(asst.id);
+    setCurrentStep(1);
+    setWizardData({
+      title: asst.title,
+      description: asst.description || "",
+      durationMinutes: asst.durationMinutes,
+      passPercentage: asst.passPercentage,
+      selectedProblemIds: problems.slice(0, Math.max(1, asst._count?.items || 1)).map((p) => p.id),
+      pointsMap: problems.reduce((acc, p) => ({ ...acc, [p.id]: p.points || 15 }), {}),
+    });
+    setIsWizardOpen(true);
+  };
+
+  // Delete Assessment
+  const handleDeleteAssessment = (id: string, title: string) => {
+    if (confirm(`Are you sure you want to delete assessment "${title}"?`)) {
+      const updated = deleteAssessment(id);
+      setAssessments(updated);
+      toast.success(`Assessment "${title}" deleted.`);
+    }
+  };
 
   const toggleProblemSelection = (id: string) => {
     setWizardData((prev) => {
@@ -99,7 +156,7 @@ export default function RecruiterAssessmentsPage() {
 
   const calculateTotalPoints = () => {
     return wizardData.selectedProblemIds.reduce(
-      (sum, id) => sum + (wizardData.pointsMap[id] || 10),
+      (sum, id) => sum + (wizardData.pointsMap[id] || 15),
       0
     );
   };
@@ -118,13 +175,12 @@ export default function RecruiterAssessmentsPage() {
 
     setIsLoading(true);
     try {
-      // Simulate / POST to backend
-      await new Promise((r) => setTimeout(r, 600));
+      await new Promise((r) => setTimeout(r, 400));
 
-      const newAssessment: Assessment = {
-        id: `asst_${Date.now()}`,
-        title: wizardData.title,
-        description: wizardData.description || null,
+      const updatedAsst: Assessment = {
+        id: editingAssessmentId || `asst_${Date.now()}`,
+        title: wizardData.title.trim(),
+        description: wizardData.description.trim() || null,
         durationMinutes: Number(wizardData.durationMinutes),
         passPercentage: Number(wizardData.passPercentage),
         totalPoints: calculateTotalPoints(),
@@ -132,54 +188,367 @@ export default function RecruiterAssessmentsPage() {
         createdAt: new Date().toISOString(),
         _count: {
           items: wizardData.selectedProblemIds.length,
-          invitations: 0,
-          attempts: 0,
+          invitations: editingAssessmentId
+            ? assessments.find((a) => a.id === editingAssessmentId)?._count?.invitations || 0
+            : 0,
+          attempts: editingAssessmentId
+            ? assessments.find((a) => a.id === editingAssessmentId)?._count?.attempts || 0
+            : 0,
         },
       };
 
-      setAssessments([newAssessment, ...assessments]);
-      toast.success(`Assessment "${newAssessment.title}" created & published!`);
+      const updatedList = saveAssessment(updatedAsst);
+      setAssessments(updatedList);
+      toast.success(
+        editingAssessmentId
+          ? `Assessment "${updatedAsst.title}" updated successfully!`
+          : `Assessment "${updatedAsst.title}" published and added to invitation list!`
+      );
       setIsWizardOpen(false);
-      setCurrentStep(1);
-      setWizardData({
-        title: "",
-        description: "",
-        durationMinutes: 45,
-        passPercentage: 65,
-        selectedProblemIds: ["seed_problem_typescript"],
-        pointsMap: { seed_problem_typescript: 10 },
-      });
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Create Company Problem
+  const handleCreateProblem = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!problemForm.title.trim()) {
+      toast.error("Problem title is required");
+      return;
+    }
+    if (!problemForm.description.trim()) {
+      toast.error("Problem description is required");
+      return;
+    }
+
+    const created = saveCompanyProblem(problemForm);
+    setProblems(getCompanyProblems());
+    setIsProblemModalOpen(false);
+    setProblemForm({
+      title: "",
+      category: "Full-Stack & Algorithms",
+      difficulty: "MEDIUM",
+      type: "CODE",
+      points: 20,
+      description: "",
+      starterCode: "function solution(input) {\n  // your implementation here\n}",
+    });
+    toast.success(`Problem "${created.title}" created and added to company bank!`);
+  };
+
+  // Invite Team Member
+  const handleInviteMember = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!memberForm.name.trim() || !memberForm.email.trim()) {
+      toast.error("Name and email are required");
+      return;
+    }
+
+    inviteCompanyMember(memberForm);
+    setMembers(getCompanyMembers(user?.email));
+    setIsMemberModalOpen(false);
+    setMemberForm({
+      name: "",
+      email: "",
+      designation: "Technical Interviewer",
+      role: "INTERVIEWER",
+      assessmentId: "",
+    });
+    toast.success(`Team invitation sent to ${memberForm.email}!`);
+  };
+
   return (
     <DashboardLayout role="RECRUITER">
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="space-y-6">
+        {/* Header with Title & Action Buttons */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Assessment Management & Authoring
+              Company Assessments & Question Bank
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
-              Design timed assessment programs, calibrate pass thresholds, and review published challenge sets.
+              Create and manage proprietary assessments, author custom coding challenges, and invite hiring team members.
             </p>
           </div>
 
-          <Button
-            variant="glow"
-            size="sm"
-            onClick={() => setIsWizardOpen(true)}
-            className="gap-2 text-xs"
-          >
-            <PlusCircle className="w-4 h-4" />
-            Launch 3-Step Creation Wizard
-          </Button>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsProblemModalOpen(true)}
+              className="gap-1.5 text-xs border-purple-500/30 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/30"
+            >
+              <Code2 className="w-4 h-4" />
+              Create Custom Problem
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsMemberModalOpen(true)}
+              className="gap-1.5 text-xs border-blue-500/30 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
+            >
+              <UserPlus className="w-4 h-4" />
+              Invite Team Member
+            </Button>
+
+            <Button
+              variant="glow"
+              size="sm"
+              onClick={handleOpenCreateWizard}
+              className="gap-1.5 text-xs"
+            >
+              <PlusCircle className="w-4 h-4" />
+              New Assessment
+            </Button>
+          </div>
         </div>
 
-        {/* MULTI-STEP CREATION WIZARD MODAL */}
+        {/* Tab Controls: Assessments | Problem Bank | Team Members */}
+        <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+          <button
+            onClick={() => setActiveTab("assessments")}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeTab === "assessments"
+                ? "bg-blue-600 text-white shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50"
+            }`}
+          >
+            Assessments ({assessments.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab("problems")}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeTab === "problems"
+                ? "bg-blue-600 text-white shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50"
+            }`}
+          >
+            Question Bank ({problems.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab("team")}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeTab === "team"
+                ? "bg-blue-600 text-white shadow-sm"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50"
+            }`}
+          >
+            Hiring Team & Collaborators ({members.length})
+          </button>
+        </div>
+
+        {/* ============================================================
+            TAB 1: ASSESSMENTS LIST
+        ============================================================ */}
+        {activeTab === "assessments" && (
+          <div className="space-y-4">
+            <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 dark:bg-slate-950/80 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-200 dark:border-slate-800">
+                    <tr>
+                      <th className="px-5 py-3.5">Assessment Title</th>
+                      <th className="px-5 py-3.5">Status</th>
+                      <th className="px-5 py-3.5">Duration</th>
+                      <th className="px-5 py-3.5">Problems</th>
+                      <th className="px-5 py-3.5">Pass Mark</th>
+                      <th className="px-5 py-3.5">Activity</th>
+                      <th className="px-5 py-3.5 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
+                    {assessments.map((item) => (
+                      <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-850/40 transition-colors">
+                        <td className="px-5 py-4">
+                          <div className="font-bold text-slate-900 dark:text-white text-sm">{item.title}</div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 max-w-sm line-clamp-1">
+                            {item.description || "No description provided"}
+                          </div>
+                          <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                            ID: {item.id}
+                          </div>
+                        </td>
+                        <td className="px-5 py-4">
+                          <StatusBadge status={item.status} />
+                        </td>
+                        <td className="px-5 py-4 font-mono">
+                          {item.durationMinutes} mins
+                        </td>
+                        <td className="px-5 py-4 font-mono font-bold text-blue-600 dark:text-blue-400">
+                          {item._count?.items || 1} items ({item.totalPoints} pts)
+                        </td>
+                        <td className="px-5 py-4 font-mono text-emerald-600 dark:text-emerald-400 font-bold">
+                          {item.passPercentage}%
+                        </td>
+                        <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400 text-[11px]">
+                          {item._count?.invitations || 0} invited • {item._count?.attempts || 0} taken
+                        </td>
+                        <td className="px-5 py-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <Link href={`/recruiter/candidates?asst=${item.id}`}>
+                              <Button size="sm" variant="outline" className="text-xs gap-1 py-1 px-2.5">
+                                <Send className="w-3 h-3 text-blue-500" /> Invite
+                              </Button>
+                            </Link>
+
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleOpenEditWizard(item)}
+                              title="Edit Assessment"
+                              className="text-xs p-1.5 text-slate-600 dark:text-slate-400 hover:text-blue-600"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </Button>
+
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleDeleteAssessment(item.id, item.title)}
+                              title="Delete Assessment"
+                              className="text-xs p-1.5 text-slate-400 hover:text-rose-600"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================
+            TAB 2: QUESTION BANK (RECRUITER CAN CREATE & BROWSE PROBLEMS)
+        ============================================================ */}
+        {activeTab === "problems" && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Company problems authored by your hiring team. Can be included in any assessment.
+              </p>
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={() => setIsProblemModalOpen(true)}
+                className="gap-1.5 text-xs"
+              >
+                <Plus className="w-3.5 h-3.5" /> Author New Problem
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {problems.map((prob) => (
+                <Card key={prob.id} className="p-5 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-xs space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                        {prob.category}
+                      </span>
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
+                        {prob.title}
+                      </h3>
+                    </div>
+                    <Badge variant={prob.difficulty === "EASY" ? "success" : prob.difficulty === "HARD" ? "danger" : "warning"} size="sm">
+                      {prob.difficulty}
+                    </Badge>
+                  </div>
+
+                  <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">
+                    {prob.description}
+                  </p>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] font-mono text-slate-500">
+                    <span>Type: {prob.type}</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-200">{prob.points} Points</span>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================
+            TAB 3: HIRING TEAM & COLLABORATORS
+        ============================================================ */}
+        {activeTab === "team" && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Team members with access to evaluate submissions and dispatch assessment tokens.
+              </p>
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={() => setIsMemberModalOpen(true)}
+                className="gap-1.5 text-xs"
+              >
+                <UserPlus className="w-3.5 h-3.5" /> Invite Team Member
+              </Button>
+            </div>
+
+            <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 dark:bg-slate-950/80 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-200 dark:border-slate-800">
+                    <tr>
+                      <th className="px-5 py-3.5">Member Name</th>
+                      <th className="px-5 py-3.5">Email</th>
+                      <th className="px-5 py-3.5">Designation</th>
+                      <th className="px-5 py-3.5">Access Role</th>
+                      <th className="px-5 py-3.5 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
+                    {members.map((mem) => (
+                      <tr key={mem.id} className="hover:bg-slate-50 dark:hover:bg-slate-850/40">
+                        <td className="px-5 py-4 font-bold text-slate-900 dark:text-white">
+                          {mem.name}
+                        </td>
+                        <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400">
+                          {mem.email}
+                        </td>
+                        <td className="px-5 py-4">
+                          {mem.designation}
+                        </td>
+                        <td className="px-5 py-4">
+                          <Badge variant="purple" size="sm">
+                            {mem.role}
+                          </Badge>
+                        </td>
+                        <td className="px-5 py-4 text-right">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              const updated = removeCompanyMember(mem.id);
+                              setMembers(updated);
+                              toast.info(`Removed ${mem.name} from company team.`);
+                            }}
+                            className="text-xs text-rose-500 hover:text-rose-700"
+                          >
+                            Remove
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================
+            MODAL 1: ASSESSMENT CREATION & EDITING WIZARD
+        ============================================================ */}
         {isWizardOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md animate-fade-in">
             <Card className="w-full max-w-2xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl relative max-h-[90vh] flex flex-col">
@@ -188,7 +557,7 @@ export default function RecruiterAssessmentsPage() {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <FileCode2 className="w-5 h-5 text-blue-500 dark:text-blue-400" />
-                    Assessment Creation Wizard
+                    {editingAssessmentId ? "Edit Assessment Program" : "Assessment Creation Wizard"}
                   </h2>
                   <Button
                     size="icon"
@@ -237,7 +606,6 @@ export default function RecruiterAssessmentsPage() {
 
               {/* Wizard Content Body */}
               <div className="p-6 overflow-y-auto flex-1 space-y-5">
-                {/* STEP 1: Basic Info & Constraints */}
                 {currentStep === 1 && (
                   <div className="space-y-4">
                     <div>
@@ -251,7 +619,7 @@ export default function RecruiterAssessmentsPage() {
                         onChange={(e) =>
                           setWizardData({ ...wizardData, title: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       />
                     </div>
 
@@ -266,7 +634,7 @@ export default function RecruiterAssessmentsPage() {
                         onChange={(e) =>
                           setWizardData({ ...wizardData, description: e.target.value })
                         }
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       />
                     </div>
 
@@ -312,15 +680,14 @@ export default function RecruiterAssessmentsPage() {
                   </div>
                 )}
 
-                {/* STEP 2: Problem Selection & Points */}
                 {currentStep === 2 && (
                   <div className="space-y-4">
                     <p className="text-xs text-slate-600 dark:text-slate-400">
-                      Select which questions to include in this assessment. Candidates will be presented with each item in sequence.
+                      Select which questions to include in this assessment.
                     </p>
 
-                    <div className="space-y-2.5">
-                      {AVAILABLE_PROBLEMS.map((prob) => {
+                    <div className="space-y-2.5 max-h-72 overflow-y-auto">
+                      {problems.map((prob) => {
                         const isSelected = wizardData.selectedProblemIds.includes(prob.id);
                         return (
                           <div
@@ -347,7 +714,7 @@ export default function RecruiterAssessmentsPage() {
                                   {prob.title}
                                 </div>
                                 <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                                  {prob.type} • {prob.difficulty}
+                                  {prob.category} • {prob.difficulty}
                                 </div>
                               </div>
                             </div>
@@ -371,7 +738,6 @@ export default function RecruiterAssessmentsPage() {
                   </div>
                 )}
 
-                {/* STEP 3: Review & Launch */}
                 {currentStep === 3 && (
                   <div className="space-y-4 text-xs">
                     <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2">
@@ -381,7 +747,7 @@ export default function RecruiterAssessmentsPage() {
                       <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                         {wizardData.description || "No description provided."}
                       </p>
-                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-200 dark:border-slate-900 font-mono">
+                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800 font-mono">
                         <div>
                           <span className="text-slate-500 block">Duration</span>
                           <span className="text-slate-900 dark:text-white font-bold">{wizardData.durationMinutes} mins</span>
@@ -400,7 +766,7 @@ export default function RecruiterAssessmentsPage() {
                     <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-500/20 text-slate-700 dark:text-slate-300 space-y-1">
                       <div className="font-semibold text-blue-700 dark:text-blue-300">Ready for Candidate Dispatch</div>
                       <p className="text-[11px] text-slate-600 dark:text-slate-400">
-                        Once launched, this assessment will be available in your candidate invitations dispatch dropdown.
+                        Once saved, this assessment immediately syncs with candidate test invitations and token dispatchers.
                       </p>
                     </div>
                   </div>
@@ -425,7 +791,7 @@ export default function RecruiterAssessmentsPage() {
                     variant="primary"
                     onClick={() => {
                       if (currentStep === 1 && !wizardData.title.trim()) {
-                        toast.error("Please enter a title");
+                        toast.error("Please enter an assessment title");
                         return;
                       }
                       setCurrentStep((c) => c + 1);
@@ -442,7 +808,7 @@ export default function RecruiterAssessmentsPage() {
                     onClick={handleFinishWizard}
                     className="gap-1.5"
                   >
-                    Publish Assessment <CheckCircle2 className="w-4 h-4" />
+                    {editingAssessmentId ? "Save Changes" : "Publish Assessment"} <CheckCircle2 className="w-4 h-4" />
                   </Button>
                 )}
               </div>
@@ -450,61 +816,211 @@ export default function RecruiterAssessmentsPage() {
           </div>
         )}
 
-        {/* Existing Assessments Table */}
-        <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-slate-950/80 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-200 dark:border-slate-800">
-                <tr>
-                  <th className="px-5 py-3.5">Assessment Title</th>
-                  <th className="px-5 py-3.5">Status</th>
-                  <th className="px-5 py-3.5">Duration</th>
-                  <th className="px-5 py-3.5">Problems</th>
-                  <th className="px-5 py-3.5">Pass Mark</th>
-                  <th className="px-5 py-3.5">Candidates</th>
-                  <th className="px-5 py-3.5 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
-                {assessments.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-850/40 transition-colors">
-                    <td className="px-5 py-4">
-                      <div className="font-bold text-slate-900 dark:text-white text-sm">{item.title}</div>
-                      <div className="text-[11px] text-slate-600 dark:text-slate-400 max-w-sm line-clamp-1">
-                        {item.description || "No description provided"}
-                      </div>
-                      <div className="text-[10px] text-slate-500 font-mono mt-0.5">
-                        ID: {item.id}
-                      </div>
-                    </td>
-                    <td className="px-5 py-4">
-                      <StatusBadge status={item.status} />
-                    </td>
-                    <td className="px-5 py-4 font-mono">
-                      {item.durationMinutes} mins
-                    </td>
-                    <td className="px-5 py-4 font-mono font-bold text-blue-600 dark:text-blue-400">
-                      {item._count?.items || 1} items ({item.totalPoints} pts)
-                    </td>
-                    <td className="px-5 py-4 font-mono text-emerald-600 dark:text-emerald-400 font-bold">
-                      {item.passPercentage}%
-                    </td>
-                    <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400">
-                      {item._count?.invitations || 0} invited • {item._count?.attempts || 0} taken
-                    </td>
-                    <td className="px-5 py-4 text-right">
-                      <Link href="/recruiter/candidates">
-                        <Button size="sm" variant="outline" className="text-xs gap-1">
-                          <Send className="w-3.5 h-3.5" /> Invite
-                        </Button>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* ============================================================
+            MODAL 2: CREATE CUSTOM PROBLEM (RECRUITER CAN AUTHOR QUESTIONS)
+        ============================================================ */}
+        {isProblemModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md animate-fade-in">
+            <Card className="w-full max-w-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl relative max-h-[90vh] flex flex-col p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Code2 className="w-5 h-5 text-purple-500" />
+                  Author Custom Assessment Problem
+                </h3>
+                <Button size="icon" variant="ghost" onClick={() => setIsProblemModalOpen(false)}>
+                  ✕
+                </Button>
+              </div>
+
+              <form onSubmit={handleCreateProblem} className="space-y-3 overflow-y-auto flex-1">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Problem Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Asynchronous Retry Mechanism with Exponential Backoff"
+                    value={problemForm.title}
+                    onChange={(e) => setProblemForm({ ...problemForm, title: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Category / Topic
+                    </label>
+                    <input
+                      type="text"
+                      value={problemForm.category}
+                      onChange={(e) => setProblemForm({ ...problemForm, category: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Difficulty
+                    </label>
+                    <select
+                      value={problemForm.difficulty}
+                      onChange={(e) => setProblemForm({ ...problemForm, difficulty: e.target.value as any })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500"
+                    >
+                      <option value="EASY">EASY</option>
+                      <option value="MEDIUM">MEDIUM</option>
+                      <option value="HARD">HARD</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Evaluation Type
+                    </label>
+                    <select
+                      value={problemForm.type}
+                      onChange={(e) => setProblemForm({ ...problemForm, type: e.target.value as any })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500"
+                    >
+                      <option value="CODE">Code Implementation</option>
+                      <option value="SINGLE_CHOICE">Single Choice Question</option>
+                      <option value="MULTIPLE_CHOICE">Multiple Choice Question</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Max Points
+                    </label>
+                    <input
+                      type="number"
+                      min="5"
+                      max="100"
+                      value={problemForm.points}
+                      onChange={(e) => setProblemForm({ ...problemForm, points: Number(e.target.value) })}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Problem Prompt & Specifications *
+                  </label>
+                  <textarea
+                    rows={3}
+                    required
+                    placeholder="Provide detailed algorithmic constraints, input parameters, and expected return value..."
+                    value={problemForm.description}
+                    onChange={(e) => setProblemForm({ ...problemForm, description: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Starter Code Template (for candidate)
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={problemForm.starterCode}
+                    onChange={(e) => setProblemForm({ ...problemForm, starterCode: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 font-mono text-xs focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+
+                <Button type="submit" variant="glow" className="w-full text-xs">
+                  Save & Add to Question Bank
+                </Button>
+              </form>
+            </Card>
           </div>
-        </div>
+        )}
+
+        {/* ============================================================
+            MODAL 3: INVITE COMPANY MEMBER
+        ============================================================ */}
+        {isMemberModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/80 backdrop-blur-md animate-fade-in">
+            <Card className="w-full max-w-md border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl relative p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <UserPlus className="w-5 h-5 text-blue-500" />
+                  Invite Team Member
+                </h3>
+                <Button size="icon" variant="ghost" onClick={() => setIsMemberModalOpen(false)}>
+                  ✕
+                </Button>
+              </div>
+
+              <form onSubmit={handleInviteMember} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Member Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. John Doe"
+                    value={memberForm.name}
+                    onChange={(e) => setMemberForm({ ...memberForm, name: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Work Email *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="john@company.io"
+                    value={memberForm.email}
+                    onChange={(e) => setMemberForm({ ...memberForm, email: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Designation / Title
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Senior Backend Interviewer"
+                    value={memberForm.designation}
+                    onChange={(e) => setMemberForm({ ...memberForm, designation: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Permission Role
+                  </label>
+                  <select
+                    value={memberForm.role}
+                    onChange={(e) => setMemberForm({ ...memberForm, role: e.target.value as any })}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-500"
+                  >
+                    <option value="INTERVIEWER">Technical Interviewer (Evaluate Submissions)</option>
+                    <option value="ADMIN">Recruiting Admin (Full authoring & dispatch)</option>
+                    <option value="MEMBER">Viewer / Observer</option>
+                  </select>
+                </div>
+
+                <Button type="submit" variant="primary" className="w-full text-xs">
+                  Send Invitation
+                </Button>
+              </form>
+            </Card>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

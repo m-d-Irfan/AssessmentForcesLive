@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -14,49 +14,81 @@ import { useAuth } from "@/context/auth-context";
 
 const profileSchema = z.object({
   displayName: z.string().min(2, "Name must be at least 2 characters"),
-  headline: z.string().min(5, "Headline must be at least 5 characters"),
-  yearsExperience: z.coerce.number().min(0, "Experience cannot be negative"),
-  skills: z.string().min(2, "Provide at least one skill tag"),
-  githubUrl: z.string().url("Must be a valid URL").or(z.literal("")),
-  bio: z.string().max(500, "Bio max 500 characters").optional(),
+  headline: z.string().max(120).optional().or(z.literal("")),
+  yearsExperience: z.coerce.number().min(0).max(50).optional(),
+  skills: z.string().optional().or(z.literal("")),
+  githubUrl: z.string().url("Must be a valid URL").or(z.literal("")).optional(),
+  bio: z.string().max(500, "Bio max 500 characters").optional().or(z.literal("")),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function CandidateProfilePage() {
   const { user, updateUser } = useAuth();
-  const [skillTags, setSkillTags] = useState(["TypeScript", "Node.js", "PostgreSQL", "Next.js", "Redis"]);
+  const [skillTags, setSkillTags] = useState<string[]>([]);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      displayName: user?.displayName || "Demo Candidate",
-      headline: "Full-Stack Software Engineer & Backend Specialist",
-      yearsExperience: 3,
-      skills: "TypeScript, Node.js, PostgreSQL, Next.js, Redis",
-      githubUrl: "https://github.com/developer",
-      bio: "Passionate engineer specialized in scalable distributed systems and high-accuracy developer assessment platforms.",
+      displayName: user?.displayName || "",
+      headline: "",
+      yearsExperience: 0,
+      skills: "",
+      githubUrl: "",
+      bio: "",
     },
   });
 
+  useEffect(() => {
+    if (!user) return;
+    setValue("displayName", user.displayName || "");
+
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(`devassess_profile_${user.id}`);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setValue("displayName", parsed.displayName || user.displayName);
+          setValue("headline", parsed.headline || "");
+          setValue("yearsExperience", parsed.yearsExperience || 0);
+          setValue("skills", parsed.skills || "");
+          setValue("githubUrl", parsed.githubUrl || "");
+          setValue("bio", parsed.bio || "");
+          if (parsed.skills) {
+            setSkillTags(parsed.skills.split(",").map((s: string) => s.trim()).filter(Boolean));
+          }
+        } catch {}
+      }
+    }
+  }, [user, setValue]);
+
   const onSubmit = async (data: ProfileFormData) => {
-    await new Promise((r) => setTimeout(r, 600));
+    await new Promise((r) => setTimeout(r, 400));
 
     if (user) {
       updateUser({
         ...user,
         displayName: data.displayName,
       });
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem(`devassess_profile_${user.id}`, JSON.stringify(data));
+      }
     }
 
-    const tags = data.skills.split(",").map((s) => s.trim()).filter(Boolean);
-    setSkillTags(tags);
+    if (data.skills) {
+      const tags = data.skills.split(",").map((s) => s.trim()).filter(Boolean);
+      setSkillTags(tags);
+    } else {
+      setSkillTags([]);
+    }
 
-    toast.success("Developer profile and skill tags updated successfully!");
+    toast.success("Developer profile and technical skills saved!");
   };
 
   return (
@@ -71,12 +103,12 @@ export default function CandidateProfilePage() {
           </p>
         </div>
 
-        <Card className="p-8 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm space-y-6">
+        <Card className="p-6 sm:p-8 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm space-y-6">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Display Name
+                  Display Name *
                 </label>
                 <input
                   type="text"
@@ -95,28 +127,23 @@ export default function CandidateProfilePage() {
                 <input
                   type="text"
                   {...register("headline")}
-                  placeholder="e.g. Senior Backend Architect"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  placeholder="e.g. Full-Stack Developer | TypeScript & Python"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
-                {errors.headline && (
-                  <p className="text-rose-500 text-xs mt-1">{errors.headline.message}</p>
-                )}
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Years of Professional Experience
+                  Years of Experience
                 </label>
                 <input
                   type="number"
                   {...register("yearsExperience")}
+                  placeholder="0"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
-                {errors.yearsExperience && (
-                  <p className="text-rose-500 text-xs mt-1">{errors.yearsExperience.message}</p>
-                )}
               </div>
 
               <div>
@@ -127,7 +154,7 @@ export default function CandidateProfilePage() {
                   type="url"
                   {...register("githubUrl")}
                   placeholder="https://github.com/your-username"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
                 {errors.githubUrl && (
                   <p className="text-rose-500 text-xs mt-1">{errors.githubUrl.message}</p>
@@ -142,21 +169,20 @@ export default function CandidateProfilePage() {
               <input
                 type="text"
                 {...register("skills")}
-                placeholder="TypeScript, Python, Docker, PostgreSQL, GraphQL"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                placeholder="TypeScript, Python, Docker, PostgreSQL, React"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
-              {errors.skills && (
-                <p className="text-rose-500 text-xs mt-1">{errors.skills.message}</p>
-              )}
 
               {/* Skills preview tags */}
-              <div className="flex flex-wrap gap-1.5 mt-3">
-                {skillTags.map((tag, i) => (
-                  <Badge key={i} variant="info" size="sm">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+              {skillTags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-3">
+                  {skillTags.map((tag, i) => (
+                    <Badge key={i} variant="info" size="sm">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div>
@@ -166,11 +192,9 @@ export default function CandidateProfilePage() {
               <textarea
                 rows={3}
                 {...register("bio")}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                placeholder="Briefly describe your engineering background, favorite tech stack, or career aspirations..."
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
-              {errors.bio && (
-                <p className="text-rose-500 text-xs mt-1">{errors.bio.message}</p>
-              )}
             </div>
 
             <Button

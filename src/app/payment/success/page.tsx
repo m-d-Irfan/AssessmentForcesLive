@@ -14,6 +14,7 @@ import {
   Receipt,
   Send,
 } from "lucide-react";
+import { addCompanyCredits } from "@/lib/assessment-store";
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
@@ -31,7 +32,17 @@ function PaymentSuccessContent() {
       spread: 70,
       origin: { y: 0.6 },
     });
-  }, []);
+
+    // Automatically credit the company balance once per session
+    if (typeof window !== "undefined" && sessionId) {
+      const processedKey = `devassess_session_credited_${sessionId}`;
+      if (!sessionStorage.getItem(processedKey)) {
+        const added = parseInt(credits, 10) || 50;
+        addCompanyCredits(added);
+        sessionStorage.setItem(processedKey, "true");
+      }
+    }
+  }, [sessionId, credits]);
 
   return (
     <Card className="p-8 sm:p-10 border-emerald-500/30 bg-white dark:bg-slate-900/90 shadow-2xl backdrop-blur-xl space-y-6 text-center">

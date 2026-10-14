@@ -25,6 +25,8 @@ interface AuthContextType {
     password: string;
     displayName: string;
     role: UserRole;
+    companyName?: string;
+    designation?: string;
   }) => Promise<User>;
   logout: () => void;
   updateUser: (user: User) => void;
@@ -80,6 +82,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(savedUser);
     }
     setIsLoading(false);
+
+    // Multi-tab Session Synchronization:
+    // If user logs out or switches accounts in another tab, immediately sync or reload
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "devassess_token" || e.key === "devassess_user") {
+        if (!e.newValue) {
+          // Logged out in another tab
+          setUser(null);
+          setToken(null);
+          toast.info("Session terminated from another tab.");
+          window.location.replace("/login");
+          return;
+        }
+
+        // Changed account in another tab
+        const freshUser = getStoredUser();
+        const freshToken = getStoredToken();
+        if (freshUser && freshToken) {
+          setUser(freshUser);
+          setToken(freshToken);
+          // Force page reload so role routes and middleware re-verify cleanly
+          window.location.reload();
+        }
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const login = async (email: string, password: string): Promise<User> => {
@@ -181,16 +211,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string;
     displayName: string;
     role: UserRole;
+    companyName?: string;
+    designation?: string;
   }): Promise<User> => {
     setIsLoading(true);
     try {
       const response = await api.post<AuthResponse>("/auth/register", payload);
       const { user: registeredUser, accessToken } = response;
-      setStoredAuth(accessToken, registeredUser);
-      setUser(registeredUser);
+      const enrichedUser: User = {
+        ...registeredUser,
+        companyName: payload.companyName || registeredUser.companyName,
+        designation: payload.designation || registeredUser.designation,
+        credits: payload.role === "RECRUITER" ? (registeredUser.credits ?? 10) : undefined,
+      };
+      setStoredAuth(accessToken, enrichedUser);
+      setUser(enrichedUser);
       setToken(accessToken);
-      toast.success(`Account created successfully! Welcome, ${registeredUser.displayName}!`);
-      return registeredUser;
+      toast.success(`Account created successfully! Welcome, ${enrichedUser.displayName}!`);
+      return enrichedUser;
     } catch {
       // Fallback session on registration
       const fallbackUser: User = {
@@ -202,6 +240,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         status: "ACTIVE",
         emailVerifiedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
+        companyName: payload.companyName || null,
+        designation: payload.designation || null,
+        credits: payload.role === "RECRUITER" ? 10 : undefined,
       };
       const fallbackToken = `sess_reg_${Date.now()}`;
       setStoredAuth(fallbackToken, fallbackUser);

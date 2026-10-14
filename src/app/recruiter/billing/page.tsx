@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -12,27 +12,31 @@ import {
   Coins,
   ShieldCheck,
   CheckCircle2,
-  Clock,
   Receipt,
-  ArrowRight,
-  ExternalLink,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  getCompanyCredits,
+  addCompanyCredits,
+  claimFreeStarterCredits,
+  isFreeStarterClaimed,
+} from "@/lib/assessment-store";
 
 const CREDIT_PACKAGES: CreditPackage[] = [
   {
     id: "pkg_starter",
-    name: "Starter Package",
-    description: "10 Candidate invitations for specialized hiring.",
+    name: "Free Starter Tier",
+    description: "10 Complimentary candidate invitations included free for every recruiter organization.",
     credits: 10,
-    price: 500,
+    price: 0,
     currency: "BDT",
     isActive: true,
   },
   {
     id: "pkg_growth",
     name: "Growth Package",
-    description: "50 Candidate invitations for scaling engineering teams.",
+    description: "50 Candidate invitations for scaling engineering teams with full telemetry.",
     credits: 50,
     price: 2000,
     currency: "BDT",
@@ -41,7 +45,7 @@ const CREDIT_PACKAGES: CreditPackage[] = [
   {
     id: "pkg_scale",
     name: "Enterprise Scale",
-    description: "100 Candidate invitations with priority telemetry.",
+    description: "100 Candidate invitations with priority execution & custom test authoring.",
     credits: 100,
     price: 3500,
     currency: "BDT",
@@ -51,16 +55,16 @@ const CREDIT_PACKAGES: CreditPackage[] = [
 
 const INITIAL_PAYMENTS: Payment[] = [
   {
-    id: "pay_demo_01",
+    id: "pay_free_starter",
     companyId: "seed_company",
     initiatedById: "seed_recruiter",
     creditPackageId: "pkg_starter",
     provider: "STRIPE",
     status: "COMPLETED",
-    amount: 500,
+    amount: 0,
     currency: "BDT",
     credits: 10,
-    merchantInvoiceNumber: "INV-2026-0091",
+    merchantInvoiceNumber: "INV-FREE-STARTER",
     completedAt: "2026-10-08T11:20:00.000Z",
     createdAt: "2026-10-08T11:18:00.000Z",
   },
@@ -71,8 +75,33 @@ export default function RecruiterBillingPage() {
   const [selectedPkg, setSelectedPkg] = useState<CreditPackage>(CREDIT_PACKAGES[1]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [payments, setPayments] = useState<Payment[]>(INITIAL_PAYMENTS);
+  const [credits, setCredits] = useState<number>(10);
+  const [hasClaimedFree, setHasClaimedFree] = useState<boolean>(false);
+
+  const syncCredits = () => {
+    setCredits(getCompanyCredits());
+    setHasClaimedFree(isFreeStarterClaimed());
+  };
+
+  useEffect(() => {
+    syncCredits();
+    const handleUpdate = () => syncCredits();
+    window.addEventListener("credits_updated", handleUpdate);
+    return () => window.removeEventListener("credits_updated", handleUpdate);
+  }, []);
+
+  const handleClaimFreeTier = () => {
+    claimFreeStarterCredits();
+    syncCredits();
+    toast.success("10 Complimentary Starter Credits claimed! Your balance has been updated.");
+  };
 
   const handleInitiateStripePayment = async () => {
+    if (selectedPkg.price === 0) {
+      handleClaimFreeTier();
+      return;
+    }
+
     setIsProcessing(true);
     toast.loading("Generating real Stripe Checkout session...", { id: "stripe-init" });
 
@@ -98,7 +127,7 @@ export default function RecruiterBillingPage() {
         return;
       }
 
-      // If backend offline or error, use local test sandbox
+      // If backend offline or fallback
       const sessionId = `cs_test_${Math.random().toString(36).substring(2, 16)}`;
       const successUrl = `/payment/success?session_id=${sessionId}&package=${encodeURIComponent(
         selectedPkg.name
@@ -126,7 +155,7 @@ export default function RecruiterBillingPage() {
             Credit Packages & Stripe Billing
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Top up candidate invitation credits using secure Stripe Checkout. 1 credit unlocks 1 full candidate assessment invitation.
+            Every recruiter organization receives 10 free candidate assessment credits. Top up additional credits via secure Stripe Checkout.
           </p>
         </div>
 
@@ -141,10 +170,10 @@ export default function RecruiterBillingPage() {
                 Current Available Credits
               </span>
               <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-mono mt-0.5">
-                50 Credits
+                {credits} Credits
               </div>
               <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1">
-                Sufficient for 50 candidate invitations across all published tests.
+                Sufficient for {credits} candidate test invitations across all published tests.
               </p>
             </div>
           </div>
@@ -160,12 +189,13 @@ export default function RecruiterBillingPage() {
         <div className="space-y-4">
           <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <CreditCard className="w-4 h-4 text-blue-500 dark:text-blue-400" />
-            Select Top-Up Package
+            Select Credit Tier
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {CREDIT_PACKAGES.map((pkg) => {
               const isSelected = selectedPkg.id === pkg.id;
+              const isFree = pkg.price === 0;
 
               return (
                 <Card
@@ -178,17 +208,28 @@ export default function RecruiterBillingPage() {
                       : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm"
                   }`}
                 >
+                  {isFree && (
+                    <div className="absolute -top-3 right-4">
+                      <Badge variant="success" size="sm" className="font-bold">
+                        Free for Recruiters
+                      </Badge>
+                    </div>
+                  )}
+
                   {pkg.credits === 50 && (
                     <div className="absolute -top-3 right-4">
                       <Badge variant="info" size="sm" className="bg-blue-600 text-white font-bold">
-                        Popular
+                        Most Popular
                       </Badge>
                     </div>
                   )}
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white">{pkg.name}</h3>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                        {pkg.name}
+                        {isFree && <Sparkles className="w-4 h-4 text-amber-500" />}
+                      </h3>
                       <div
                         className={`w-4 h-4 rounded-full border flex items-center justify-center ${
                           isSelected
@@ -206,7 +247,7 @@ export default function RecruiterBillingPage() {
 
                     <div className="pt-3">
                       <span className="text-2xl font-extrabold text-slate-900 dark:text-white font-mono">
-                        {pkg.price} {pkg.currency}
+                        {isFree ? "0 BDT (Free)" : `${pkg.price} ${pkg.currency}`}
                       </span>
                       <span className="text-xs text-slate-500 dark:text-slate-400 ml-1.5 font-mono">
                         ({pkg.credits} Credits)
@@ -215,7 +256,9 @@ export default function RecruiterBillingPage() {
                   </div>
 
                   <div className="pt-4 border-t border-slate-200 dark:border-slate-800/80 mt-4 text-[11px] text-slate-500 dark:text-slate-400">
-                    Unit price: {Math.round(pkg.price / pkg.credits)} {pkg.currency} / candidate
+                    {isFree
+                      ? "Complimentary Starter Plan for hiring evaluation"
+                      : `Unit price: ${Math.round(pkg.price / pkg.credits)} ${pkg.currency} / candidate`}
                   </div>
                 </Card>
               );
@@ -229,29 +272,47 @@ export default function RecruiterBillingPage() {
                 Selected: {selectedPkg.name} ({selectedPkg.credits} Credits)
               </div>
               <div className="text-xs text-slate-600 dark:text-slate-400">
-                Total Due: <span className="text-slate-900 dark:text-white font-bold font-mono">{selectedPkg.price} {selectedPkg.currency}</span> via Stripe Checkout
+                {selectedPkg.price === 0 ? (
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">100% Free Plan for all Recruiters</span>
+                ) : (
+                  <>Total Due: <span className="text-slate-900 dark:text-white font-bold font-mono">{selectedPkg.price} {selectedPkg.currency}</span> via Stripe</>
+                )}
               </div>
             </div>
 
             <div className="flex items-center gap-3 w-full sm:w-auto">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => router.push("/payment/cancel")}
-                className="text-xs"
-              >
-                Test Cancel Flow
-              </Button>
-              <Button
-                variant="glow"
-                size="md"
-                isLoading={isProcessing}
-                onClick={handleInitiateStripePayment}
-                className="gap-2 text-xs font-semibold w-full sm:w-auto"
-              >
-                <CreditCard className="w-4 h-4" />
-                Pay {selectedPkg.price} {selectedPkg.currency} with Stripe
-              </Button>
+              {selectedPkg.price === 0 ? (
+                <Button
+                  variant="glow"
+                  size="md"
+                  onClick={handleClaimFreeTier}
+                  className="gap-2 text-xs font-semibold w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Claim Free 10 Credits
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => router.push("/payment/cancel")}
+                    className="text-xs"
+                  >
+                    Test Cancel Flow
+                  </Button>
+                  <Button
+                    variant="glow"
+                    size="md"
+                    isLoading={isProcessing}
+                    onClick={handleInitiateStripePayment}
+                    className="gap-2 text-xs font-semibold w-full sm:w-auto"
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    Pay {selectedPkg.price} {selectedPkg.currency} with Stripe
+                  </Button>
+                </>
+              )}
             </div>
           </Card>
         </div>
@@ -260,7 +321,7 @@ export default function RecruiterBillingPage() {
         <div className="space-y-4">
           <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <Receipt className="w-4 h-4 text-purple-500 dark:text-purple-400" />
-            Payment History & Invoices
+            Credit History & Invoices
           </h2>
 
           <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
@@ -291,7 +352,7 @@ export default function RecruiterBillingPage() {
                         +{p.credits} Credits
                       </td>
                       <td className="px-5 py-4 font-mono">
-                        {p.amount} {p.currency}
+                        {p.amount === 0 ? "Free" : `${p.amount} ${p.currency}`}
                       </td>
                       <td className="px-5 py-4">
                         <StatusBadge status={p.status} />

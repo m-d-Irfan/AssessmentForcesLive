@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { CandidateRadar } from "@/components/dashboard/candidate-radar";
+import { useAuth } from "@/context/auth-context";
+import { saveScorecard } from "@/lib/assessment-store";
 
 interface PendingSubmission {
   id: string;
@@ -60,6 +62,7 @@ const INITIAL_SUBMISSIONS: PendingSubmission[] = [
 ];
 
 export default function RecruiterEvaluationsPage() {
+  const { user } = useAuth();
   const [submissions, setSubmissions] = useState<PendingSubmission[]>(INITIAL_SUBMISSIONS);
   const [selectedSubmission, setSelectedSubmission] = useState<PendingSubmission>(INITIAL_SUBMISSIONS[1]);
   const [manualScoreInput, setManualScoreInput] = useState(String(INITIAL_SUBMISSIONS[1].manualScore));
@@ -94,6 +97,21 @@ export default function RecruiterEvaluationsPage() {
         manualScore: Number(manualScoreInput),
         evaluatorNotes: notesInput,
         status: "FINALIZED",
+      });
+
+      saveScorecard({
+        id: `res_${selectedSubmission.id}`,
+        assessmentId: "seed_assessment_backend",
+        assessmentTitle: selectedSubmission.assessmentTitle,
+        companyName: user?.companyName || "Verified Hiring Partner",
+        candidateEmail: selectedSubmission.candidateEmail,
+        completedAt: new Date().toISOString(),
+        score: Number(manualScoreInput),
+        maxScore: selectedSubmission.maxScore,
+        percentage: Math.round((Number(manualScoreInput) / selectedSubmission.maxScore) * 100),
+        passed: Number(manualScoreInput) >= 6,
+        evaluatorNotes: notesInput,
+        skillsAssessed: ["TypeScript", "Data Structures", "Algorithmic Complexity"],
       });
 
       toast.success(

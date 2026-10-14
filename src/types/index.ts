@@ -9,6 +9,9 @@ export interface User {
   status: "PENDING_VERIFICATION" | "ACTIVE" | "SUSPENDED";
   emailVerifiedAt: string | null;
   createdAt: string;
+  companyName?: string | null;
+  designation?: string | null;
+  credits?: number;
 }
 
 export interface AuthResponse {
@@ -169,4 +172,28 @@ export interface AuditLog {
     displayName: string;
     role: string;
   };
+}
+
+export interface CompanyMember {
+  id: string;
+  name: string;
+  email: string;
+  designation: string;
+  role: "ADMIN" | "INTERVIEWER" | "MEMBER";
+  assessmentId?: string | null;
+  createdAt: string;
+}
+
+export interface CompanyProblem {
+  id: string;
+  title: string;
+  type: ProblemType;
+  difficulty: Difficulty;
+  category: string;
+  description: string;
+  starterCode?: string;
+  testCases?: string;
+  points: number;
+  companyId?: string | null;
+  createdAt: string;
 }
