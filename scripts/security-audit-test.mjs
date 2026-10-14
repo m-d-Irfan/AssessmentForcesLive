@@ -1,7 +1,7 @@
 // Comprehensive Security Audit Suite for AssessmentForces
 // Tests unauthenticated barriers, middleware redirects, cache control headers, and role isolation
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.BASE_URL || "https://assessment-forces-ai.vercel.app";
 
 async function runSecurityTests() {
   console.log("🔒 Starting Comprehensive Security Audit Suite...\n");
@@ -182,7 +182,7 @@ async function runSecurityTests() {
     const nosniff = res.headers.get("x-content-type-options");
     const frameOptions = res.headers.get("x-frame-options");
     const referrer = res.headers.get("referrer-policy");
-    if (nosniff === "nosniff" && frameOptions === "SAMEORIGIN") {
+    if (nosniff === "nosniff" && (frameOptions === "SAMEORIGIN" || frameOptions === "DENY")) {
       console.log(`✅ TEST 10: Global Security Headers verified: X-Content-Type-Options=${nosniff}, X-Frame-Options=${frameOptions}, Referrer-Policy=${referrer}`);
       passed++;
     } else {

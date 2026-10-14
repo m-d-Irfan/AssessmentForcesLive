@@ -3,22 +3,17 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
-import { Card } from "@/components/ui/card";
 import { Badge, StatusBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/ui/empty-state";
 import { api } from "@/lib/api-client";
-import { User, UserRole } from "@/types";
+import { User } from "@/types";
 import {
   Users,
   Search,
-  Shield,
-  Briefcase,
-  Terminal,
   UserCheck,
   UserX,
-  Filter,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -145,7 +140,7 @@ function ManageUsersContent() {
   return (
     <div className="space-y-6">
       {/* Filters Bar */}
-      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">
         <div className="relative w-full md:w-80">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
@@ -153,7 +148,7 @@ function ManageUsersContent() {
             placeholder="Search by name, email, or user ID..."
             value={query}
             onChange={(e) => updateFilters("q", e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           />
         </div>
 
@@ -161,7 +156,7 @@ function ManageUsersContent() {
           <select
             value={roleFilter}
             onChange={(e) => updateFilters("role", e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           >
             <option value="ALL">All Roles</option>
             <option value="ADMIN">Platform Admin</option>
@@ -172,7 +167,7 @@ function ManageUsersContent() {
           <select
             value={statusFilter}
             onChange={(e) => updateFilters("status", e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           >
             <option value="ALL">All Statuses</option>
             <option value="ACTIVE">Active</option>
@@ -185,7 +180,7 @@ function ManageUsersContent() {
               size="sm"
               variant="ghost"
               onClick={() => router.push(pathname)}
-              className="text-xs text-slate-400 hover:text-white"
+              className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             >
               Reset
             </Button>
@@ -205,19 +200,19 @@ function ManageUsersContent() {
           onAction={() => router.push(pathname)}
         />
       ) : (
-        <div className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden">
+        <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+              <thead className="bg-slate-50 dark:bg-slate-950/80 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-200 dark:border-slate-800">
                 <tr>
-                  <th className="px-5 py-3.5">User Identity</th>
-                  <th className="px-5 py-3.5">Role</th>
-                  <th className="px-5 py-3.5">Status</th>
-                  <th className="px-5 py-3.5">Registered</th>
-                  <th className="px-5 py-3.5 text-right">Access Action</th>
+                  <th className="px-5 py-3.5 font-bold">User Identity</th>
+                  <th className="px-5 py-3.5 font-bold">Role</th>
+                  <th className="px-5 py-3.5 font-bold">Status</th>
+                  <th className="px-5 py-3.5 font-bold">Registered</th>
+                  <th className="px-5 py-3.5 font-bold text-right">Access Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
                 {filteredUsers.map((item) => {
                   const roleBadge =
                     item.role === "ADMIN"
@@ -227,15 +222,15 @@ function ManageUsersContent() {
                       : "success";
 
                   return (
-                    <tr key={item.id} className="hover:bg-slate-850/40 transition-colors">
+                    <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-850/40 transition-colors">
                       <td className="px-5 py-4">
-                        <div className="font-bold text-white text-sm">
+                        <div className="font-bold text-slate-900 dark:text-white text-sm">
                           {item.displayName}
                         </div>
-                        <div className="text-[11px] text-slate-400 font-mono">
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                           {item.email}
                         </div>
-                        <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono mt-0.5">
                           ID: {item.id}
                         </div>
                       </td>
@@ -247,12 +242,12 @@ function ManageUsersContent() {
                       <td className="px-5 py-4">
                         <StatusBadge status={item.status} />
                       </td>
-                      <td className="px-5 py-4 text-slate-400 font-mono text-[11px]">
+                      <td className="px-5 py-4 text-slate-500 dark:text-slate-400 font-mono text-[11px]">
                         {new Date(item.createdAt).toLocaleDateString()}
                       </td>
                       <td className="px-5 py-4 text-right">
                         {item.role === "ADMIN" ? (
-                          <span className="text-[10px] text-slate-500 font-mono">
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                             Protected Superuser
                           </span>
                         ) : (
@@ -291,10 +286,10 @@ export default function AdminManagePage() {
     <DashboardLayout role="ADMIN">
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             User & Company Resource Directory
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Search, filter, and modify candidate and recruiter privileges across the platform.
           </p>
         </div>

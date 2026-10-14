@@ -18,9 +18,9 @@ export function Card({
     <div
       className={twMerge(
         clsx(
-          "rounded-2xl bg-slate-900/70 border border-slate-800/80 backdrop-blur-md p-6 text-slate-100 transition-all duration-200",
-          glow && "shadow-xl shadow-blue-500/5 border-blue-500/20",
-          hoverEffect && "hover:border-slate-700 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-0.5",
+          "rounded-2xl bg-white dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md p-6 text-slate-800 dark:text-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.04)] dark:shadow-none transition-all duration-200",
+          glow && "shadow-xl shadow-blue-500/10 border-blue-500/30 dark:shadow-blue-500/5 dark:border-blue-500/20",
+          hoverEffect && "hover:border-blue-300 dark:hover:border-slate-700 hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-0.5",
           className
         )
       )}
@@ -50,7 +50,7 @@ export function CardTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={twMerge(clsx("text-lg font-bold tracking-tight text-white", className))}
+      className={twMerge(clsx("text-lg font-bold tracking-tight text-slate-900 dark:text-white", className))}
       {...props}
     >
       {children}
@@ -65,7 +65,7 @@ export function CardDescription({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={twMerge(clsx("text-sm text-slate-400 leading-relaxed", className))}
+      className={twMerge(clsx("text-sm text-slate-600 dark:text-slate-400 leading-relaxed", className))}
       {...props}
     >
       {children}
@@ -88,7 +88,7 @@ export function CardFooter({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={twMerge(clsx("flex items-center pt-4 border-t border-slate-800/60 mt-4", className))}
+      className={twMerge(clsx("flex items-center pt-4 border-t border-slate-100 dark:border-slate-800/60 mt-4", className))}
       {...props}
     >
       {children}

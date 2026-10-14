@@ -34,10 +34,10 @@ export function StatCard({
     <Card hoverEffect className="relative overflow-hidden">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             {title}
           </p>
-          <p className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <p className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {value}
           </p>
         </div>
@@ -49,12 +49,12 @@ export function StatCard({
       </div>
 
       {(description || trend) && (
-        <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
           {description && <span>{description}</span>}
           {trend && (
             <span
               className={`font-semibold font-mono ${
-                trend.isPositive ? "text-emerald-400" : "text-rose-400"
+                trend.isPositive ? "text-emerald-500 dark:text-emerald-400" : "text-rose-500 dark:text-rose-400"
               }`}
             >
               {trend.isPositive ? "+" : ""}

@@ -24,6 +24,7 @@ import {
 import { toast } from "sonner";
 import { LogoMark } from "@/components/ui/logo";
 import { useAuth } from "@/context/auth-context";
+import { ThemeToggle } from "@/context/theme-context";
 import { LanguageSelector } from "@/components/assessment/language-selector";
 import {
   SupportedLanguage,
@@ -163,7 +164,7 @@ export default function AssessmentRunnerPage() {
         `✔ Suite 1: TestCreateCacheBasicOperations() ... PASSED (3ms)\n` +
         `✔ Suite 2: TestTtlExpirationThreshold() ...... PASSED (simulated ${latencyMs}ms)\n` +
         `✔ Suite 3: TestEvictionAndNilSafety() ........ PASSED (2ms)\n\n` +
-        `Diagnostics: Execution Latency ${latencyMs}ms | Peak RSS: ${memMb} MB | Sandbox: Linux Cgroups\n` +
+        `Diagnostics: Execution Latency ${latencyMs}ms | Peak RSS: ${memMb} MB | Isolation: Linux Cgroups\n` +
         `RESULT: All 3 automated test suites PASSED (100% Score)`
       );
       toast.success(`All assertions passed for ${selectedLang.displayName}!`);
@@ -199,34 +200,36 @@ export default function AssessmentRunnerPage() {
   const currentProb = TEST_QUESTIONS[currentIndex];
 
   return (
-    <div className="min-h-screen bg-[#070b12] text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#070b12] dark:text-slate-100 flex flex-col transition-colors duration-150">
       {/* Test Runner Sticky Header */}
-      <header className="sticky top-0 z-50 px-4 sm:px-6 py-3 bg-slate-950/90 border-b border-slate-800 backdrop-blur-xl flex items-center justify-between">
+      <header className="sticky top-0 z-50 px-4 sm:px-6 py-3 bg-white/95 dark:bg-slate-950/90 border-b border-slate-200 dark:border-slate-800 backdrop-blur-xl flex items-center justify-between transition-colors">
         <div className="flex items-center gap-3">
           <Link href="/candidate/assessments" className="flex items-center gap-2 group">
             <LogoMark size="sm" />
-            <span className="font-extrabold text-sm text-white group-hover:text-blue-400 transition-colors">
-              Assessment<span className="text-blue-500">Forces</span>
+            <span className="font-extrabold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              Assessment<span className="text-blue-600 dark:text-blue-500">Forces</span>
             </span>
           </Link>
-          <span className="text-slate-600">•</span>
+          <span className="text-slate-300 dark:text-slate-600">•</span>
           <div>
-            <h1 className="text-xs sm:text-sm font-semibold text-slate-200 truncate max-w-xs sm:max-w-md">
+            <h1 className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-200 truncate max-w-xs sm:max-w-md">
               Backend Developer Fundamentals
             </h1>
-            <span className="text-[10px] text-slate-400 font-mono">
-              Live Test Attempt • ID: {params.id || "seed_backend"}
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+              Live Evaluation Session • ID: {params.id || "seed_backend"}
             </span>
           </div>
         </div>
 
-        {/* Live Countdown Timer & Submit */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700/80 font-mono text-xs sm:text-sm">
-            <Clock className="w-4 h-4 text-amber-400 animate-pulse" />
+        {/* Live Countdown Timer, ThemeToggle & Submit */}
+        <div className="flex items-center gap-2.5">
+          <ThemeToggle size="sm" />
+
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700/80 font-mono text-xs sm:text-sm">
+            <Clock className="w-4 h-4 text-amber-500 dark:text-amber-400 animate-pulse" />
             <span
               className={`font-bold ${
-                timeLeft < 300 ? "text-rose-400" : "text-amber-300"
+                timeLeft < 300 ? "text-rose-600 dark:text-rose-400" : "text-amber-700 dark:text-amber-300"
               }`}
             >
               {formatTimer(timeLeft)}
@@ -245,20 +248,20 @@ export default function AssessmentRunnerPage() {
         </div>
       </header>
 
-      {/* Public Free Guest Sandbox Banner */}
+      {/* Featured Practice Challenge Banner */}
       {!isAuthenticated && (
-        <div className="bg-gradient-to-r from-blue-950/90 via-slate-900 to-indigo-950/80 border-b border-blue-500/30 px-4 py-2.5 text-xs text-blue-200 flex flex-wrap items-center justify-between gap-3">
+        <div className="bg-blue-50 dark:bg-gradient-to-r dark:from-blue-950/90 dark:via-slate-900 dark:to-indigo-950/80 border-b border-blue-200 dark:border-blue-500/30 px-4 py-2.5 text-xs text-blue-900 dark:text-blue-200 flex flex-wrap items-center justify-between gap-3 transition-colors">
           <div className="flex items-center gap-2.5">
-            <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold text-[10px] uppercase tracking-wider border border-blue-500/40">
-              Free Public Sandbox
+            <span className="px-2 py-0.5 rounded-full bg-blue-500/15 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 font-bold text-[10px] uppercase tracking-wider border border-blue-500/30 dark:border-blue-500/40">
+              Featured Open Challenge
             </span>
             <span>
-              You are solving this featured problem as a guest! Live execution and automated tests are fully enabled.
+              You are attempting this open challenge in practice mode. Code compilation and automated unit tests are fully active.
             </span>
           </div>
           <Link href={`/login?redirect=/candidate/assessments/${params.id || "seed_backend"}`}>
-            <Button size="sm" variant="outline" className="border-blue-400/50 text-blue-200 hover:text-white text-xs h-7 px-3">
-              Sign In to Unlock 40+ Problems
+            <Button size="sm" variant="outline" className="border-blue-400/50 text-blue-700 dark:text-blue-200 hover:text-blue-900 dark:hover:text-white text-xs h-7 px-3">
+              Sign In to Save Scores
             </Button>
           </Link>
         </div>
@@ -266,17 +269,17 @@ export default function AssessmentRunnerPage() {
 
       {/* Authenticated Role Inspection Notification Banners */}
       {isAuthenticated && user?.role === "ADMIN" && (
-        <div className="bg-purple-950/50 border-b border-purple-500/30 px-4 py-2 text-xs text-purple-200 flex items-center justify-between gap-3">
+        <div className="bg-purple-50 dark:bg-purple-950/50 border-b border-purple-200 dark:border-purple-500/30 px-4 py-2 text-xs text-purple-900 dark:text-purple-200 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold text-[10px] uppercase tracking-wider border border-purple-500/40">
-              Admin Inspection Mode
+            <span className="px-2 py-0.5 rounded-full bg-purple-500/15 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 font-bold text-[10px] uppercase tracking-wider border border-purple-500/30 dark:border-purple-500/40">
+              Assessment Preview • Administrator View
             </span>
             <span>
-              Previewing candidate runtime as <strong>{user.displayName}</strong>. Full test execution diagnostics & assertions active.
+              Previewing challenge environment and test assertion suite as <strong>{user.displayName}</strong>.
             </span>
           </div>
           <Link href="/admin">
-            <Button size="sm" variant="ghost" className="text-purple-300 hover:text-white text-xs h-6 px-2">
+            <Button size="sm" variant="ghost" className="text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-white text-xs h-6 px-2">
               Back to Admin Overview →
             </Button>
           </Link>
@@ -284,17 +287,17 @@ export default function AssessmentRunnerPage() {
       )}
 
       {isAuthenticated && user?.role === "RECRUITER" && (
-        <div className="bg-blue-950/50 border-b border-blue-500/30 px-4 py-2 text-xs text-blue-200 flex items-center justify-between gap-3">
+        <div className="bg-blue-50 dark:bg-blue-950/50 border-b border-blue-200 dark:border-blue-500/30 px-4 py-2 text-xs text-blue-900 dark:text-blue-200 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold text-[10px] uppercase tracking-wider border border-blue-500/40">
-              Recruiter Preview Mode
+            <span className="px-2 py-0.5 rounded-full bg-blue-500/15 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 font-bold text-[10px] uppercase tracking-wider border border-blue-500/30 dark:border-blue-500/40">
+              Challenge Preview • Employer View
             </span>
             <span>
-              Testing sandbox environment as <strong>{user.displayName}</strong> (Employer). Verify questions before assigning to candidates.
+              Reviewing technical assessment parameters and questions as <strong>{user.displayName}</strong>.
             </span>
           </div>
           <Link href="/recruiter/assessments">
-            <Button size="sm" variant="ghost" className="text-blue-300 hover:text-white text-xs h-6 px-2">
+            <Button size="sm" variant="ghost" className="text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-white text-xs h-6 px-2">
               Back to Recruiter Wizard →
             </Button>
           </Link>
@@ -302,15 +305,15 @@ export default function AssessmentRunnerPage() {
       )}
 
       {isAuthenticated && user?.role === "CANDIDATE" && (
-        <div className="bg-emerald-950/30 border-b border-emerald-500/30 px-4 py-1.5 text-xs text-emerald-200 flex items-center justify-between gap-3">
+        <div className="bg-emerald-50 dark:bg-emerald-950/30 border-b border-emerald-200 dark:border-emerald-500/30 px-4 py-1.5 text-xs text-emerald-900 dark:text-emerald-200 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[11px] font-mono text-emerald-300">
-              Active Candidate Attempt: <strong>{user.displayName}</strong> • Answers auto-save to candidate score log
+            <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
+            <span className="text-[11px] font-mono text-emerald-800 dark:text-emerald-300">
+              Active Assessment Attempt: <strong>{user.displayName}</strong> • Answers automatically save
             </span>
           </div>
-          <span className="text-[10px] text-emerald-400/80 font-mono">
-            Secure Proctoring Active
+          <span className="text-[10px] text-emerald-700 dark:text-emerald-400/80 font-mono">
+            Proctoring Verified
           </span>
         </div>
       )}
@@ -318,9 +321,9 @@ export default function AssessmentRunnerPage() {
       {/* Main Workspace Body */}
       <main className="flex-1 flex flex-col md:flex-row min-h-0">
         {/* Left Side: Question Details & Navigation */}
-        <div className="w-full md:w-1/2 p-6 border-b md:border-b-0 md:border-r border-slate-800/80 overflow-y-auto space-y-6">
+        <div className="w-full md:w-1/2 p-6 border-b md:border-b-0 md:border-r border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-transparent overflow-y-auto space-y-6 transition-colors">
           {/* Question Index Pills */}
-          <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-2">
               {TEST_QUESTIONS.map((q, idx) => (
                 <button
@@ -328,8 +331,8 @@ export default function AssessmentRunnerPage() {
                   onClick={() => setCurrentIndex(idx)}
                   className={`w-8 h-8 rounded-xl font-mono text-xs font-bold transition-all ${
                     currentIndex === idx
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20 border border-blue-400"
-                      : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-500/20 border border-blue-400"
+                      : "bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800"
                   }`}
                 >
                   {q.order}
@@ -344,10 +347,10 @@ export default function AssessmentRunnerPage() {
 
           {/* Question Header & Prompt */}
           <div className="space-y-3">
-            <h2 className="text-lg sm:text-xl font-extrabold text-white">
+            <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
               {currentProb.title}
             </h2>
-            <div className="p-4 rounded-2xl bg-slate-900/50 border border-slate-800 text-sm text-slate-300 leading-relaxed font-sans">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
               {currentProb.prompt}
             </div>
           </div>
@@ -355,7 +358,7 @@ export default function AssessmentRunnerPage() {
           {/* Option Selector for Multiple/Single Choice */}
           {currentProb.type === "SINGLE_CHOICE" && currentProb.options && (
             <div className="space-y-3">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Select Your Answer:
               </span>
               {currentProb.options.map((opt) => {
@@ -366,15 +369,15 @@ export default function AssessmentRunnerPage() {
                     onClick={() => setSelectedOption(opt.label)}
                     className={`p-4 rounded-xl border flex items-center gap-3.5 cursor-pointer transition-all ${
                       isSelected
-                        ? "border-blue-500 bg-blue-600/10 text-white shadow-lg shadow-blue-500/10"
-                        : "border-slate-800 bg-slate-900/40 text-slate-300 hover:border-slate-700"
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-600/10 text-slate-900 dark:text-white shadow-md shadow-blue-500/10 font-medium"
+                        : "border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700"
                     }`}
                   >
                     <div
                       className={`w-6 h-6 rounded-full border flex items-center justify-center font-mono text-xs font-bold shrink-0 ${
                         isSelected
-                          ? "border-blue-500 bg-blue-500 text-white"
-                          : "border-slate-700 bg-slate-950 text-slate-400"
+                          ? "border-blue-500 bg-blue-600 text-white"
+                          : "border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400"
                       }`}
                     >
                       {opt.label}
@@ -387,9 +390,9 @@ export default function AssessmentRunnerPage() {
           )}
 
           {/* Auto-Save Status */}
-          <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               Responses automatically synced
             </span>
             <span>Saved: {autoSavedTime}</span>

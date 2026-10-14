@@ -104,7 +104,7 @@ export default function RecruiterBillingPage() {
         selectedPkg.name
       )}&credits=${selectedPkg.credits}&amount=${selectedPkg.price}&currency=${selectedPkg.currency}`;
 
-      toast.info("Entering Sandbox Verification Mode...");
+      toast.info("Processing Secure Verification...");
       router.push(successUrl);
     } catch {
       toast.dismiss("stripe-init");
@@ -122,28 +122,28 @@ export default function RecruiterBillingPage() {
     <DashboardLayout role="RECRUITER">
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Credit Packages & Stripe Billing
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Top up candidate invitation credits using Stripe test mode processing. 1 credit unlocks 1 full candidate assessment invitation.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Top up candidate invitation credits using secure Stripe Checkout. 1 credit unlocks 1 full candidate assessment invitation.
           </p>
         </div>
 
         {/* Current Balance Banner */}
-        <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-900/40 via-indigo-900/30 to-purple-900/40 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/40 dark:via-indigo-900/30 dark:to-purple-900/40 border border-blue-200 dark:border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md dark:shadow-xl">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/30 dark:border-blue-500/40 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
               <Coins className="w-7 h-7" />
             </div>
             <div>
-              <span className="text-xs text-blue-300 font-semibold uppercase tracking-wider block">
+              <span className="text-xs text-blue-700 dark:text-blue-300 font-semibold uppercase tracking-wider block">
                 Current Available Credits
               </span>
-              <div className="text-3xl sm:text-4xl font-extrabold text-white font-mono mt-0.5">
+              <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-mono mt-0.5">
                 50 Credits
               </div>
-              <p className="text-[11px] text-slate-300 mt-1">
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1">
                 Sufficient for 50 candidate invitations across all published tests.
               </p>
             </div>
@@ -158,8 +158,8 @@ export default function RecruiterBillingPage() {
 
         {/* Credit Packages Selection */}
         <div className="space-y-4">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <CreditCard className="w-4 h-4 text-blue-400" />
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <CreditCard className="w-4 h-4 text-blue-500 dark:text-blue-400" />
             Select Top-Up Package
           </h2>
 
@@ -174,8 +174,8 @@ export default function RecruiterBillingPage() {
                   onClick={() => setSelectedPkg(pkg)}
                   className={`p-6 cursor-pointer relative flex flex-col justify-between transition-all ${
                     isSelected
-                      ? "border-blue-500 bg-slate-900/90 shadow-xl shadow-blue-500/15"
-                      : "border-slate-800 bg-slate-900/50 hover:border-slate-700"
+                      ? "border-blue-500 bg-white dark:bg-slate-900/90 shadow-xl shadow-blue-500/15 ring-2 ring-blue-500/20"
+                      : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm"
                   }`}
                 >
                   {pkg.credits === 50 && (
@@ -188,33 +188,33 @@ export default function RecruiterBillingPage() {
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-base font-bold text-white">{pkg.name}</h3>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white">{pkg.name}</h3>
                       <div
                         className={`w-4 h-4 rounded-full border flex items-center justify-center ${
                           isSelected
                             ? "border-blue-500 bg-blue-500 text-white text-[10px]"
-                            : "border-slate-700"
+                            : "border-slate-300 dark:border-slate-700"
                         }`}
                       >
                         {isSelected && "✓"}
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                       {pkg.description}
                     </p>
 
                     <div className="pt-3">
-                      <span className="text-2xl font-extrabold text-white font-mono">
+                      <span className="text-2xl font-extrabold text-slate-900 dark:text-white font-mono">
                         {pkg.price} {pkg.currency}
                       </span>
-                      <span className="text-xs text-slate-400 ml-1.5 font-mono">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 ml-1.5 font-mono">
                         ({pkg.credits} Credits)
                       </span>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-800/80 mt-4 text-[11px] text-slate-400">
+                  <div className="pt-4 border-t border-slate-200 dark:border-slate-800/80 mt-4 text-[11px] text-slate-500 dark:text-slate-400">
                     Unit price: {Math.round(pkg.price / pkg.credits)} {pkg.currency} / candidate
                   </div>
                 </Card>
@@ -223,13 +223,13 @@ export default function RecruiterBillingPage() {
           </div>
 
           {/* Checkout Action Card */}
-          <Card className="p-6 border-slate-800 bg-slate-900/70 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="space-y-1">
-              <div className="text-sm font-bold text-white">
+              <div className="text-sm font-bold text-slate-900 dark:text-white">
                 Selected: {selectedPkg.name} ({selectedPkg.credits} Credits)
               </div>
-              <div className="text-xs text-slate-400">
-                Total Due: <span className="text-white font-bold font-mono">{selectedPkg.price} {selectedPkg.currency}</span> via Stripe Test Card
+              <div className="text-xs text-slate-600 dark:text-slate-400">
+                Total Due: <span className="text-slate-900 dark:text-white font-bold font-mono">{selectedPkg.price} {selectedPkg.currency}</span> via Stripe Checkout
               </div>
             </div>
 
@@ -258,15 +258,15 @@ export default function RecruiterBillingPage() {
 
         {/* Payment Receipts History Table */}
         <div className="space-y-4">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <Receipt className="w-4 h-4 text-purple-400" />
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Receipt className="w-4 h-4 text-purple-500 dark:text-purple-400" />
             Payment History & Invoices
           </h2>
 
-          <div className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden">
+          <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                <thead className="bg-slate-50 dark:bg-slate-950/80 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     <th className="px-5 py-3.5">Invoice #</th>
                     <th className="px-5 py-3.5">Provider</th>
@@ -276,10 +276,10 @@ export default function RecruiterBillingPage() {
                     <th className="px-5 py-3.5 text-right">Completed Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
                   {payments.map((p) => (
-                    <tr key={p.id} className="hover:bg-slate-850/40 transition-colors">
-                      <td className="px-5 py-4 font-mono font-bold text-white">
+                    <tr key={p.id} className="hover:bg-slate-50 dark:hover:bg-slate-850/40 transition-colors">
+                      <td className="px-5 py-4 font-mono font-bold text-slate-900 dark:text-white">
                         {p.merchantInvoiceNumber}
                       </td>
                       <td className="px-5 py-4">
@@ -287,7 +287,7 @@ export default function RecruiterBillingPage() {
                           {p.provider}
                         </Badge>
                       </td>
-                      <td className="px-5 py-4 font-mono font-bold text-blue-400">
+                      <td className="px-5 py-4 font-mono font-bold text-blue-600 dark:text-blue-400">
                         +{p.credits} Credits
                       </td>
                       <td className="px-5 py-4 font-mono">
@@ -296,7 +296,7 @@ export default function RecruiterBillingPage() {
                       <td className="px-5 py-4">
                         <StatusBadge status={p.status} />
                       </td>
-                      <td className="px-5 py-4 text-right font-mono text-slate-400 text-[11px]">
+                      <td className="px-5 py-4 text-right font-mono text-slate-500 dark:text-slate-400 text-[11px]">
                         {p.completedAt ? new Date(p.completedAt).toLocaleDateString() : "Pending"}
                       </td>
                     </tr>

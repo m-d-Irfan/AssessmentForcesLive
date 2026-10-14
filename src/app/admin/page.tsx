@@ -12,8 +12,6 @@ import {
   Building2,
   FileCode2,
   Activity,
-  ShieldCheck,
-  TrendingUp,
   Cpu,
   Database,
   RefreshCw,
@@ -39,7 +37,7 @@ export default function AdminOverviewPage() {
     try {
       const systemData = await api.get<any>("/system/metrics").catch(() => null);
       if (systemData) {
-        // Updated from live system metrics
+        // live metrics
       }
     } finally {
       setIsLoading(false);
@@ -60,12 +58,12 @@ export default function AdminOverviewPage() {
               <Badge variant="purple" size="sm">
                 System Governance
               </Badge>
-              <span className="text-xs text-slate-400 font-mono">NODE_ENV: production-ready</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">NODE_ENV: production-ready</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Platform Administration & Analytics
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               Real-time platform throughput, relational metrics, and user access state.
             </p>
           </div>
@@ -127,10 +125,10 @@ export default function AdminOverviewPage() {
         {/* System Health & Microservices Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-2 space-y-6">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-slate-800">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
               <div>
                 <CardTitle className="text-base">Infrastructure & Database Health</CardTitle>
-                <p className="text-xs text-slate-400">Neon Postgres pooled connections & Upstash Redis REST</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Neon Postgres pooled connections & Upstash Redis REST</p>
               </div>
               <Badge variant="success" size="sm">
                 Operational
@@ -139,15 +137,15 @@ export default function AdminOverviewPage() {
 
             <CardContent className="space-y-4 pt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-2">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 space-y-2">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 flex items-center gap-1.5">
-                      <Database className="w-4 h-4 text-emerald-400" /> PostgreSQL (Neon)
+                    <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-medium">
+                      <Database className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> PostgreSQL (Neon)
                     </span>
-                    <span className="text-emerald-400 font-bold font-mono">CONNECTED</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold font-mono">CONNECTED</span>
                   </div>
-                  <div className="text-sm font-semibold text-white">AWS ap-southeast-1</div>
-                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="text-sm font-semibold text-slate-900 dark:text-white">AWS ap-southeast-1</div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
                     <div className="bg-emerald-500 h-full w-[28%]" />
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-500 font-mono">
@@ -156,15 +154,15 @@ export default function AdminOverviewPage() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-2">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 space-y-2">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400 flex items-center gap-1.5">
-                      <Cpu className="w-4 h-4 text-blue-400" /> Upstash Redis Cache
+                    <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-medium">
+                      <Cpu className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Upstash Redis Cache
                     </span>
-                    <span className="text-blue-400 font-bold font-mono">HEALTHY</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-bold font-mono">HEALTHY</span>
                   </div>
-                  <div className="text-sm font-semibold text-white">Rate-Limit & Session Store</div>
-                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="text-sm font-semibold text-slate-900 dark:text-white">Rate-Limit & Session Store</div>
+                  <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
                     <div className="bg-blue-500 h-full w-[12%]" />
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-500 font-mono">
@@ -175,13 +173,13 @@ export default function AdminOverviewPage() {
               </div>
 
               {/* Maintenance Tasks & Schedulers */}
-              <div className="p-4 rounded-xl bg-slate-950/40 border border-slate-800/60 flex items-center justify-between">
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800/60 flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-white flex items-center gap-2">
-                    <Activity className="w-3.5 h-3.5 text-purple-400" />
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Activity className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                     Background Maintenance Automation
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                     Auto-submits expired candidate attempts every 60s and sweeps timed invitations.
                   </div>
                 </div>
@@ -194,9 +192,9 @@ export default function AdminOverviewPage() {
 
           {/* Quick Shortcuts */}
           <Card className="space-y-4">
-            <CardHeader className="pb-2 border-b border-slate-800">
+            <CardHeader className="pb-2 border-b border-slate-200 dark:border-slate-800">
               <CardTitle className="text-base">Administrative Actions</CardTitle>
-              <p className="text-xs text-slate-400">Rapid access management controls</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Rapid access management controls</p>
             </CardHeader>
             <CardContent className="space-y-3 pt-2">
               <Link href="/admin/manage" className="block">

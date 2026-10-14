@@ -2,16 +2,14 @@
 
 import React, { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge, StatusBadge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   CheckSquare,
   Award,
   CheckCircle2,
-  AlertTriangle,
   Code2,
-  FileText,
   Save,
   Send,
 } from "lucide-react";
@@ -110,10 +108,10 @@ export default function RecruiterEvaluationsPage() {
     <DashboardLayout role="RECRUITER">
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Submission Evaluation & Grading Rubrics
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Review candidate code submissions, assign manual rubric points, and release final scorecard results.
           </p>
         </div>
@@ -121,8 +119,8 @@ export default function RecruiterEvaluationsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Submissions Queue */}
           <div className="space-y-3">
-            <h2 className="text-sm font-bold text-white flex items-center gap-2">
-              <CheckSquare className="w-4 h-4 text-blue-400" />
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               Evaluation Queue ({submissions.length})
             </h2>
 
@@ -133,14 +131,14 @@ export default function RecruiterEvaluationsPage() {
                   key={sub.id}
                   hoverEffect
                   onClick={() => handleSelect(sub)}
-                  className={`p-4 cursor-pointer transition-all ${
+                  className={`p-4 cursor-pointer transition-all shadow-sm ${
                     isSelected
-                      ? "border-blue-500/60 bg-blue-950/20 shadow-lg"
-                      : "border-slate-800 bg-slate-900/40"
+                      ? "border-blue-500 ring-2 ring-blue-500/20 bg-blue-50/50 dark:bg-blue-950/20"
+                      : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <span className="font-bold text-white text-sm">
+                    <span className="font-bold text-slate-900 dark:text-white text-sm">
                       {sub.candidateName}
                     </span>
                     <Badge
@@ -150,13 +148,13 @@ export default function RecruiterEvaluationsPage() {
                       {sub.status.replace(/_/g, " ")}
                     </Badge>
                   </div>
-                  <p className="text-xs text-slate-400 font-mono mb-2">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mb-2">
                     {sub.candidateEmail}
                   </p>
-                  <p className="text-xs font-semibold text-slate-300">
+                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                     {sub.assessmentTitle}
                   </p>
-                  <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono mt-3 pt-2 border-t border-slate-800/80">
+                  <div className="flex justify-between items-center text-[10px] text-slate-400 dark:text-slate-500 font-mono mt-3 pt-2 border-t border-slate-100 dark:border-slate-800/80">
                     <span>Auto: {sub.autoScore}/{sub.maxScore}</span>
                     <span>{new Date(sub.submittedAt).toLocaleTimeString()}</span>
                   </div>
@@ -167,12 +165,12 @@ export default function RecruiterEvaluationsPage() {
 
           {/* Submission Review Workspace */}
           <div className="lg:col-span-2 space-y-6">
-            <Card className="p-6 border-slate-800 bg-slate-900/60 space-y-6">
+            <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm space-y-6">
               {/* Header Info */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-800 gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-200 dark:border-slate-800 gap-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-bold text-white">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                       {selectedSubmission.candidateName}
                     </h3>
                     <Badge
@@ -186,14 +184,14 @@ export default function RecruiterEvaluationsPage() {
                       {selectedSubmission.status}
                     </Badge>
                   </div>
-                  <p className="text-xs text-slate-400 font-mono">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
                     {selectedSubmission.candidateEmail} • {selectedSubmission.assessmentTitle}
                   </p>
                 </div>
 
-                <div className="text-right">
-                  <span className="text-xs text-slate-400 block">Submitted At</span>
-                  <span className="text-xs font-mono text-slate-200">
+                <div className="sm:text-right">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 block">Submitted At</span>
+                  <span className="text-xs font-mono text-slate-800 dark:text-slate-200 font-semibold">
                     {new Date(selectedSubmission.submittedAt).toLocaleString()}
                   </span>
                 </div>
@@ -201,9 +199,9 @@ export default function RecruiterEvaluationsPage() {
 
               {/* Code Snippet & Answer Inspection */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-300">
+                <div className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
                   <span className="flex items-center gap-1.5">
-                    <Code2 className="w-4 h-4 text-blue-400" />
+                    <Code2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     Submitted Source Code / Solution
                   </span>
                   <Badge variant="outline" size="sm">
@@ -211,7 +209,7 @@ export default function RecruiterEvaluationsPage() {
                   </Badge>
                 </div>
 
-                <pre className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed">
+                <pre className="p-4 rounded-xl bg-slate-900 text-slate-100 border border-slate-800 text-xs font-mono overflow-x-auto leading-relaxed">
                   {selectedSubmission.codeSnippet}
                 </pre>
               </div>
@@ -220,9 +218,9 @@ export default function RecruiterEvaluationsPage() {
               <CandidateRadar candidateName={selectedSubmission.candidateName} />
 
               {/* Grading Input Form */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-800">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                     Assigned Final Score (Max: {selectedSubmission.maxScore})
                   </label>
                   <input
@@ -231,7 +229,7 @@ export default function RecruiterEvaluationsPage() {
                     max={selectedSubmission.maxScore}
                     value={manualScoreInput}
                     onChange={(e) => setManualScoreInput(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-slate-100 focus:outline-none focus:border-blue-500 font-mono font-bold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-mono font-bold"
                   />
                   <p className="text-[11px] text-slate-500 mt-1">
                     Auto-graded benchmark: {selectedSubmission.autoScore} / {selectedSubmission.maxScore}
@@ -239,7 +237,7 @@ export default function RecruiterEvaluationsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                     Recruiter Feedback & Notes
                   </label>
                   <textarea
@@ -247,13 +245,13 @@ export default function RecruiterEvaluationsPage() {
                     value={notesInput}
                     placeholder="Candidate demonstrated clean code structure..."
                     onChange={(e) => setNotesInput(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+                    className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
                 <Button
                   variant="glow"
                   size="sm"

@@ -123,12 +123,12 @@ export default function RecruiterOverviewPage() {
               <Badge variant="info" size="sm">
                 Recruiter Portal
               </Badge>
-              <span className="text-xs text-slate-400 font-mono">Demo Technologies</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">Enterprise Workspace</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Talent Assessment Pipeline
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
               Manage engineering evaluations, send candidate invitations, and evaluate test submissions.
             </p>
           </div>
@@ -136,7 +136,7 @@ export default function RecruiterOverviewPage() {
           <div className="flex items-center gap-3">
             <Link href="/recruiter/billing">
               <Button size="sm" variant="outline" className="gap-2 text-xs">
-                <Coins className="w-3.5 h-3.5 text-blue-400" />
+                <Coins className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
                 {stats.availableCredits} Credits Available
               </Button>
             </Link>
@@ -184,15 +184,15 @@ export default function RecruiterOverviewPage() {
 
         {/* Quick Action Workflow Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card hoverEffect className="space-y-3 border-blue-500/20 bg-slate-900/40">
+          <Card hoverEffect className="space-y-3 border-slate-200 dark:border-blue-500/20 bg-white dark:bg-slate-900/40 shadow-sm">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
                 <FileCode2 className="w-5 h-5" />
               </div>
               <Badge variant="info" size="sm">Wizard</Badge>
             </div>
-            <h3 className="text-base font-bold text-white">Create Assessment</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Create Assessment</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
               Build a multi-problem benchmark test with timing limits and pass mark percentages.
             </p>
             <Link href="/recruiter/assessments">
@@ -202,15 +202,15 @@ export default function RecruiterOverviewPage() {
             </Link>
           </Card>
 
-          <Card hoverEffect className="space-y-3 border-indigo-500/20 bg-slate-900/40">
+          <Card hoverEffect className="space-y-3 border-slate-200 dark:border-indigo-500/20 bg-white dark:bg-slate-900/40 shadow-sm">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                 <Send className="w-5 h-5" />
               </div>
               <Badge variant="purple" size="sm">Dispatch</Badge>
             </div>
-            <h3 className="text-base font-bold text-white">Send Invitations</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Send Invitations</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
               Email unique assessment tokens to candidate applicants with single-click start links.
             </p>
             <Link href="/recruiter/candidates">
@@ -220,15 +220,15 @@ export default function RecruiterOverviewPage() {
             </Link>
           </Card>
 
-          <Card hoverEffect className="space-y-3 border-emerald-500/20 bg-slate-900/40">
+          <Card hoverEffect className="space-y-3 border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-slate-900/40 shadow-sm">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                 <Award className="w-5 h-5" />
               </div>
               <Badge variant="success" size="sm">Grading</Badge>
             </div>
-            <h3 className="text-base font-bold text-white">Review Submissions</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Review Submissions</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
               Grade candidate short-text responses, inspect automated code test passes, and release scores.
             </p>
             <Link href="/recruiter/evaluations">
@@ -242,21 +242,21 @@ export default function RecruiterOverviewPage() {
         {/* Recent Candidate Attempts Table */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <Clock className="w-4 h-4 text-blue-400" />
+            <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Clock className="w-4 h-4 text-blue-500 dark:text-blue-400" />
               Recent Candidate Attempts
             </h2>
             <Link href="/recruiter/candidates">
-              <Button variant="ghost" size="sm" className="text-xs text-slate-400 hover:text-white">
+              <Button variant="ghost" size="sm" className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 View All Pipeline
               </Button>
             </Link>
           </div>
 
-          <div className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden">
+          <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                <thead className="bg-slate-50 dark:bg-slate-950/80 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     <th className="px-5 py-3.5">Candidate</th>
                     <th className="px-5 py-3.5">Assessment</th>
@@ -266,18 +266,18 @@ export default function RecruiterOverviewPage() {
                     <th className="px-5 py-3.5 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
                   {recentAttempts.map((att) => (
-                    <tr key={att.id} className="hover:bg-slate-850/40 transition-colors">
+                    <tr key={att.id} className="hover:bg-slate-50 dark:hover:bg-slate-850/40 transition-colors">
                       <td className="px-5 py-4">
-                        <div className="font-bold text-white text-sm">
+                        <div className="font-bold text-slate-900 dark:text-white text-sm">
                           {att.candidate?.displayName}
                         </div>
-                        <div className="text-[11px] text-slate-400 font-mono">
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                           {att.candidate?.email}
                         </div>
                       </td>
-                      <td className="px-5 py-4 font-semibold text-slate-200">
+                      <td className="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">
                         {att.assessment?.title}
                       </td>
                       <td className="px-5 py-4">

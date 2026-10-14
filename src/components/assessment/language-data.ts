@@ -101,7 +101,7 @@ export function createCache(ttlMs) {
     runnerCommand: "python3 -m pytest -q",
     testFramework: "pytest v8.2.1",
     defaultLatencyMs: 24,
-    initialCode: `# Python 3.12 (CPython Sandboxed Runtime)
+    initialCode: `# Python 3.12 (Isolated Cloud Runtime)
 # Problem: In-Memory TTL Cache Helper
 import time
 from typing import Any, Optional

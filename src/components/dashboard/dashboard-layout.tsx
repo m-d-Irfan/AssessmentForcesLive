@@ -29,6 +29,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
+import { ThemeToggle } from "@/context/theme-context";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/ui/logo";
@@ -236,11 +237,12 @@ export function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#090d16] dark:text-slate-100 flex flex-col md:flex-row transition-colors duration-150">
       {/* Mobile Top Header */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-slate-950 border-b border-slate-800 sticky top-0 z-40">
+      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 transition-colors">
         <Logo href="/" size="sm" />
         <div className="flex items-center gap-2">
+          <ThemeToggle size="sm" />
           <Badge variant={roleBadgeVariant} size="sm">
             {role}
           </Badge>
@@ -257,7 +259,7 @@ export function DashboardLayout({
       {/* Mobile Backdrop Overlay */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black/75 backdrop-blur-xs z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-black/50 dark:bg-black/75 backdrop-blur-xs z-40 md:hidden transition-opacity"
           onClick={() => setIsMobileOpen(false)}
           aria-hidden="true"
         />
@@ -265,28 +267,31 @@ export function DashboardLayout({
 
       {/* Sidebar for Desktop & Mobile Drawer */}
       <aside
-        className={`fixed md:sticky top-0 left-0 z-50 h-screen w-64 bg-slate-950/95 border-r border-slate-800/80 backdrop-blur-xl flex flex-col justify-between transition-transform duration-200 ${
+        className={`fixed md:sticky top-0 left-0 z-50 h-screen w-64 bg-white/95 dark:bg-slate-950/95 border-r border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl flex flex-col justify-between transition-transform duration-200 shadow-sm dark:shadow-none ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
         <div className="p-5 flex flex-col flex-1">
           {/* Brand & Portal title */}
-          <div className="flex flex-col pb-5 mb-4 border-b border-slate-800/80">
+          <div className="flex flex-col pb-5 mb-4 border-b border-slate-200/80 dark:border-slate-800/80">
             <div className="flex items-center justify-between">
               <Logo href="/" size="md" />
-              <Badge variant={roleBadgeVariant} size="sm">
-                {role}
-              </Badge>
+              <div className="flex items-center gap-1.5">
+                <ThemeToggle size="sm" />
+                <Badge variant={roleBadgeVariant} size="sm">
+                  {role}
+                </Badge>
+              </div>
             </div>
-            <div className="text-[11px] text-slate-400 font-mono tracking-wider mt-2.5 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono tracking-wider mt-2.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-blue-400" />
               {roleLabel}
             </div>
           </div>
 
           {/* Navigation Menu */}
           <nav className="space-y-1.5 flex-1">
-            <div className="text-[10px] uppercase font-semibold text-slate-500 px-3 mb-2 tracking-wider">
+            <div className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500 px-3 mb-2 tracking-wider">
               Navigation
             </div>
             {currentNav.map((item) => {
@@ -300,8 +305,8 @@ export function DashboardLayout({
                   onClick={() => setIsMobileOpen(false)}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                     isActive
-                      ? "bg-blue-600/15 text-blue-400 border border-blue-500/30 shadow-sm"
-                      : "text-slate-400 hover:text-slate-100 hover:bg-slate-900/60"
+                      ? "bg-blue-50 text-blue-700 border border-blue-200 shadow-xs dark:bg-blue-600/15 dark:text-blue-400 dark:border-blue-500/30"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-900/60"
                   }`}
                 >
                   <Icon className="w-4 h-4 shrink-0" />
@@ -311,19 +316,19 @@ export function DashboardLayout({
             })}
           </nav>
 
-          {/* Recruiter Credit Balance Badge or Candidate Test Notice */}
+          {/* Recruiter Credit Balance Badge */}
           {role === "RECRUITER" && (
-            <div className="p-3.5 rounded-2xl bg-blue-950/30 border border-blue-500/20 my-4">
+            <div className="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-500/20 my-4">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[11px] text-slate-300 font-medium flex items-center gap-1.5">
-                  <Coins className="w-3.5 h-3.5 text-blue-400" /> Company Credits
+                <span className="text-[11px] text-slate-700 dark:text-slate-300 font-medium flex items-center gap-1.5">
+                  <Coins className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Company Credits
                 </span>
-                <span className="text-xs font-extrabold text-blue-400 font-mono">
+                <span className="text-xs font-extrabold text-blue-600 dark:text-blue-400 font-mono">
                   Active
                 </span>
               </div>
               <Link href="/recruiter/billing">
-                <span className="text-[10px] text-blue-300/80 hover:text-blue-200 flex items-center gap-1 mt-1">
+                <span className="text-[10px] text-blue-600 dark:text-blue-300/80 hover:underline flex items-center gap-1 mt-1 font-medium">
                   Top up credits with Stripe <ChevronRight className="w-2.5 h-2.5" />
                 </span>
               </Link>
@@ -331,17 +336,17 @@ export function DashboardLayout({
           )}
 
           {/* Quick External Links */}
-          <div className="pt-2 border-t border-slate-800/60 space-y-1">
+          <div className="pt-2 border-t border-slate-200/80 dark:border-slate-800/60 space-y-1">
             <Link
               href="/problems"
-              className="flex items-center justify-between px-3 py-1.5 text-slate-400 hover:text-slate-200 text-xs rounded-lg hover:bg-slate-900/40"
+              className="flex items-center justify-between px-3 py-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 text-xs rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/40"
             >
               <span>Problem Catalog</span>
               <ExternalLink className="w-3 h-3" />
             </Link>
             <Link
               href="/"
-              className="flex items-center justify-between px-3 py-1.5 text-slate-400 hover:text-slate-200 text-xs rounded-lg hover:bg-slate-900/40"
+              className="flex items-center justify-between px-3 py-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 text-xs rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900/40"
             >
               <span>Home Page</span>
               <ExternalLink className="w-3 h-3" />
@@ -350,16 +355,16 @@ export function DashboardLayout({
         </div>
 
         {/* User Card & Logout */}
-        <div className="p-4 border-t border-slate-800/80 bg-slate-950 flex items-center justify-between">
+        <div className="p-4 border-t border-slate-200/80 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950 flex items-center justify-between">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-200 shrink-0">
+            <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-200 shrink-0">
               {user?.displayName ? user.displayName.charAt(0).toUpperCase() : "U"}
             </div>
             <div className="truncate">
-              <div className="text-xs font-semibold text-slate-200 truncate">
+              <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
                 {user?.displayName || "Authorized User"}
               </div>
-              <div className="text-[10px] text-slate-400 truncate font-mono">
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate font-mono">
                 {user?.email || "user@devassess.local"}
               </div>
             </div>
@@ -370,7 +375,7 @@ export function DashboardLayout({
             variant="ghost"
             onClick={logout}
             title="Sign Out"
-            className="text-slate-400 hover:text-rose-400 shrink-0 ml-1"
+            className="text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 shrink-0 ml-1"
           >
             <LogOut className="w-4 h-4" />
           </Button>

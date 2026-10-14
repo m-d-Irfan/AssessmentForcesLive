@@ -80,7 +80,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16]">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 transition-colors duration-150">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center px-4 py-16 relative">
@@ -89,18 +89,18 @@ export default function RegisterPage() {
         <div className="w-full max-w-xl space-y-8 relative z-10">
           <div className="text-center space-y-3 flex flex-col items-center">
             <Logo href="/" size="lg" />
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Create Your AssessmentForces Account
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
               Join the developer assessment network as a Candidate or Technical Recruiter
             </p>
           </div>
 
-          <Card className="p-6 sm:p-8 border-slate-800 bg-slate-900/80 shadow-2xl backdrop-blur-xl">
+          <Card className="p-6 sm:p-8 border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 shadow-xl dark:shadow-2xl backdrop-blur-xl">
             {/* Role Switcher */}
             <div className="mb-6">
-              <label className="block text-xs font-semibold text-slate-300 mb-2">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
                 Select Your Account Role
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -112,18 +112,18 @@ export default function RegisterPage() {
                   }}
                   className={`p-3 rounded-xl border flex items-center gap-3 transition-all cursor-pointer text-left ${
                     selectedRole === "CANDIDATE"
-                      ? "border-emerald-500 bg-emerald-500/10 text-white shadow-lg shadow-emerald-500/10"
-                      : "border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700"
+                      ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-950 dark:text-white shadow-md shadow-emerald-500/10"
+                      : "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700"
                   }`}
                 >
                   <Terminal
                     className={`w-5 h-5 ${
-                      selectedRole === "CANDIDATE" ? "text-emerald-400" : "text-slate-500"
+                      selectedRole === "CANDIDATE" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 dark:text-slate-500"
                     }`}
                   />
                   <div>
-                    <div className="text-xs font-bold text-white">Candidate</div>
-                    <div className="text-[10px] text-slate-400">Take code tests</div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white">Candidate</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Take code tests</div>
                   </div>
                 </button>
 
@@ -135,18 +135,18 @@ export default function RegisterPage() {
                   }}
                   className={`p-3 rounded-xl border flex items-center gap-3 transition-all cursor-pointer text-left ${
                     selectedRole === "RECRUITER"
-                      ? "border-blue-500 bg-blue-500/10 text-white shadow-lg shadow-blue-500/10"
-                      : "border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10 text-blue-950 dark:text-white shadow-md shadow-blue-500/10"
+                      : "border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700"
                   }`}
                 >
                   <Briefcase
                     className={`w-5 h-5 ${
-                      selectedRole === "RECRUITER" ? "text-blue-400" : "text-slate-500"
+                      selectedRole === "RECRUITER" ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"
                     }`}
                   />
                   <div>
-                    <div className="text-xs font-bold text-white">Recruiter</div>
-                    <div className="text-[10px] text-slate-400">Hire engineers</div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white">Recruiter</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Hire engineers</div>
                   </div>
                 </button>
               </div>
@@ -154,74 +154,74 @@ export default function RegisterPage() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Full Display Name
                 </label>
                 <div className="relative">
-                  <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                   <input
                     type="text"
                     {...register("displayName")}
                     placeholder="e.g. Alex Mercer"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                   />
                 </div>
                 {errors.displayName && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.displayName.message}</p>
+                  <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.displayName.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                   <input
                     type="email"
                     {...register("email")}
                     placeholder="alex@example.com"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.email.message}</p>
+                  <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.email.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Password (min 12 chars, upper, lower, number, symbol)
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                   <input
                     type="password"
                     {...register("password")}
                     placeholder="SecurePass123!"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                   />
                 </div>
                 {errors.password && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.password.message}</p>
+                  <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.password.message}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                   Confirm Password
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                   <input
                     type="password"
                     {...register("confirmPassword")}
                     placeholder="SecurePass123!"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
                   />
                 </div>
                 {errors.confirmPassword && (
-                  <p className="text-rose-400 text-xs mt-1">{errors.confirmPassword.message}</p>
+                  <p className="text-rose-500 dark:text-rose-400 text-xs mt-1">{errors.confirmPassword.message}</p>
                 )}
               </div>
 
@@ -236,9 +236,9 @@ export default function RegisterPage() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-xs text-slate-400">
+            <div className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
               Already have an account?{" "}
-              <Link href="/login" className="text-blue-400 font-semibold hover:underline">
+              <Link href="/login" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                 Sign In
               </Link>
             </div>

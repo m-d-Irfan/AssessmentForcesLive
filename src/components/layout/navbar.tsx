@@ -16,6 +16,7 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import { useAuth, DEMO_CREDENTIALS } from "@/context/auth-context";
+import { ThemeToggle } from "@/context/theme-context";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/ui/logo";
@@ -37,7 +38,7 @@ export function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800/80 dark:bg-slate-950/80 backdrop-blur-xl transition-colors duration-150">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <Logo href="/" size="md" />
@@ -50,8 +51,8 @@ export function Navbar() {
               href={link.href}
               className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive(link.href)
-                  ? "text-blue-400 bg-blue-500/10"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800/50"
+                  ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 font-semibold"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800/50"
               }`}
             >
               {link.label}
@@ -60,7 +61,10 @@ export function Navbar() {
         </nav>
 
         {/* Auth / Action Buttons */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-2.5">
+          {/* Light / Dark Mode Toggle */}
+          <ThemeToggle size="sm" />
+
           {isAuthenticated && user ? (
             <div className="flex items-center gap-3">
               <Link href={getDashboardPath(user.role)}>
@@ -69,15 +73,15 @@ export function Navbar() {
                   Dashboard
                 </Button>
               </Link>
-              <div className="flex items-center gap-2 pl-3 border-l border-slate-800">
-                <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-xs">
+              <div className="flex items-center gap-2 pl-3 border-l border-slate-200 dark:border-slate-800">
+                <div className="w-8 h-8 rounded-full bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
                   {user.displayName.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className="text-xs font-semibold text-slate-200 leading-none">
+                  <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-none">
                     {user.displayName}
                   </span>
-                  <span className="text-[10px] text-slate-400 uppercase font-mono">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">
                     {user.role}
                   </span>
                 </div>
@@ -86,7 +90,7 @@ export function Navbar() {
                   variant="ghost"
                   onClick={logout}
                   title="Sign Out"
-                  className="text-slate-400 hover:text-rose-400 ml-1"
+                  className="text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 ml-1"
                 >
                   <LogOut className="w-4 h-4" />
                 </Button>
@@ -100,29 +104,29 @@ export function Navbar() {
                   size="sm"
                   variant="outline"
                   onClick={() => setIsDemoDropdownOpen(!isDemoDropdownOpen)}
-                  className="gap-1.5 border-indigo-500/40 text-indigo-300 hover:text-white hover:border-indigo-400"
+                  className="gap-1.5 border-indigo-500/40 text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-white hover:border-indigo-500"
                 >
                   Demo Logins
                   <ChevronDown className="w-3.5 h-3.5 opacity-60" />
                 </Button>
 
                 {isDemoDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2">
-                    <div className="px-3 py-2 border-b border-slate-800/80 mb-1">
-                      <p className="text-xs font-semibold text-slate-200">1-Click Instant Logins</p>
-                      <p className="text-[11px] text-slate-400">Select any role to test dashboards</p>
+                  <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2">
+                    <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800/80 mb-1">
+                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">1-Click Instant Logins</p>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400">Select any role to test dashboards</p>
                     </div>
                     <button
                       onClick={() => {
                         setIsDemoDropdownOpen(false);
                         demoLogin("ADMIN");
                       }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-xl hover:bg-slate-800 text-slate-200 hover:text-white text-left transition-colors"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white text-left transition-colors cursor-pointer"
                     >
-                      <ShieldCheck className="w-4 h-4 text-purple-400" />
+                      <ShieldCheck className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                       <div>
                         <div className="font-semibold">Platform Admin</div>
-                        <div className="text-[10px] text-slate-400">Governance & Metrics</div>
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400">Governance & Metrics</div>
                       </div>
                     </button>
                     <button
@@ -130,12 +134,12 @@ export function Navbar() {
                         setIsDemoDropdownOpen(false);
                         demoLogin("RECRUITER");
                       }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-xl hover:bg-slate-800 text-slate-200 hover:text-white text-left transition-colors"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white text-left transition-colors cursor-pointer"
                     >
-                      <Briefcase className="w-4 h-4 text-blue-400" />
+                      <Briefcase className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       <div>
                         <div className="font-semibold">Recruiter / Employer</div>
-                        <div className="text-[10px] text-slate-400">Assessments & Billing</div>
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400">Assessments & Billing</div>
                       </div>
                     </button>
                     <button
@@ -143,12 +147,12 @@ export function Navbar() {
                         setIsDemoDropdownOpen(false);
                         demoLogin("CANDIDATE");
                       }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-xl hover:bg-slate-800 text-slate-200 hover:text-white text-left transition-colors"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white text-left transition-colors cursor-pointer"
                     >
-                      <Terminal className="w-4 h-4 text-emerald-400" />
+                      <Terminal className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       <div>
                         <div className="font-semibold">Candidate / Developer</div>
-                        <div className="text-[10px] text-slate-400">Tests, Profile & Scorecards</div>
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400">Tests, Profile & Scorecards</div>
                       </div>
                     </button>
                   </div>
@@ -169,8 +173,9 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile Hamburger Button */}
+        {/* Mobile Actions: ThemeToggle + Hamburger Button */}
         <div className="flex md:hidden items-center gap-2">
+          <ThemeToggle size="sm" />
           <Button
             size="icon"
             variant="ghost"
@@ -183,7 +188,7 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-slate-950 px-4 pt-2 pb-6 space-y-3">
+        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-2 pb-6 space-y-3 shadow-lg">
           <div className="flex flex-col space-y-1">
             {navLinks.map((link) => (
               <Link
@@ -192,8 +197,8 @@ export function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`px-3 py-2 rounded-lg text-sm font-medium ${
                   isActive(link.href)
-                    ? "text-blue-400 bg-blue-500/10"
-                    : "text-slate-300 hover:bg-slate-800/50"
+                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 font-semibold"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/50"
                 }`}
               >
                 {link.label}
@@ -201,7 +206,7 @@ export function Navbar() {
             ))}
           </div>
 
-          <div className="pt-3 border-t border-slate-800/80 flex flex-col gap-2">
+          <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 flex flex-col gap-2">
             {isAuthenticated && user ? (
               <>
                 <Link

@@ -120,10 +120,10 @@ export default function RecruiterCandidatesPage() {
     <DashboardLayout role="RECRUITER">
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Candidate Pipeline & Test Invitations
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Dispatch timed test tokens to applicant emails and monitor assessment session starts in real time.
           </p>
         </div>
@@ -131,15 +131,15 @@ export default function RecruiterCandidatesPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Dispatch Form Card */}
           <div className="lg:col-span-1">
-            <Card className="p-6 border-slate-800 bg-slate-900/60 sticky top-24">
-              <div className="flex items-center gap-2 text-blue-400 mb-4">
+            <Card className="p-6 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 sticky top-24 shadow-sm">
+              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-4">
                 <Send className="w-5 h-5" />
-                <h3 className="text-base font-bold text-white">Send New Invitation</h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Send New Invitation</h3>
               </div>
 
               <form onSubmit={handleSendInvite} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                     Candidate Email Address *
                   </label>
                   <input
@@ -147,18 +147,18 @@ export default function RecruiterCandidatesPage() {
                     placeholder="candidate@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                     Select Assessment *
                   </label>
                   <select
                     value={assessmentId}
                     onChange={(e) => setAssessmentId(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   >
                     <option value="seed_assessment_backend">Backend Developer Fundamentals (30 mins)</option>
                     <option value="asst_fullstack_benchmark">Senior Full-Stack Architecture Challenge (60 mins)</option>
@@ -166,13 +166,13 @@ export default function RecruiterCandidatesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                     Token Validity (Days)
                   </label>
                   <select
                     value={expiryDays}
                     onChange={(e) => setExpiryDays(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   >
                     <option value="3">3 Days</option>
                     <option value="7">7 Days (Default)</option>
@@ -180,7 +180,7 @@ export default function RecruiterCandidatesPage() {
                   </select>
                 </div>
 
-                <div className="p-3 rounded-xl bg-blue-950/20 border border-blue-500/20 text-[11px] text-slate-300">
+                <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-500/20 text-[11px] text-blue-800 dark:text-slate-300">
                   ⚡ Costs 1 credit from your available balance.
                 </div>
 
@@ -199,42 +199,42 @@ export default function RecruiterCandidatesPage() {
           {/* Pipeline Invitations Table */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
-                <Users className="w-4 h-4 text-blue-400" />
+              <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 Active Candidate Invitations ({invitations.length})
               </h2>
             </div>
 
-            <div className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden">
+            <div className="rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+                  <thead className="bg-slate-50 dark:bg-slate-950/80 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-200 dark:border-slate-800">
                     <tr>
-                      <th className="px-5 py-3.5">Candidate Email</th>
-                      <th className="px-5 py-3.5">Assessment</th>
-                      <th className="px-5 py-3.5">Status</th>
-                      <th className="px-5 py-3.5">Expires</th>
-                      <th className="px-5 py-3.5 text-right">Direct Link</th>
+                      <th className="px-5 py-3.5 font-bold">Candidate Email</th>
+                      <th className="px-5 py-3.5 font-bold">Assessment</th>
+                      <th className="px-5 py-3.5 font-bold">Status</th>
+                      <th className="px-5 py-3.5 font-bold">Expires</th>
+                      <th className="px-5 py-3.5 font-bold text-right">Direct Link</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                  <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
                     {invitations.map((inv) => (
-                      <tr key={inv.id} className="hover:bg-slate-850/40 transition-colors">
+                      <tr key={inv.id} className="hover:bg-slate-50 dark:hover:bg-slate-850/40 transition-colors">
                         <td className="px-5 py-4">
-                          <div className="font-bold text-white text-sm">
+                          <div className="font-bold text-slate-900 dark:text-white text-sm">
                             {inv.candidateEmail}
                           </div>
-                          <div className="text-[10px] text-slate-500 font-mono">
+                          <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                             ID: {inv.id}
                           </div>
                         </td>
-                        <td className="px-5 py-4 font-semibold text-slate-200">
+                        <td className="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">
                           {inv.assessment?.title}
                         </td>
                         <td className="px-5 py-4">
                           <StatusBadge status={inv.status} />
                         </td>
-                        <td className="px-5 py-4 font-mono text-slate-400 text-[11px]">
+                        <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400 text-[11px]">
                           {new Date(inv.expiresAt).toLocaleDateString()}
                         </td>
                         <td className="px-5 py-4 text-right">

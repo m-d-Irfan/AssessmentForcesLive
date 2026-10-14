@@ -41,7 +41,7 @@ export default function PricingPage() {
       popular: true,
       features: [
         "50 Candidate invitation credits",
-        "Custom problem authoring sandbox",
+        "Custom problem authoring environment",
         "Multi-step assessment wizard",
         "Detailed code telemetry & error logs",
         "Manual evaluation rubrics",
@@ -70,7 +70,7 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16]">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 transition-colors duration-150">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -78,11 +78,11 @@ export default function PricingPage() {
           <Badge variant="purple" className="mb-3">
             Pay As You Hire
           </Badge>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Simple, Transparent Candidate Credits
           </h1>
-          <p className="text-slate-400 mt-4 text-base sm:text-lg">
-            Purchase credits using test Stripe checkout or bKash gateway. 1 credit equals 1 complete candidate assessment invitation.
+          <p className="text-slate-600 dark:text-slate-400 mt-4 text-base sm:text-lg">
+            Purchase credits using secure Stripe Checkout. 1 credit equals 1 complete candidate assessment invitation.
           </p>
         </div>
 
@@ -94,45 +94,45 @@ export default function PricingPage() {
               glow={pkg.popular}
               className={`flex flex-col justify-between relative ${
                 pkg.popular
-                  ? "border-blue-500/50 bg-slate-900/90 shadow-2xl shadow-blue-500/10"
-                  : "bg-slate-900/50"
+                  ? "border-blue-500 bg-white dark:bg-slate-900/90 shadow-xl shadow-blue-500/10 ring-2 ring-blue-500/20"
+                  : "bg-white dark:bg-slate-900/50 border-slate-200 dark:border-slate-800"
               }`}
             >
               {pkg.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  <Badge variant="info" size="sm" className="bg-blue-600 text-white font-bold border-blue-400">
+                  <Badge variant="info" size="sm" className="bg-blue-600 text-white font-bold border-blue-400 shadow-sm">
                     Most Popular
                   </Badge>
                 </div>
               )}
 
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">{pkg.name}</h3>
-                <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{pkg.name}</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
                   {pkg.description}
                 </p>
 
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-3xl sm:text-4xl font-extrabold text-white font-mono">
+                  <span className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-mono">
                     {pkg.price}
                   </span>
-                  <span className="text-xs text-slate-400">({pkg.equivalent})</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400">({pkg.equivalent})</span>
                 </div>
-                <p className="text-xs text-blue-400 font-semibold mb-6">
+                <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold mb-6">
                   {pkg.credits} Invitations ({Math.round(parseInt(pkg.price) / pkg.credits)} BDT / candidate)
                 </p>
 
-                <div className="space-y-3 pt-6 border-t border-slate-800 text-xs text-slate-300">
+                <div className="space-y-3 pt-6 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300">
                   {pkg.features.map((feat, i) => (
                     <div key={i} className="flex items-start gap-2.5">
-                      <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                      <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <span>{feat}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-8 mt-6 border-t border-slate-800">
+              <div className="pt-8 mt-6 border-t border-slate-200 dark:border-slate-800">
                 <Link href="/recruiter/billing">
                   <Button
                     variant={pkg.popular ? "glow" : "primary"}
@@ -148,15 +148,15 @@ export default function PricingPage() {
         </div>
 
         {/* Security / Guarantee Banner */}
-        <div className="p-8 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 max-w-4xl mx-auto text-center sm:text-left">
+        <div className="p-8 rounded-2xl bg-white dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 shadow-md dark:shadow-none flex flex-col sm:flex-row items-center justify-between gap-6 max-w-4xl mx-auto text-center sm:text-left">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
               <Shield className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-white">Guaranteed Test Mode Processing</h4>
-              <p className="text-xs text-slate-400">
-                Powered by Stripe test checkout and SSLCommerz test mode. Fully functional payment success and cancellation workflows.
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">Enterprise-Grade Secure Checkout</h4>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Powered by Stripe Checkout. Real-time automatic credit replenishment and encrypted payment receipts.
               </p>
             </div>
           </div>

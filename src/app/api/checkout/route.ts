@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     );
     params.append(
       "line_items[0][price_data][product_data][description]",
-      `${credits || 50} Assessment Invitations with Automated Proctoring & Sandbox Execution`
+      `${credits || 50} Assessment Invitations with Automated Proctoring & Cloud Code Execution`
     );
     params.append("line_items[0][quantity]", "1");
     params.append("payment_method_types[0]", "card");

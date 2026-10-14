@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { StatCard } from "@/components/ui/stat-card";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Badge, StatusBadge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Terminal,
@@ -13,13 +13,11 @@ import {
   Clock,
   Play,
   CheckCircle2,
-  AlertCircle,
   FileCode2,
-  Calendar,
 } from "lucide-react";
 
 export default function CandidateOverviewPage() {
-  const [activeInvitations, setActiveInvitations] = useState([
+  const [activeInvitations] = useState([
     {
       id: "inv_backend_01",
       assessmentId: "seed_assessment_backend",
@@ -52,12 +50,12 @@ export default function CandidateOverviewPage() {
             <Badge variant="success" size="sm">
               Candidate Workspace
             </Badge>
-            <span className="text-xs text-slate-400 font-mono">Verified Developer</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">Verified Developer</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             My Assessments & Coding Tests
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
             Review invitations from technical recruiters, enter timed test environments, and access verified scorecards.
           </p>
         </div>
@@ -90,8 +88,8 @@ export default function CandidateOverviewPage() {
 
         {/* Assigned Assessments Cards */}
         <div className="space-y-4">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <FileCode2 className="w-4 h-4 text-emerald-400" />
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <FileCode2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             Active Test Assignments
           </h2>
 
@@ -103,44 +101,44 @@ export default function CandidateOverviewPage() {
                 <Card
                   key={inv.id}
                   hoverEffect
-                  className={`p-6 flex flex-col justify-between space-y-4 ${
+                  className={`p-6 flex flex-col justify-between space-y-4 shadow-sm ${
                     isReady
-                      ? "border-emerald-500/30 bg-slate-900/80 shadow-xl shadow-emerald-500/5"
-                      : "border-slate-800 bg-slate-900/40"
+                      ? "border-emerald-500/40 bg-white dark:bg-slate-900/80 shadow-emerald-500/5 ring-1 ring-emerald-500/20"
+                      : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40"
                   }`}
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-slate-400 font-medium">
-                        Invited by <strong className="text-white">{inv.companyName}</strong>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        Invited by <strong className="text-slate-800 dark:text-white">{inv.companyName}</strong>
                       </span>
                       <Badge variant={isReady ? "warning" : "success"} size="sm">
                         {isReady ? "Ready to Take" : "Submitted"}
                       </Badge>
                     </div>
 
-                    <h3 className="text-lg font-bold text-white hover:text-emerald-400 transition-colors">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                       {inv.title}
                     </h3>
 
-                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-mono">
                       <div>
-                        <span className="text-slate-500 block">Duration</span>
-                        <span className="text-white font-bold">{inv.durationMinutes} mins</span>
+                        <span className="text-slate-400 dark:text-slate-500 block">Duration</span>
+                        <span className="text-slate-900 dark:text-white font-bold">{inv.durationMinutes} mins</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block">Total Points</span>
-                        <span className="text-blue-400 font-bold">{inv.totalPoints} pts</span>
+                        <span className="text-slate-400 dark:text-slate-500 block">Total Points</span>
+                        <span className="text-blue-600 dark:text-blue-400 font-bold">{inv.totalPoints} pts</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block">Passing Mark</span>
-                        <span className="text-emerald-400 font-bold">{inv.passPercentage}%</span>
+                        <span className="text-slate-400 dark:text-slate-500 block">Passing Mark</span>
+                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">{inv.passPercentage}%</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-4">
-                    <span className="text-[10px] text-slate-500 font-mono">
+                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                       Valid until {new Date(inv.expiresAt).toLocaleDateString()}
                     </span>
 

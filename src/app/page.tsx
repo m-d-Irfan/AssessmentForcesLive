@@ -90,7 +90,7 @@ const RUNTIME_SAMPLES: Record<
   },
   python: {
     language: "Python",
-    runtime: "CPython 3.12 (Sandboxed)",
+    runtime: "CPython 3.12 (Isolated Runtime)",
     title: "LRU Cache with Time-To-Live (TTL)",
     tag: "PY",
     tagColor: "bg-sky-500/20 text-sky-400 border-sky-500/30",
@@ -327,34 +327,34 @@ export default function HomePage() {
   const sample = RUNTIME_SAMPLES[activeLang];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#07080b] text-slate-100 selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#07080b] text-slate-900 dark:text-slate-100 selection:bg-blue-600 selection:text-white transition-colors duration-150">
       <Navbar />
 
       <main className="flex-1">
         {/* PORTION 1: NEXT-LEVEL HERO SECTION */}
-        <section className="relative pt-20 pb-20 border-b border-white/[0.06] overflow-hidden">
+        <section className="relative pt-20 pb-20 border-b border-slate-200 dark:border-white/[0.06] overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             {/* Precision Developer Telemetry Header */}
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-slate-400 tracking-wider uppercase mb-7">
-              <span className="text-blue-400 font-bold">AF-BENCHMARK v2.4</span>
-              <span className="text-slate-600 hidden sm:inline">/</span>
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 font-mono text-[11px] text-slate-500 dark:text-slate-400 tracking-wider uppercase mb-7">
+              <span className="text-blue-600 dark:text-blue-400 font-bold">AF-BENCHMARK v2.4</span>
+              <span className="text-slate-400 dark:text-slate-600 hidden sm:inline">/</span>
               <span>ISOLATED RUNTIME CONTAINERS</span>
-              <span className="text-slate-600 hidden sm:inline">/</span>
-              <span className="text-emerald-400 font-medium">ZERO WHITEBOARD TRIVIA</span>
-              <span className="text-slate-600 hidden sm:inline">/</span>
-              <span className="text-slate-400">&lt;45MS EVALUATION LATENCY</span>
+              <span className="text-slate-400 dark:text-slate-600 hidden sm:inline">/</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-medium">ZERO WHITEBOARD TRIVIA</span>
+              <span className="text-slate-400 dark:text-slate-600 hidden sm:inline">/</span>
+              <span>&lt;45MS EVALUATION LATENCY</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.08] mb-6 font-sans">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white max-w-5xl mx-auto leading-[1.08] mb-6 font-sans">
               Objective Code Assessments.<br className="hidden sm:inline" />
-              <span className="text-slate-300">
+              <span className="text-slate-600 dark:text-slate-300">
                 Engineered for Real Software Teams.
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
               Screen engineering talent through executable test suites, algorithmic complexity telemetry, and multi-role evaluation pipelines—not memorized whiteboard riddles.
             </p>
 
@@ -370,20 +370,20 @@ export default function HomePage() {
               ) : (
                 <Link href="/login" className="w-full sm:w-auto">
                   <Button size="lg" className="w-full gap-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20">
-                    Try 1-Click Demo Logins
+                    Get Started Free
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
               )}
               <Link href="/problems" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full gap-2 text-sm font-semibold border-white/10 hover:bg-white/[0.04] text-slate-200">
+                <Button size="lg" variant="outline" className="w-full gap-2 text-sm font-semibold">
                   Browse Problem Bank
                 </Button>
               </Link>
             </div>
 
             {/* Live Interactive Terminal Preview */}
-            <div className="max-w-4xl mx-auto rounded-xl matte-card overflow-hidden text-left border border-white/[0.08] shadow-2xl">
+            <div className="max-w-4xl mx-auto rounded-xl overflow-hidden text-left border border-slate-200 dark:border-white/[0.08] shadow-2xl bg-[#090b10]">
               {/* Window Header */}
               <div className="flex items-center justify-between px-4 py-3 bg-[#0a0c12] border-b border-white/[0.06]">
                 <div className="flex items-center gap-2">
@@ -441,64 +441,64 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 2: ENTERPRISE TEAMS (SOCIAL PROOF) */}
-        <section className="py-12 border-b border-white/[0.06] bg-[#090a0f]">
+        <section className="py-12 border-b border-slate-200 dark:border-white/[0.06] bg-slate-100/70 dark:bg-[#090a0f]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p className="text-xs uppercase tracking-widest text-slate-500 font-semibold mb-6">
               Benchmarking Engineering Craftsmanship Across Leading Technology Organizations
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center opacity-60">
-              <div className="font-mono text-sm font-bold text-slate-400 tracking-wider">STRIPE</div>
-              <div className="font-mono text-sm font-bold text-slate-400 tracking-wider">CLOUDFLARE</div>
-              <div className="font-mono text-sm font-bold text-slate-400 tracking-wider">DATADOG</div>
-              <div className="font-mono text-sm font-bold text-slate-400 tracking-wider">LINEAR</div>
-              <div className="font-mono text-sm font-bold text-slate-400 tracking-wider">HASHICORP</div>
-              <div className="font-mono text-sm font-bold text-slate-400 tracking-wider">FIGMA</div>
+              <div className="font-mono text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wider">STRIPE</div>
+              <div className="font-mono text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wider">CLOUDFLARE</div>
+              <div className="font-mono text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wider">DATADOG</div>
+              <div className="font-mono text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wider">LINEAR</div>
+              <div className="font-mono text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wider">HASHICORP</div>
+              <div className="font-mono text-sm font-bold text-slate-500 dark:text-slate-400 tracking-wider">FIGMA</div>
             </div>
           </div>
         </section>
 
         {/* PORTION 3: THREE CORE ARCHITECTURAL PILLARS */}
-        <section className="py-20 border-b border-white/[0.06]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
-              <span className="text-xs font-mono uppercase tracking-wider text-blue-400 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
                 Designed for Engineering Leaders
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
                 Why Top Teams Abandon Uncalibrated Interviews
               </h2>
-              <p className="text-slate-400 mt-3 text-sm">
+              <p className="text-slate-600 dark:text-slate-400 mt-3 text-sm">
                 Whiteboard riddles measure memorization. AssessmentForces measures real software architecture and execution.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-xl matte-card matte-card-hover border border-white/[0.06] space-y-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+              <div className="p-6 rounded-xl matte-card matte-card-hover border border-slate-200 dark:border-white/[0.06] space-y-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
                   <Terminal className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-white">Production-Grade Sandboxes</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Production-Grade Environments</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Candidates code in realistic split-screen environments with syntax highlighting, language runtimes, test assertions, and memory diagnostics.
                 </p>
               </div>
 
-              <div className="p-6 rounded-xl matte-card matte-card-hover border border-white/[0.06] space-y-3">
-                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <div className="p-6 rounded-xl matte-card matte-card-hover border border-slate-200 dark:border-white/[0.06] space-y-3">
+                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-white">Objective Automated Grading</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Objective Automated Grading</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Every submission is executed against multi-tier automated test suites, grading for edge cases, performance constraints, and architectural structure.
                 </p>
               </div>
 
-              <div className="p-6 rounded-xl matte-card matte-card-hover border border-white/[0.06] space-y-3">
-                <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+              <div className="p-6 rounded-xl matte-card matte-card-hover border border-slate-200 dark:border-white/[0.06] space-y-3">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
                   <TrendingUp className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-white">90% Less Interviewer Fatigue</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">90% Less Interviewer Fatigue</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Stop burning senior engineering hours on basic screening loops. Receive comprehensive candidate scorecards and telemetry before scheduling on-sites.
                 </p>
               </div>
@@ -507,39 +507,39 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 4: INTERACTIVE MULTI-LANGUAGE RUNTIME SHOWCASE */}
-        <section className="py-20 border-b border-white/[0.06] bg-[#090a0f]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06] bg-slate-100/70 dark:bg-[#090a0f]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
               <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+                <span className="text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">
                   Multi-Language Container Isolates
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
                   Test Candidates in Their Native Stacks
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
                   Evaluate candidates using isolated execution runtimes with real-time feedback.
                 </p>
               </div>
 
               {/* Language Selector Tabs */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-white/10 self-start md:self-auto">
+              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-200 dark:bg-slate-900/90 border border-slate-300 dark:border-white/10 self-start md:self-auto">
                 {(
                   [
-                    { id: "typescript", label: "TypeScript", tag: "TS", cls: "text-blue-400" },
-                    { id: "python", label: "Python", tag: "PY", cls: "text-sky-400" },
-                    { id: "go", label: "Go", tag: "GO", cls: "text-cyan-400" },
-                    { id: "rust", label: "Rust", tag: "RS", cls: "text-orange-400" },
-                    { id: "java", label: "Java", tag: "JV", cls: "text-amber-400" },
+                    { id: "typescript", label: "TypeScript", tag: "TS", cls: "text-blue-500 dark:text-blue-400" },
+                    { id: "python", label: "Python", tag: "PY", cls: "text-sky-500 dark:text-sky-400" },
+                    { id: "go", label: "Go", tag: "GO", cls: "text-cyan-500 dark:text-cyan-400" },
+                    { id: "rust", label: "Rust", tag: "RS", cls: "text-orange-500 dark:text-orange-400" },
+                    { id: "java", label: "Java", tag: "JV", cls: "text-amber-500 dark:text-amber-400" },
                   ] as const
                 ).map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setActiveLang(item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold font-mono transition-all ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold font-mono transition-all cursor-pointer ${
                       activeLang === item.id
-                        ? "bg-slate-800 text-white border border-slate-700 shadow-xs ring-1 ring-blue-500/30"
-                        : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                        ? "bg-white text-slate-900 border border-slate-300 shadow-sm dark:bg-slate-800 dark:text-white dark:border-slate-700 ring-1 ring-blue-500/30"
+                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300/50 dark:hover:bg-slate-800/50"
                     }`}
                   >
                     <span className={`text-[10px] font-bold ${item.cls}`}>{item.tag}</span>
@@ -551,7 +551,7 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
               {/* Code Editor Panel */}
-              <div className="lg:col-span-2 rounded-xl matte-card border border-white/[0.08] overflow-hidden flex flex-col">
+              <div className="lg:col-span-2 rounded-xl border border-slate-200 dark:border-white/[0.08] overflow-hidden flex flex-col shadow-sm bg-[#090b10]">
                 <div className="flex items-center justify-between px-4 py-2.5 bg-[#0a0c12] border-b border-white/[0.06] text-xs font-mono">
                   <span className="text-slate-300 font-bold">{sample.title}</span>
                   <span className="text-slate-500">{sample.runtime}</span>
@@ -562,19 +562,19 @@ export default function HomePage() {
               </div>
 
               {/* Telemetry Output Panel */}
-              <div className="rounded-xl matte-card border border-white/[0.08] p-5 flex flex-col justify-between space-y-4">
+              <div className="rounded-xl matte-card border border-slate-200 dark:border-white/[0.08] p-5 flex flex-col justify-between space-y-4">
                 <div>
-                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 mb-2">
+                  <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
                     Execution Telemetry & Benchmark
                   </h4>
                   <div className="grid grid-cols-2 gap-3 mb-4">
-                    <div className="p-3 rounded-lg bg-slate-900/60 border border-white/[0.06]">
+                    <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-white/[0.06]">
                       <span className="text-[10px] text-slate-500 uppercase block font-mono">Latency</span>
-                      <span className="text-lg font-bold text-emerald-400 font-mono">{sample.speed}</span>
+                      <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400 font-mono">{sample.speed}</span>
                     </div>
-                    <div className="p-3 rounded-lg bg-slate-900/60 border border-white/[0.06]">
+                    <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-white/[0.06]">
                       <span className="text-[10px] text-slate-500 uppercase block font-mono">Memory</span>
-                      <span className="text-lg font-bold text-blue-400 font-mono">{sample.memory}</span>
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400 font-mono">{sample.memory}</span>
                     </div>
                   </div>
 
@@ -586,10 +586,10 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-white/[0.06]">
+                <div className="pt-3 border-t border-slate-200 dark:border-white/[0.06]">
                   <Link href="/problems">
-                    <Button variant="outline" size="sm" className="w-full text-xs font-semibold gap-1.5 border-white/10 hover:bg-white/[0.04]">
-                      Explore All 120+ Sandboxes <ChevronRight className="w-3.5 h-3.5" />
+                    <Button variant="outline" size="sm" className="w-full text-xs font-semibold gap-1.5">
+                      Explore All 120+ Challenges <ChevronRight className="w-3.5 h-3.5" />
                     </Button>
                   </Link>
                 </div>
@@ -599,47 +599,47 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 5: ROLE-BASED ARCHITECTURE WORKSPACES */}
-        <section className="py-20 border-b border-white/[0.06]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
-              <span className="text-xs font-mono uppercase tracking-wider text-purple-400 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-purple-600 dark:text-purple-400 font-semibold">
                 Role-Based Access Control
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
                 Tailored Workspaces for the Entire Hiring Lifecycle
               </h2>
-              <p className="text-slate-400 mt-2 text-sm">
+              <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm">
                 Each stakeholder has a dedicated, secure portal with fine-grained permissions.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Role 1: Platform Admin */}
-              <div className="p-6 rounded-xl matte-card matte-card-hover border border-white/[0.08] flex flex-col justify-between space-y-4">
+              <div className="p-6 rounded-xl matte-card matte-card-hover border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono text-purple-400 font-bold">PORTAL 01</span>
+                    <span className="text-xs font-mono text-purple-600 dark:text-purple-400 font-bold">PORTAL 01</span>
                     <Badge variant="purple" size="sm">System Owner</Badge>
                   </div>
-                  <h3 className="text-xl font-bold text-white">Platform Administrator</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Platform Administrator</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                     Full platform governance: inspect telemetry metrics, manage recruiter and candidate access states, adjust credit ledgers, and audit security events.
                   </p>
-                  <ul className="space-y-2 text-xs text-slate-300 pt-3 border-t border-white/[0.06]">
+                  <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300 pt-3 border-t border-slate-200 dark:border-white/[0.06]">
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-purple-400" /> System Metrics & Telemetry
+                      <Check className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> System Metrics & Telemetry
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-purple-400" /> User Role Elevation & Governance
+                      <Check className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> User Role Elevation & Governance
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-purple-400" /> Immutable Financial & Audit Ledger
+                      <Check className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" /> Immutable Financial & Audit Ledger
                     </li>
                   </ul>
                 </div>
-                <div className="pt-4 border-t border-white/[0.06]">
+                <div className="pt-4 border-t border-slate-200 dark:border-white/[0.06]">
                   <Link href="/admin">
-                    <Button variant="outline" size="sm" className="w-full text-xs font-semibold border-white/10 hover:bg-white/[0.04]">
+                    <Button variant="outline" size="sm" className="w-full text-xs font-semibold">
                       Open Admin Console
                     </Button>
                   </Link>
@@ -647,31 +647,31 @@ export default function HomePage() {
               </div>
 
               {/* Role 2: Technical Recruiter */}
-              <div className="p-6 rounded-xl matte-card matte-card-hover border border-white/[0.08] flex flex-col justify-between space-y-4">
+              <div className="p-6 rounded-xl matte-card matte-card-hover border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono text-blue-400 font-bold">PORTAL 02</span>
+                    <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold">PORTAL 02</span>
                     <Badge variant="info" size="sm">Hiring Team</Badge>
                   </div>
-                  <h3 className="text-xl font-bold text-white">Technical Recruiter</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Technical Recruiter</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                     Author benchmark assessments using our 3-step wizard, dispatch invites, track applicant Kanban pipelines, grade candidate code rubrics, and manage billing.
                   </p>
-                  <ul className="space-y-2 text-xs text-slate-300 pt-3 border-t border-white/[0.06]">
+                  <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300 pt-3 border-t border-slate-200 dark:border-white/[0.06]">
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> 3-Step Assessment Creation Wizard
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> 3-Step Assessment Creation Wizard
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> Applicant Pipeline & Scorecard Reviews
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Applicant Pipeline & Scorecard Reviews
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> Stripe Credit Packages & Checkout
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Stripe Credit Packages & Checkout
                     </li>
                   </ul>
                 </div>
-                <div className="pt-4 border-t border-white/[0.06]">
+                <div className="pt-4 border-t border-slate-200 dark:border-white/[0.06]">
                   <Link href="/recruiter">
-                    <Button variant="outline" size="sm" className="w-full text-xs font-semibold border-white/10 hover:bg-white/[0.04]">
+                    <Button variant="outline" size="sm" className="w-full text-xs font-semibold">
                       Open Recruiter Portal
                     </Button>
                   </Link>
@@ -679,31 +679,31 @@ export default function HomePage() {
               </div>
 
               {/* Role 3: Software Candidate */}
-              <div className="p-6 rounded-xl matte-card matte-card-hover border border-white/[0.08] flex flex-col justify-between space-y-4">
+              <div className="p-6 rounded-xl matte-card matte-card-hover border border-slate-200 dark:border-white/[0.08] flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono text-emerald-400 font-bold">PORTAL 03</span>
+                    <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-bold">PORTAL 03</span>
                     <Badge variant="success" size="sm">Candidate</Badge>
                   </div>
-                  <h3 className="text-xl font-bold text-white">Developer Candidate</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Take assigned technical challenges in an isolated sandbox, execute live unit tests, view historical scorecards, and highlight verified skill badges.
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Developer Candidate</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Take assigned technical challenges in an isolated cloud IDE, execute live unit tests, view historical scorecards, and highlight verified skill badges.
                   </p>
-                  <ul className="space-y-2 text-xs text-slate-300 pt-3 border-t border-white/[0.06]">
+                  <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300 pt-3 border-t border-slate-200 dark:border-white/[0.06]">
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Timed Coding Runner with Auto-Save
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Timed Coding Runner with Auto-Save
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Detailed Test Result Breakdown
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Detailed Test Result Breakdown
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Developer Profile & Language Badges
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Developer Profile & Language Badges
                     </li>
                   </ul>
                 </div>
-                <div className="pt-4 border-t border-white/[0.06]">
+                <div className="pt-4 border-t border-slate-200 dark:border-white/[0.06]">
                   <Link href="/candidate">
-                    <Button variant="outline" size="sm" className="w-full text-xs font-semibold border-white/10 hover:bg-white/[0.04]">
+                    <Button variant="outline" size="sm" className="w-full text-xs font-semibold">
                       Open Candidate Workspace
                     </Button>
                   </Link>
@@ -714,49 +714,49 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 6: 4-STEP HUMANOID HIRING WORKFLOW */}
-        <section className="py-20 border-b border-white/[0.06] bg-[#090a0f]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06] bg-slate-100/70 dark:bg-[#090a0f]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
                 Operational Lifecycle
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
                 How AssessmentForces Operates
               </h2>
-              <p className="text-slate-400 mt-2 text-sm">
+              <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm">
                 A seamless, transparent workflow connecting technical recruiters and engineering candidates.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="p-5 rounded-xl matte-card border border-white/[0.06] space-y-2">
-                <span className="text-xs font-mono text-blue-400 font-bold">STEP 01</span>
-                <h4 className="text-base font-bold text-white">Assemble Benchmark</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
+              <div className="p-5 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] space-y-2">
+                <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold">STEP 01</span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Assemble Benchmark</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Select from 120+ vetted problems or author tailored challenges with custom test assertions and rubrics.
                 </p>
               </div>
 
-              <div className="p-5 rounded-xl matte-card border border-white/[0.06] space-y-2">
-                <span className="text-xs font-mono text-blue-400 font-bold">STEP 02</span>
-                <h4 className="text-base font-bold text-white">Dispatch Invitations</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
+              <div className="p-5 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] space-y-2">
+                <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold">STEP 02</span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Dispatch Invitations</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Send secure, time-bound invitation tokens with expiration windows and anti-cheat constraints.
                 </p>
               </div>
 
-              <div className="p-5 rounded-xl matte-card border border-white/[0.06] space-y-2">
-                <span className="text-xs font-mono text-blue-400 font-bold">STEP 03</span>
-                <h4 className="text-base font-bold text-white">Candidate Executes</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  The engineer solves problems inside a timed sandbox with live compilation, syntax checks, and memory feedback.
+              <div className="p-5 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] space-y-2">
+                <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold">STEP 03</span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Candidate Executes</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  The engineer solves problems inside a timed live IDE with live compilation, syntax checks, and memory feedback.
                 </p>
               </div>
 
-              <div className="p-5 rounded-xl matte-card border border-white/[0.06] space-y-2">
-                <span className="text-xs font-mono text-blue-400 font-bold">STEP 04</span>
-                <h4 className="text-base font-bold text-white">Telemetry & Decision</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
+              <div className="p-5 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] space-y-2">
+                <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-bold">STEP 04</span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Telemetry & Decision</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Receive automated rubric scorecards, code diffs, pass rates, and competency radar telemetry.
                 </p>
               </div>
@@ -765,22 +765,22 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 7: CHALLENGE TAXONOMY & PROBLEM BANK SHOWCASE */}
-        <section className="py-20 border-b border-white/[0.06]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
               <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-blue-400 font-semibold">
+                <span className="text-xs font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
                   Curated Catalog
                 </span>
-                <h2 className="text-3xl font-extrabold text-white tracking-tight mt-1">
+                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
                   Explore Sample Coding Benchmarks
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
                   120+ verified real-world assessments across algorithms, systems, frontend, and databases.
                 </p>
               </div>
               <Link href="/problems">
-                <Button variant="outline" size="sm" className="text-xs font-semibold gap-1.5 border-white/10 hover:bg-white/[0.04]">
+                <Button variant="outline" size="sm" className="text-xs font-semibold gap-1.5">
                   View Full Catalog ({SHOWCASE_PROBLEMS.length}+) <ChevronRight className="w-3.5 h-3.5" />
                 </Button>
               </Link>
@@ -790,14 +790,14 @@ export default function HomePage() {
               {SHOWCASE_PROBLEMS.map((prob, i) => (
                 <div
                   key={i}
-                  className="p-4 rounded-xl matte-card matte-card-hover border border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="p-4 rounded-xl matte-card matte-card-hover border border-slate-200 dark:border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+                      <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         {prob.category}
                       </span>
-                      <span className="text-slate-600">•</span>
+                      <span className="text-slate-400 dark:text-slate-600">•</span>
                       <Badge
                         variant={
                           prob.difficulty === "HARD"
@@ -811,19 +811,19 @@ export default function HomePage() {
                         {prob.difficulty}
                       </Badge>
                     </div>
-                    <h3 className="text-sm font-bold text-white hover:text-blue-400 transition-colors">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                       {prob.title}
                     </h3>
                   </div>
 
-                  <div className="flex items-center gap-4 text-xs font-mono text-slate-400 shrink-0">
+                  <div className="flex items-center gap-4 text-xs font-mono text-slate-500 dark:text-slate-400 shrink-0">
                     <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-slate-500" /> {prob.duration}
+                      <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" /> {prob.duration}
                     </span>
                     <span className="flex items-center gap-1">
-                      <BarChart3 className="w-3.5 h-3.5 text-slate-500" /> {prob.passRate} pass rate
+                      <BarChart3 className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" /> {prob.passRate} pass rate
                     </span>
-                    <span className="text-blue-400 font-semibold">
+                    <span className="text-blue-600 dark:text-blue-400 font-semibold">
                       +{prob.points} pts
                     </span>
                   </div>
@@ -834,44 +834,44 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 8: CANDIDATE COMPETENCY RADAR TELEMETRY */}
-        <section className="py-20 border-b border-white/[0.06] bg-[#090a0f]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06] bg-slate-100/70 dark:bg-[#090a0f]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+                <span className="text-xs font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">
                   Multi-Dimensional Evaluation
                 </span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
                   Comprehensive Candidate Competency Scoring
                 </h2>
-                <p className="text-slate-400 text-sm mt-4 leading-relaxed">
+                <p className="text-slate-600 dark:text-slate-400 text-sm mt-4 leading-relaxed">
                   Rather than a simple binary pass/fail score, AssessmentForces grades candidates across 5 critical engineering vectors to provide hiring teams with rich qualitative signals.
                 </p>
-                <div className="space-y-3 mt-6 text-xs text-slate-300">
+                <div className="space-y-3 mt-6 text-xs text-slate-700 dark:text-slate-300">
                   <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                     <span><strong>Algorithmic Complexity:</strong> Big-O time and space optimization under stress load.</span>
                   </div>
                   <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                     <span><strong>Code Cleanliness:</strong> Structural naming, separation of concerns, and typing precision.</span>
                   </div>
                   <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                     <span><strong>Edge Case Handling:</strong> Null safety, boundary values, and defensive exception handling.</span>
                   </div>
                   <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <span><strong>Execution Speed:</strong> High throughput performance verified in isolated V8 sandboxes.</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <span><strong>Execution Speed:</strong> High throughput performance verified in isolated V8 environments.</span>
                   </div>
                 </div>
               </div>
 
               {/* Visual Telemetry Card */}
-              <div className="p-6 rounded-xl matte-card border border-white/[0.08] space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.08] space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/[0.06]">
                   <div>
-                    <h3 className="text-sm font-bold text-white">Alex Vance — Senior Fullstack Evaluation</h3>
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">Alex Vance — Senior Fullstack Evaluation</h3>
                     <p className="text-[11px] text-slate-500 font-mono">Backend Systems & Concurrency Benchmark</p>
                   </div>
                   <Badge variant="success" size="sm">94.8% Index</Badge>
@@ -879,59 +879,59 @@ export default function HomePage() {
 
                 <div className="space-y-3 text-xs font-mono">
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-slate-700 dark:text-slate-300 mb-1">
                       <span>Algorithmic Complexity</span>
-                      <span className="text-blue-400">96/100</span>
+                      <span className="text-blue-600 dark:text-blue-400">96/100</span>
                     </div>
-                    <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
                       <div className="bg-blue-500 h-full rounded-full" style={{ width: "96%" }} />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-slate-700 dark:text-slate-300 mb-1">
                       <span>Clean Architecture & Types</span>
-                      <span className="text-emerald-400">92/100</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">92/100</span>
                     </div>
-                    <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
                       <div className="bg-emerald-500 h-full rounded-full" style={{ width: "92%" }} />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-slate-700 dark:text-slate-300 mb-1">
                       <span>Edge Case Defense</span>
-                      <span className="text-purple-400">95/100</span>
+                      <span className="text-purple-600 dark:text-purple-400">95/100</span>
                     </div>
-                    <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
                       <div className="bg-purple-500 h-full rounded-full" style={{ width: "95%" }} />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-slate-700 dark:text-slate-300 mb-1">
                       <span>Execution Concurrency</span>
-                      <span className="text-amber-400">89/100</span>
+                      <span className="text-amber-600 dark:text-amber-400">89/100</span>
                     </div>
-                    <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
                       <div className="bg-amber-500 h-full rounded-full" style={{ width: "89%" }} />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-slate-700 dark:text-slate-300 mb-1">
                       <span>Automated Test Coverage</span>
-                      <span className="text-cyan-400">98/100</span>
+                      <span className="text-cyan-600 dark:text-cyan-400">98/100</span>
                     </div>
-                    <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                    <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
                       <div className="bg-cyan-500 h-full rounded-full" style={{ width: "98%" }} />
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-white/[0.06] text-[11px] text-slate-500 flex justify-between">
-                  <span>Confidence Rating: <strong className="text-emerald-400">99.2%</strong></span>
-                  <span>Evaluator Consensus: <strong className="text-slate-300">Strong Hire</strong></span>
+                <div className="pt-3 border-t border-slate-200 dark:border-white/[0.06] text-[11px] text-slate-500 flex justify-between">
+                  <span>Confidence Rating: <strong className="text-emerald-600 dark:text-emerald-400">99.2%</strong></span>
+                  <span>Evaluator Consensus: <strong className="text-slate-700 dark:text-slate-300">Strong Hire</strong></span>
                 </div>
               </div>
             </div>
@@ -939,47 +939,47 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 9: ACADEMIC INTEGRITY & ANTI-CHEAT STANDARDS */}
-        <section className="py-20 border-b border-white/[0.06]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
-              <span className="text-xs font-mono uppercase tracking-wider text-purple-400 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-purple-600 dark:text-purple-400 font-semibold">
                 Integrity & Fairness
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
                 Fair Assessments with Enterprise Tamper Prevention
               </h2>
-              <p className="text-slate-400 mt-2 text-sm">
+              <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm">
                 Ensure evaluation results reflect real individual capabilities without intrusive invasive surveillance.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06] space-y-2.5">
-                <div className="w-9 h-9 rounded-lg bg-slate-900 border border-white/10 flex items-center justify-center text-blue-400">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] space-y-2.5">
+                <div className="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
                   <Lock className="w-4 h-4" />
                 </div>
-                <h4 className="text-base font-bold text-white">Ephemeral Isolated Sandboxes</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Every test run executes in a stateless, sandboxed container with strict compute, network, and execution limits.
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Stateless Execution Environments</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Every test run executes in a stateless, isolated container with strict compute, network, and execution limits.
                 </p>
               </div>
 
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06] space-y-2.5">
-                <div className="w-9 h-9 rounded-lg bg-slate-900 border border-white/10 flex items-center justify-center text-emerald-400">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] space-y-2.5">
+                <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                   <Cpu className="w-4 h-4" />
                 </div>
-                <h4 className="text-base font-bold text-white">Clipboard & Blur Telemetry</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Clipboard & Blur Telemetry</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Non-invasive event logging flags unnatural bulk paste actions and external tab focus changes for reviewer context.
                 </p>
               </div>
 
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06] space-y-2.5">
-                <div className="w-9 h-9 rounded-lg bg-slate-900 border border-white/10 flex items-center justify-center text-amber-400">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] space-y-2.5">
+                <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
-                <h4 className="text-base font-bold text-white">Plagiarism Fingerprinting</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Plagiarism Fingerprinting</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Abstract syntax tree (AST) structural diffing detects public repository and LLM regurgitation patterns.
                 </p>
               </div>
@@ -988,69 +988,69 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 10: PLATFORM SCALE & BENCHMARK METRICS */}
-        <section className="py-16 border-b border-white/[0.06] bg-[#090a0f]">
+        <section className="py-16 border-b border-slate-200 dark:border-white/[0.06] bg-slate-100/70 dark:bg-[#090a0f]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06]">
-                <p className="text-3xl sm:text-4xl font-extrabold text-blue-400 font-mono">140,000+</p>
-                <p className="text-xs text-slate-400 mt-1 uppercase font-semibold font-mono">Test Suites Executed</p>
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400 font-mono">140,000+</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 uppercase font-semibold font-mono">Test Suites Executed</p>
               </div>
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06]">
-                <p className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono">94.4%</p>
-                <p className="text-xs text-slate-400 mt-1 uppercase font-semibold font-mono">Interviewer Time Saved</p>
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">94.4%</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 uppercase font-semibold font-mono">Interviewer Time Saved</p>
               </div>
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06]">
-                <p className="text-3xl sm:text-4xl font-extrabold text-purple-400 font-mono">&lt;20ms</p>
-                <p className="text-xs text-slate-400 mt-1 uppercase font-semibold font-mono">Container Latency</p>
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-purple-600 dark:text-purple-400 font-mono">&lt;20ms</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 uppercase font-semibold font-mono">Container Latency</p>
               </div>
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06]">
-                <p className="text-3xl sm:text-4xl font-extrabold text-amber-400 font-mono">99.98%</p>
-                <p className="text-xs text-slate-400 mt-1 uppercase font-semibold font-mono">Evaluation Uptime SLA</p>
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06]">
+                <p className="text-3xl sm:text-4xl font-extrabold text-amber-600 dark:text-amber-400 font-mono">99.98%</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 uppercase font-semibold font-mono">Evaluation Uptime SLA</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* PORTION 11: ENGINEERING TESTIMONIALS & CASE STUDIES */}
-        <section className="py-20 border-b border-white/[0.06]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
                 Trusted by Developers
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
                 What Engineering Teams Are Saying
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06] flex flex-col justify-between space-y-4">
-                <p className="text-xs text-slate-300 leading-relaxed italic">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] flex flex-col justify-between space-y-4">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
                   &quot;Our engineering team cut candidate screening loops from 5 stages down to 2 while tripling signal fidelity. Candidates actually enjoy taking these practical challenges.&quot;
                 </p>
-                <div className="pt-3 border-t border-white/[0.06]">
-                  <div className="font-bold text-sm text-white">David K.</div>
-                  <div className="text-[11px] text-slate-400 font-mono">VP of Engineering, ScaleCloud</div>
+                <div className="pt-3 border-t border-slate-200 dark:border-white/[0.06]">
+                  <div className="font-bold text-sm text-slate-900 dark:text-white">David K.</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">VP of Engineering, ScaleCloud</div>
                 </div>
               </div>
 
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06] flex flex-col justify-between space-y-4">
-                <p className="text-xs text-slate-300 leading-relaxed italic">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] flex flex-col justify-between space-y-4">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
                   &quot;The automated rubrics and live test case pass rates make review calibration completely objective. We no longer argue over subjective interview opinions.&quot;
                 </p>
-                <div className="pt-3 border-t border-white/[0.06]">
-                  <div className="font-bold text-sm text-white">Elena Rostova</div>
-                  <div className="text-[11px] text-slate-400 font-mono">Lead Technical Recruiter, FinTech Hub</div>
+                <div className="pt-3 border-t border-slate-200 dark:border-white/[0.06]">
+                  <div className="font-bold text-sm text-slate-900 dark:text-white">Elena Rostova</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">Lead Technical Recruiter, FinTech Hub</div>
                 </div>
               </div>
 
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06] flex flex-col justify-between space-y-4">
-                <p className="text-xs text-slate-300 leading-relaxed italic">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] flex flex-col justify-between space-y-4">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
                   &quot;As a candidate, having a clean editor with instant unit test feedback felt just like my daily workflow. I received my scorecard within hours of submitting.&quot;
                 </p>
-                <div className="pt-3 border-t border-white/[0.06]">
-                  <div className="font-bold text-sm text-white">Marcus Brody</div>
-                  <div className="text-[11px] text-slate-400 font-mono">Senior Fullstack Engineer Candidate</div>
+                <div className="pt-3 border-t border-slate-200 dark:border-white/[0.06]">
+                  <div className="font-bold text-sm text-slate-900 dark:text-white">Marcus Brody</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">Senior Fullstack Engineer Candidate</div>
                 </div>
               </div>
             </div>
@@ -1058,40 +1058,40 @@ export default function HomePage() {
         </section>
 
         {/* PORTION 12: TRANSPARENT CREDIT PACKAGES PREVIEW */}
-        <section className="py-20 border-b border-white/[0.06] bg-[#090a0f]">
+        <section className="py-20 border-b border-slate-200 dark:border-white/[0.06] bg-slate-100/70 dark:bg-[#090a0f]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-14">
-              <span className="text-xs font-mono uppercase tracking-wider text-blue-400 font-semibold">
+              <span className="text-xs font-mono uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold">
                 Transparent Pricing
               </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-2">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
                 Flexible Pay-As-You-Grow Assessment Credits
               </h2>
-              <p className="text-slate-400 mt-2 text-sm">
-                No expensive annual lock-ins. Purchase credit packages on demand with Stripe test integration.
+              <p className="text-slate-600 dark:text-slate-400 mt-2 text-sm">
+                No expensive annual lock-ins. Purchase credit packages on demand with Stripe Checkout.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06] flex flex-col justify-between space-y-4">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] flex flex-col justify-between space-y-4">
                 <div>
-                  <h3 className="text-base font-bold text-white">Starter Package</h3>
-                  <div className="text-2xl font-extrabold text-white font-mono mt-2">500 BDT</div>
-                  <p className="text-xs text-slate-400 mt-1">Ideal for boutique startups screening 5-10 developers.</p>
-                  <ul className="space-y-2 text-xs text-slate-300 mt-4 pt-4 border-t border-white/[0.06]">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Starter Package</h3>
+                  <div className="text-2xl font-extrabold text-slate-900 dark:text-white font-mono mt-2">500 BDT</div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Ideal for boutique startups screening 5-10 developers.</p>
+                  <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300 mt-4 pt-4 border-t border-slate-200 dark:border-white/[0.06]">
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> 10 Assessment Credits
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> 10 Assessment Credits
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> Full Problem Bank Access
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Full Problem Bank Access
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> Basic Scorecards
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Basic Scorecards
                     </li>
                   </ul>
                 </div>
                 <Link href="/pricing">
-                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold border-white/10 hover:bg-white/[0.04]">
+                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold">
                     Select Starter
                   </Button>
                 </Link>
@@ -1102,18 +1102,18 @@ export default function HomePage() {
                   Most Popular
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">Growth Team</h3>
-                  <div className="text-2xl font-extrabold text-white font-mono mt-2">1,500 BDT</div>
-                  <p className="text-xs text-slate-400 mt-1">For expanding engineering teams with multiple pipelines.</p>
-                  <ul className="space-y-2 text-xs text-slate-300 mt-4 pt-4 border-t border-white/[0.06]">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Growth Team</h3>
+                  <div className="text-2xl font-extrabold text-slate-900 dark:text-white font-mono mt-2">1,500 BDT</div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">For expanding engineering teams with multiple pipelines.</p>
+                  <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300 mt-4 pt-4 border-t border-slate-200 dark:border-white/[0.06]">
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> 35 Assessment Credits
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> 35 Assessment Credits
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> Competency Radar Telemetry
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Competency Radar Telemetry
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> Custom Problem Authoring
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Custom Problem Authoring
                     </li>
                   </ul>
                 </div>
@@ -1124,25 +1124,25 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              <div className="p-6 rounded-xl matte-card border border-white/[0.06] flex flex-col justify-between space-y-4">
+              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] flex flex-col justify-between space-y-4">
                 <div>
-                  <h3 className="text-base font-bold text-white">Enterprise Scale</h3>
-                  <div className="text-2xl font-extrabold text-white font-mono mt-2">4,500 BDT</div>
-                  <p className="text-xs text-slate-400 mt-1">High-volume tech companies with dedicated hiring teams.</p>
-                  <ul className="space-y-2 text-xs text-slate-300 mt-4 pt-4 border-t border-white/[0.06]">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Enterprise Scale</h3>
+                  <div className="text-2xl font-extrabold text-slate-900 dark:text-white font-mono mt-2">4,500 BDT</div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">High-volume tech companies with dedicated hiring teams.</p>
+                  <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300 mt-4 pt-4 border-t border-slate-200 dark:border-white/[0.06]">
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> 120 Assessment Credits
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> 120 Assessment Credits
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> Priority Sandbox Compute
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Priority Cloud Execution Compute
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-400" /> Dedicated Account Manager
+                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Dedicated Account Manager
                     </li>
                   </ul>
                 </div>
                 <Link href="/pricing">
-                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold border-white/10 hover:bg-white/[0.04]">
+                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold">
                     Select Enterprise
                   </Button>
                 </Link>
@@ -1154,21 +1154,21 @@ export default function HomePage() {
         {/* PORTION 13: FINAL HUMANOID CONVERSION CALLOUT */}
         <section className="py-24 relative overflow-hidden">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-4">
               Stop Wasting Senior Engineering Hours on Guesswork Interviews.
             </h2>
-            <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto mb-8">
-              Experience the full Developer Assessment Platform with our 1-Click demo accounts across Platform Admin, Technical Recruiter, and Developer Candidate.
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto mb-8">
+              Experience the complete platform across Administrator, Technical Recruiter, and Developer Candidate workflows.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto">
               <Link href="/login" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full gap-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20">
-                  Launch 1-Click Demo
+                  Explore Live Platform
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/register" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full gap-2 text-sm font-semibold border-white/10 hover:bg-white/[0.04] text-slate-200">
+                <Button size="lg" variant="outline" className="w-full gap-2 text-sm font-semibold">
                   Create Account
                 </Button>
               </Link>

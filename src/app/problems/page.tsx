@@ -146,15 +146,15 @@ function ProblemsList() {
 
   const { isAuthenticated, user } = useAuth();
 
-  const handlePracticeInSandbox = (prob: Problem, isFree: boolean) => {
-    // 1 Problem is 100% FREE for all visitors without login
+  const handleSolveProblem = (prob: Problem, isFree: boolean) => {
+    // Featured problem is open to all visitors
     if (isFree) {
       if (!isAuthenticated) {
-        toast.success("Opening Free Sandbox", {
-          description: `Launching public practice environment for "${prob.title}". No login required!`,
+        toast.success("Opening Featured Challenge", {
+          description: `Launching interactive challenge environment for "${prob.title}".`,
         });
       } else {
-        toast.info("Entering Practice Sandbox", {
+        toast.info("Opening Practice Challenge", {
           description: `Loading interactive runtime for "${prob.title}".`,
         });
       }
@@ -162,12 +162,12 @@ function ProblemsList() {
       return;
     }
 
-    // Other problems require a free Candidate account
+    // Other problems require a Candidate account
     if (!isAuthenticated || !user) {
-      toast.warning("Candidate Account Required", {
-        description: `Problem #1 is 100% free without login! To practice "${prob.title}", please sign in or use 1-click Demo.`,
+      toast.warning("Candidate Sign-in Required", {
+        description: `To record your score on "${prob.title}" and earn verified skill badges, please sign in with your Candidate account.`,
         action: {
-          label: "1-Click Login",
+          label: "1-Click Sign In",
           onClick: () => router.push(`/login?redirect=/candidate/assessments/${prob.id}`),
         },
       });
@@ -175,24 +175,24 @@ function ProblemsList() {
     }
 
     if (user.role === "ADMIN") {
-      toast.info("Admin Sandbox Inspection Mode", {
-        description: `Opening "${prob.title}" in Administrator Inspection Mode. Full test assertions available.`,
+      toast.info("Administrator Solution Key Preview", {
+        description: `Reviewing test assertions and grading criteria for "${prob.title}".`,
       });
       router.push(`/candidate/assessments/${prob.id}`);
       return;
     }
 
     if (user.role === "RECRUITER") {
-      toast.info("Recruiter Sandbox Preview", {
-        description: `Inspecting "${prob.title}" sandbox as Technical Recruiter/Employer.`,
+      toast.info("Assessment Evaluation Preview", {
+        description: `Inspecting candidate challenge parameters for "${prob.title}".`,
       });
       router.push(`/candidate/assessments/${prob.id}`);
       return;
     }
 
     // Role === CANDIDATE
-    toast.success("Initializing Execution Sandbox", {
-      description: `Entering timed assessment runtime for "${prob.title}".`,
+    toast.success("Starting Assessment Attempt", {
+      description: `Initializing timed coding environment for "${prob.title}".`,
     });
     router.push(`/candidate/assessments/${prob.id}`);
   };
@@ -200,16 +200,16 @@ function ProblemsList() {
   return (
     <div className="space-y-6">
       {/* Search and Filters Bar */}
-      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none flex flex-col md:flex-row gap-4 items-center justify-between transition-colors">
         {/* Search Input */}
         <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             placeholder="Search problems by keyword..."
             value={queryParam}
             onChange={(e) => updateFilters("q", e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-blue-500"
           />
         </div>
 
@@ -219,7 +219,7 @@ function ProblemsList() {
           <select
             value={difficultyParam}
             onChange={(e) => updateFilters("difficulty", e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500 cursor-pointer"
           >
             <option value="ALL">All Difficulties</option>
             <option value="EASY">Easy</option>
@@ -231,7 +231,7 @@ function ProblemsList() {
           <select
             value={typeParam}
             onChange={(e) => updateFilters("type", e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500 cursor-pointer"
           >
             <option value="ALL">All Question Types</option>
             <option value="CODE">Coding Challenge</option>
@@ -244,7 +244,7 @@ function ProblemsList() {
               size="sm"
               variant="ghost"
               onClick={() => router.push(pathname)}
-              className="text-xs text-slate-400 hover:text-white"
+              className="text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
             >
               Reset Filters
             </Button>
@@ -278,8 +278,8 @@ function ProblemsList() {
               <Card
                 key={prob.id}
                 hoverEffect
-                className={`p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-slate-800 bg-slate-900/40 ${
-                  isFreeProblem ? "border-emerald-500/40 bg-emerald-950/15" : ""
+                className={`p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 shadow-xs dark:shadow-none ${
+                  isFreeProblem ? "border-emerald-500/40 bg-emerald-50/40 dark:bg-emerald-950/15" : ""
                 }`}
               >
                 <div className="space-y-1.5 flex-1">
@@ -287,27 +287,27 @@ function ProblemsList() {
                     <Badge variant={diffColor} size="sm">
                       {prob.difficulty}
                     </Badge>
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 rounded">
                       {prob.type.replace(/_/g, " ")}
                     </span>
                     {isFreeProblem ? (
-                      <Badge variant="success" size="sm" className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
-                        ✦ FREE FOR ALL • NO LOGIN REQUIRED
+                      <Badge variant="success" size="sm" className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 font-semibold">
+                        ★ Featured Open Challenge
                       </Badge>
                     ) : (
-                      <span className="text-[10px] font-mono text-slate-400 bg-slate-800/50 px-2 py-0.5 rounded border border-slate-700/50">
-                        Candidate Account Required
+                      <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/50 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700/50">
+                        Full Assessment Required
                       </span>
                     )}
-                    <span className="text-xs text-slate-500 font-mono">
+                    <span className="text-xs text-slate-400 dark:text-slate-500 font-mono">
                       ID: {prob.id}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white hover:text-blue-400 transition-colors">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     {prob.title}
                   </h3>
                   {prob.currentVersion?.prompt && (
-                    <p className="text-xs text-slate-400 line-clamp-1">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-1">
                       {prob.currentVersion.prompt}
                     </p>
                   )}
@@ -317,19 +317,19 @@ function ProblemsList() {
                   {isFreeProblem ? (
                     <Button
                       size="sm"
-                      onClick={() => handlePracticeInSandbox(prob, true)}
-                      className="gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-600/25 cursor-pointer"
+                      onClick={() => handleSolveProblem(prob, true)}
+                      className="gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-md shadow-emerald-600/20 cursor-pointer"
                     >
-                      <Play className="w-3.5 h-3.5 fill-white" /> Practice Free (No Login)
+                      <Play className="w-3.5 h-3.5 fill-white" /> Solve Challenge
                     </Button>
                   ) : (
                     <Button
                       size="sm"
                       variant="secondary"
-                      onClick={() => handlePracticeInSandbox(prob, false)}
-                      className="gap-1.5 text-xs hover:border-blue-500/50 hover:text-blue-300 cursor-pointer"
+                      onClick={() => handleSolveProblem(prob, false)}
+                      className="gap-1.5 text-xs hover:border-blue-500/50 hover:text-blue-600 dark:hover:text-blue-300 cursor-pointer"
                     >
-                      Practice in Sandbox <ChevronRight className="w-3.5 h-3.5" />
+                      Attempt Challenge <ChevronRight className="w-3.5 h-3.5" />
                     </Button>
                   )}
                 </div>
@@ -344,7 +344,7 @@ function ProblemsList() {
 
 export default function ProblemsPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16]">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 transition-colors duration-150">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
@@ -352,10 +352,10 @@ export default function ProblemsPage() {
           <Badge variant="info" className="mb-3">
             Algorithmic & Technical Catalog
           </Badge>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Developer Problem Repository
           </h1>
-          <p className="text-slate-400 mt-4 text-base sm:text-lg">
+          <p className="text-slate-600 dark:text-slate-400 mt-4 text-base sm:text-lg">
             Browse through algorithmic challenges, concurrency problems, and architecture questions used in active assessments. URL state synchronized.
           </p>
         </div>

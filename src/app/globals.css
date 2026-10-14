@@ -1,7 +1,26 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --card-border: rgba(0, 0, 0, 0.08);
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-foreground: #ffffff;
+    --accent: #4f46e5;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --border: rgba(0, 0, 0, 0.08);
+    --ring: #2563eb;
+    --radius: 0.75rem;
+  }
+
+  .dark {
     --background: #07080b;
     --foreground: #f3f4f6;
     --card: #0d0f15;
@@ -21,7 +40,10 @@
 
 * {
   box-sizing: border-box;
-  border-color: var(--border);
+}
+
+html {
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 body {
@@ -39,6 +61,12 @@ code, pre, kbd, samp {
 
 /* Tactile Matte Card */
 .matte-card {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dark .matte-card {
   background-color: #0b0d14;
   border: 1px solid rgba(255, 255, 255, 0.07);
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
@@ -48,9 +76,15 @@ code, pre, kbd, samp {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .matte-card-hover:hover {
+  background-color: #f8fafc;
+  border-color: rgba(37, 99, 235, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.08);
+}
+
+.dark .matte-card-hover:hover {
   background-color: #12151e;
   border-color: rgba(255, 255, 255, 0.16);
-  transform: translateY(-2px);
   box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.65);
 }
 
@@ -58,6 +92,10 @@ code, pre, kbd, samp {
 .humanoid-heading {
   letter-spacing: -0.03em;
   font-weight: 800;
+  color: #0f172a;
+}
+
+.dark .humanoid-heading {
   color: #ffffff;
 }
 
@@ -68,6 +106,12 @@ code, pre, kbd, samp {
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
+  background-color: rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  color: #334155;
+}
+
+.dark .subtle-badge {
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #e5e7eb;
@@ -79,19 +123,34 @@ code, pre, kbd, samp {
   height: 7px;
 }
 ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.dark ::-webkit-scrollbar-track {
   background: #07080b;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #1f2430;
+  background: #cbd5e1;
   border-radius: 4px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: #1f2430;
+}
+
 ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #2d3446;
 }
 
 /* Clean Monospace Code Display */
 .code-container {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background-color: #f8fafc;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.dark .code-container {
   background-color: #090b10;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }

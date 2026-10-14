@@ -37,16 +37,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       primary:
         "bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25 border border-blue-500/30",
       secondary:
-        "bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700/60 shadow-sm",
+        "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-100 dark:border-slate-700/60 shadow-sm",
       outline:
-        "border border-slate-700 hover:border-slate-500 text-slate-200 hover:bg-slate-800/60 bg-transparent",
+        "border border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-100/80 dark:border-slate-700 dark:hover:border-slate-500 dark:text-slate-200 dark:hover:bg-slate-800/60 bg-transparent",
       ghost:
-        "text-slate-300 hover:text-white hover:bg-slate-800/60 bg-transparent",
+        "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800/60 bg-transparent",
       danger:
         "bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/25 border border-rose-500/30",
       glow: "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white shadow-xl shadow-indigo-500/25 border border-indigo-400/30 font-semibold",
       glass:
-        "bg-slate-900/60 backdrop-blur-md border border-white/10 hover:border-white/20 text-slate-200 hover:text-white shadow-lg",
+        "bg-white/80 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 text-slate-800 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white shadow-sm dark:shadow-lg",
     };
 
     const sizeStyles = {

@@ -59,10 +59,10 @@ export function Logo({
       <LogoMark size={size} />
       {showText && (
         <span
-          className={`font-black tracking-tight text-white transition-colors group-hover:text-slate-100 ${s.text}`}
+          className={`font-black tracking-tight text-slate-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-slate-100 ${s.text}`}
         >
           Assessment
-          <span className="text-blue-500">Forces</span>
+          <span className="text-blue-600 dark:text-blue-500">Forces</span>
         </span>
       )}
     </div>
