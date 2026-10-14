@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -92,6 +92,27 @@ export default function RegisterPage() {
       confirmPassword: "",
     },
   });
+
+  // Ensure registration forms stay clean on load, clearing any aggressive browser autofill
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      candidateForm.reset({
+        displayName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      recruiterForm.reset({
+        displayName: "",
+        email: "",
+        companyName: "",
+        designation: "",
+        password: "",
+        confirmPassword: "",
+      });
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [candidateForm, recruiterForm]);
 
   const handleRoleChange = (role: "CANDIDATE" | "RECRUITER") => {
     setSelectedRole(role);
@@ -206,6 +227,12 @@ export default function RegisterPage() {
                 autoComplete="off"
                 className="space-y-4 animate-fade-in"
               >
+                {/* Deflect browser saved-credential autofill away from registration inputs */}
+                <div style={{ position: "absolute", opacity: 0, height: 0, width: 0, overflow: "hidden", pointerEvents: "none" }} aria-hidden="true">
+                  <input type="text" name="decoy_username_candidate" tabIndex={-1} autoComplete="off" />
+                  <input type="password" name="decoy_password_candidate" tabIndex={-1} autoComplete="new-password" />
+                </div>
+
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                     Full Name *
@@ -358,6 +385,12 @@ export default function RegisterPage() {
                 autoComplete="off"
                 className="space-y-4 animate-fade-in"
               >
+                {/* Deflect browser saved-credential autofill away from registration inputs */}
+                <div style={{ position: "absolute", opacity: 0, height: 0, width: 0, overflow: "hidden", pointerEvents: "none" }} aria-hidden="true">
+                  <input type="text" name="decoy_username_recruiter" tabIndex={-1} autoComplete="off" />
+                  <input type="password" name="decoy_password_recruiter" tabIndex={-1} autoComplete="new-password" />
+                </div>
+
                 <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/20 text-xs text-blue-800 dark:text-blue-300 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-blue-500 shrink-0" />
                   <span>Includes <strong>10 Free Starter Credits</strong> for candidate test invitations!</span>
