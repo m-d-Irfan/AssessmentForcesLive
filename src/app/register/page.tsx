@@ -95,7 +95,7 @@ export default function RegisterPage() {
 
   // Ensure registration forms stay clean on load, clearing any aggressive browser autofill
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const clearInputs = () => {
       candidateForm.reset({
         displayName: "",
         email: "",
@@ -110,8 +110,25 @@ export default function RegisterPage() {
         password: "",
         confirmPassword: "",
       });
-    }, 60);
-    return () => clearTimeout(timer);
+      // Directly clear any DOM values if the browser forcefully pre-injected them
+      const inputs = document.querySelectorAll<HTMLInputElement>("input[data-registration-field]");
+      inputs.forEach((input) => {
+        if (input.value) {
+          input.value = "";
+        }
+      });
+    };
+
+    clearInputs();
+    const t1 = setTimeout(clearInputs, 50);
+    const t2 = setTimeout(clearInputs, 150);
+    const t3 = setTimeout(clearInputs, 400);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, [candidateForm, recruiterForm]);
 
   const handleRoleChange = (role: "CANDIDATE" | "RECRUITER") => {
@@ -241,6 +258,10 @@ export default function RegisterPage() {
                     <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="text"
+                      data-registration-field="true"
+                      readOnly
+                      onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                      onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                       {...candidateForm.register("displayName")}
                       autoComplete="off"
                       placeholder="e.g. Alex Mercer"
@@ -262,9 +283,14 @@ export default function RegisterPage() {
                     <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="email"
+                      data-registration-field="true"
+                      readOnly
+                      onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                      onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                       {...candidateForm.register("email")}
                       autoComplete="off"
                       data-lpignore="true"
+                      data-1p-ignore="true"
                       placeholder="alex@example.com"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     />
@@ -285,6 +311,10 @@ export default function RegisterPage() {
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type={showCandidatePassword ? "text" : "password"}
+                        data-registration-field="true"
+                        readOnly
+                        onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                        onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                         {...candidateForm.register("password")}
                         autoComplete="new-password"
                         placeholder="••••••••"
@@ -315,6 +345,10 @@ export default function RegisterPage() {
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type={showCandidateConfirmPassword ? "text" : "password"}
+                        data-registration-field="true"
+                        readOnly
+                        onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                        onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                         {...candidateForm.register("confirmPassword")}
                         autoComplete="new-password"
                         placeholder="••••••••"
@@ -404,6 +438,10 @@ export default function RegisterPage() {
                     <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="text"
+                      data-registration-field="true"
+                      readOnly
+                      onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                      onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                       {...recruiterForm.register("displayName")}
                       autoComplete="off"
                       placeholder="e.g. Sarah Jenkins"
@@ -425,9 +463,14 @@ export default function RegisterPage() {
                     <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="email"
+                      data-registration-field="true"
+                      readOnly
+                      onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                      onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                       {...recruiterForm.register("email")}
                       autoComplete="off"
                       data-lpignore="true"
+                      data-1p-ignore="true"
                       placeholder="sarah@techcorp.io"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
@@ -448,6 +491,10 @@ export default function RegisterPage() {
                       <Building2 className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="text"
+                        data-registration-field="true"
+                        readOnly
+                        onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                        onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                         {...recruiterForm.register("companyName")}
                         autoComplete="off"
                         placeholder="e.g. Acme Labs"
@@ -469,6 +516,10 @@ export default function RegisterPage() {
                       <BadgeCheck className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type="text"
+                        data-registration-field="true"
+                        readOnly
+                        onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                        onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                         {...recruiterForm.register("designation")}
                         autoComplete="off"
                         placeholder="e.g. Lead Technical Recruiter"
@@ -492,6 +543,10 @@ export default function RegisterPage() {
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type={showRecruiterPassword ? "text" : "password"}
+                        data-registration-field="true"
+                        readOnly
+                        onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                        onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                         {...recruiterForm.register("password")}
                         autoComplete="new-password"
                         placeholder="••••••••"
@@ -522,6 +577,10 @@ export default function RegisterPage() {
                       <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                       <input
                         type={showRecruiterConfirmPassword ? "text" : "password"}
+                        data-registration-field="true"
+                        readOnly
+                        onFocus={(e) => { e.currentTarget.readOnly = false; }}
+                        onPointerDown={(e) => { e.currentTarget.readOnly = false; }}
                         {...recruiterForm.register("confirmPassword")}
                         autoComplete="new-password"
                         placeholder="••••••••"
