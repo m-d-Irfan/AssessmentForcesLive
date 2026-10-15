@@ -1073,26 +1073,34 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <div className="p-6 rounded-xl matte-card border border-slate-200 dark:border-white/[0.06] flex flex-col justify-between space-y-4">
+              <div className="p-6 rounded-xl matte-card border border-emerald-500/30 dark:border-emerald-500/20 relative flex flex-col justify-between space-y-4 shadow-lg shadow-emerald-500/5">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
+                  100% Free
+                </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Starter Package</h3>
-                  <div className="text-2xl font-extrabold text-slate-900 dark:text-white font-mono mt-2">500 BDT</div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Ideal for boutique startups screening 5-10 developers.</p>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Free Starter Package</h3>
+                  <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-2">
+                    0 BDT <span className="text-xs text-slate-500 dark:text-slate-400 font-normal">/ Free</span>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">10 complimentary invitation credits to screen candidates immediately.</p>
                   <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300 mt-4 pt-4 border-t border-slate-200 dark:border-white/[0.06]">
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> 10 Assessment Credits
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> 10 Free Assessment Credits
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Full Problem Bank Access
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Full Problem Bank Access
                     </li>
                     <li className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Basic Scorecards
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Basic Scorecards & Telemetry
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> No Credit Card Required
                     </li>
                   </ul>
                 </div>
-                <Link href="/pricing">
-                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold">
-                    Select Starter
+                <Link href="/register">
+                  <Button variant="outline" size="sm" className="w-full text-xs font-semibold border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/30">
+                    Claim 10 Free Credits
                   </Button>
                 </Link>
               </div>

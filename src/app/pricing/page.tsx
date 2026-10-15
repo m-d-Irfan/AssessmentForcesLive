@@ -16,19 +16,20 @@ export default function PricingPage() {
   const packages = [
     {
       id: "starter",
-      name: "Starter Package",
-      price: "500 BDT",
-      equivalent: "$5 USD",
+      name: "Free Starter Tier",
+      price: "0 BDT",
+      equivalent: "100% Free",
       credits: 10,
-      description: "Ideal for small teams hiring for 1-2 specialized engineering positions.",
+      description: "10 complimentary candidate invitations included free for every recruiter organization.",
       popular: false,
+      badge: "Free Forever",
       features: [
-        "10 Candidate invitation credits",
+        "10 Free Candidate invitation credits",
         "Algorithmic & Multiple-choice problems",
         "Deterministic automated auto-grading",
         "Timed attempt monitoring",
         "Basic performance scorecards",
-        "Email support",
+        "No credit card required (Instant access)",
       ],
     },
     {
@@ -39,6 +40,7 @@ export default function PricingPage() {
       credits: 50,
       description: "Designed for scaling startups and fast-moving technical recruiters.",
       popular: true,
+      badge: "Most Popular",
       features: [
         "50 Candidate invitation credits",
         "Custom problem authoring environment",
@@ -57,6 +59,7 @@ export default function PricingPage() {
       credits: 100,
       description: "For high-volume recruitment drives, hackathons, and university hiring.",
       popular: false,
+      badge: "High Volume",
       features: [
         "100 Candidate invitation credits",
         "Unlimited custom problem versions",
@@ -82,7 +85,7 @@ export default function PricingPage() {
             Simple, Transparent Candidate Credits
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-4 text-base sm:text-lg">
-            Purchase credits using secure Stripe Checkout. 1 credit equals 1 complete candidate assessment invitation.
+            Start with 10 complimentary credits or purchase packages using secure Stripe Checkout. 1 credit equals 1 complete candidate assessment invitation.
           </p>
         </div>
 
@@ -95,16 +98,24 @@ export default function PricingPage() {
               className={`flex flex-col justify-between relative ${
                 pkg.popular
                   ? "border-blue-500 bg-white dark:bg-slate-900/90 shadow-xl shadow-blue-500/10 ring-2 ring-blue-500/20"
+                  : pkg.id === "starter"
+                  ? "bg-white dark:bg-slate-900/50 border-emerald-500/40 shadow-lg shadow-emerald-500/5 ring-1 ring-emerald-500/20"
                   : "bg-white dark:bg-slate-900/50 border-slate-200 dark:border-slate-800"
               }`}
             >
-              {pkg.popular && (
+              {pkg.popular ? (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                   <Badge variant="info" size="sm" className="bg-blue-600 text-white font-bold border-blue-400 shadow-sm">
                     Most Popular
                   </Badge>
                 </div>
-              )}
+              ) : pkg.id === "starter" ? (
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                  <Badge variant="success" size="sm" className="bg-emerald-600 text-white font-bold border-emerald-400 shadow-sm">
+                    100% Free
+                  </Badge>
+                </div>
+              ) : null}
 
               <div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{pkg.name}</h3>
@@ -113,13 +124,15 @@ export default function PricingPage() {
                 </p>
 
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-mono">
+                  <span className={`text-3xl sm:text-4xl font-extrabold font-mono ${pkg.id === "starter" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-900 dark:text-white"}`}>
                     {pkg.price}
                   </span>
                   <span className="text-xs text-slate-500 dark:text-slate-400">({pkg.equivalent})</span>
                 </div>
-                <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold mb-6">
-                  {pkg.credits} Invitations ({Math.round(parseInt(pkg.price) / pkg.credits)} BDT / candidate)
+                <p className={`text-xs font-semibold mb-6 ${pkg.id === "starter" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400"}`}>
+                  {pkg.id === "starter"
+                    ? "10 Free Invitations (0 BDT / No Card Needed)"
+                    : `${pkg.credits} Invitations (${Math.round(parseInt(pkg.price.replace(/,/g, "")) / pkg.credits)} BDT / candidate)`}
                 </p>
 
                 <div className="space-y-3 pt-6 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300">
@@ -133,13 +146,13 @@ export default function PricingPage() {
               </div>
 
               <div className="pt-8 mt-6 border-t border-slate-200 dark:border-slate-800">
-                <Link href="/recruiter/billing">
+                <Link href={pkg.id === "starter" ? "/register" : "/recruiter/billing"}>
                   <Button
-                    variant={pkg.popular ? "glow" : "primary"}
-                    className="w-full gap-2"
+                    variant={pkg.popular ? "glow" : pkg.id === "starter" ? "outline" : "primary"}
+                    className={`w-full gap-2 ${pkg.id === "starter" ? "border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/30" : ""}`}
                   >
                     <CreditCard className="w-4 h-4" />
-                    Buy {pkg.name.split(" ")[0]} Credits
+                    {pkg.id === "starter" ? "Claim 10 Free Credits" : `Buy ${pkg.name.split(" ")[0]} Credits`}
                   </Button>
                 </Link>
               </div>
